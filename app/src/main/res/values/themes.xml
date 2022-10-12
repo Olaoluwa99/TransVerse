@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AIScanner" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="Theme.AIScanner" parent="Base.Theme.AIScanner" />
+
+
+
+    <style name="Widget.Shrine.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:theme">@style/Base.Theme.AIScanner</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Shrine.Toolbar</item>
+        <item name="font">@font/poppins_bold</item>
+    </style>
+
+    <style name="TextAppearance.Shrine.Toolbar" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">24sp</item>
+        <item name="font">@font/poppins_bold</item>
+    </style>
+
+    <style name="TextAppearance.Shrine.Title" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="textAllCaps">false</item>
+
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="font">@font/poppins_bold</item>
+    </style>
+</resources>

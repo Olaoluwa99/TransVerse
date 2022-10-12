@@ -1,0 +1,312 @@
+<resources>
+    <string name="app_name">AIScanner</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
+    <!-- For AI -->
+    <string name="unknown_error">Unknown error occurred.</string>
+    <string name="content_description_google_translate_attribution">Google Translate attribution</string>
+    <string name="overlay_help">Center text in box</string>
+    <string name="downloading_model_files">Downloading model files…</string>
+
+    <!-- Error toast for when non-English language is used [CHAR_LIMIT=80] -->
+    <string name="error_not_supported_language">A non-English language was
+      detected, therefore no replies were generated.</string>
+    <!-- Error toast for when no smart replies are generated [CHAR_LIMIT=75] -->
+    <string name="error_no_reply">Success! But no appropriate replies were generated.</string>
+
+    <string name="error_not_supported_language2">A non-English language was
+      detected, therefore no replies were generated.</string>
+    <!-- Error toast for when no smart replies are generated [CHAR_LIMIT=75] -->
+    <string name="error_no_reply2">Success! But no appropriate replies were generated.</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="input_text">Input text</string>
+
+
+    <!-- Entities extraction -->
+    <string name="current_model">Current model: %s</string>
+    <!-- String to show current locale [CHAR_LIMIT=NONE] -->
+    <string name="current_locale">Current locale: %s</string>
+    <!-- Placeholder for input box -->
+    <string name="input">Enter your input</string>
+    <!-- Action string for entity extraction button -->
+    <string name="entity_extraction_trigger_btn">Trigger Entity Extraction</string>
+    <!-- Message to be displayed for EE triggered with empty input -->
+    <string name="empty_input">Please enter a text.</string>
+    <!-- Placeholder for EE error -->
+    <string name="entity_extraction_error">Annotation failed.</string>
+    <!-- Waiting message for the output box once EE is triggered -->
+    <string name="wait_message">Working…\nMake sure network is on for the first time to download model</string>
+    <!-- String of info to be displayed for a money type entity -->
+    <string name="money_entity_info">Money entity detected: %1$s.
+    \nCurrency: %2$s, integer: %3$d, decimal: %4$d.\n</string>
+    <!-- String of info to be displayed for a flight number type entity -->
+    <string name="flight_number_entity_info">Flight number entity detected: %1$s.
+    \nAirline code: %2$s, flight number: %3$s.\n</string>
+    <!-- String of info to be displayed for an IBAN type entity -->
+    <string name="iban_entity_info">Iban entity detected: %1$s.
+    \nIban country code: %2$s, iban: %3$s.\n</string>
+    <!-- String of info to be displayed for an ISBN type entity -->
+    <string name="isbn_entity_info">Isbn entity detected: %1$s.\nIsbn:  %2$s.\n</string>
+    <!-- String of info to be displayed for a payment card type entity -->
+    <string name="payment_card_entity_info">Payment card entity detected: %1$s.\n
+    Payment card network: %2$d, payment card number: %3$s.\n</string>
+    <!-- String of info to be displayed for a tracking number type entity -->
+    <string name="tracking_number_entity_info">Tracking number entity detected: %1$s.\n
+    Parcel carrier: %2$d, tracking number: %3$s.\n</string>
+    <!-- String of info to be displayed for a date time type entity -->
+    <string name="date_time_entity_info">Date_time entity detected: %1$s.
+    \n%2$s (granularity: %3$s).\n</string>
+    <!-- String of info to be displayed for an address type entity -->
+    <string name="address_entity_info">Address entity detected: %1$s.\n</string>
+    <!-- String of info to be displayed for a phone number type entity -->
+    <string name="phone_entity_info">Phone number entity detected: %1$s.\n</string>
+    <!-- String of info to be displayed for a phone number type entity, including formatted phone number -->
+    <string name="phone_entity_info_formatted">Phone number entity detected: %1$s (formatted by libphonenumber: %2$s).\n</string>
+    <!-- String of info to be displayed for no entities detected -->
+    <string name="no_entity_detected">There are no entities detected.\n</string>
+    <!-- String of info to be displayed for a URL type entity -->
+    <string name="url_entity_info">URL entity detected: %1$s.\n</string>
+    <!-- String of info to be displayed for an email type entity -->
+    <string name="email_entity_info">Email entity detected: %1$s.\n</string>
+    <!-- String of info to be displayed for an unknown type entity -->
+    <string name="unknown_entity_info">Unknown entity detected: %1$s.\n</string>
+    <!-- Message to be displayed when entities are detected -->
+    <string name="entities_detected">Entities detected:</string>
+    <!-- String representing unknown granularity type, used to construct date_time entity info-->
+    <string name="granularity_unknown">Unknown</string>
+    <!-- String representing year granularity type, used to construct date_time entity info-->
+    <string name="granularity_year">Year</string>
+    <!-- String representing month granularity type, used to construct date_time entity info-->
+    <string name="granularity_month">Month</string>
+    <!-- String representing week granularity type, used to construct date_time entity info-->
+    <string name="granularity_week">Week</string>
+    <!-- String representing day granularity type, used to construct date_time entity info-->
+    <string name="granularity_day">Day</string>
+    <!-- String representing hour granularity type, used to construct date_time entity info-->
+    <string name="granularity_hour">Hour</string>
+    <!-- String representing minute granularity type, used to construct date_time entity info-->
+    <string name="granularity_minute">Minute</string>
+    <!-- String representing second granularity type, used to construct date_time entity info-->
+    <string name="granularity_second">Second</string>
+    <!-- String title for action button that opens models screen-->
+    <string name="choose_model_btn">Choose a model</string>
+    <!-- String title for models list-->
+    <string name="models_view">Choose a model from the list:</string>
+    <string name="translation_to_my_language">Translation to my language representing minute granularity type, used to construct date_time entity info</string>
+    <string name="extracted_entity">Extracted entity : String representing second granularity type, used to construct date_time entity info</string>
+    <!-- String used to display the downloading models list in a snackbar-->
+    <plurals name="snackbar_message">
+        <item quantity="one">Downloading model %1$s</item>
+        <item quantity="other">Downloading models %1$s</item>
+    </plurals>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_title">Home</string>
+    <string name="history_title">History</string>
+    <string name="image_title">Image</string>
+    <string name="audio_title">Audio</string>
+    <string name="barcode_title">Barcode</string>
+
+
+    <string name="transcribed_text">Transcribed text is here</string>
+    <string name="get_text_from_speech">Get text from speech</string>
+    <string name="click_to_start_recording">Click to start recording</string>
+    <string name="get_text_from_image">Get text from image</string>
+
+
+
+    <!-- Settings related strings. -->
+    <string name="pref_screen" translatable="false">ps</string>
+    <string name="pref_screen_title_live_preview" translatable="false">Live preview settings</string>
+    <string name="pref_screen_title_still_image" translatable="false">Still image settings</string>
+    <string name="pref_screen_title_camerax_live_preview" translatable="false">CameraX live preview settings</string>
+    <string name="pref_screen_title_cameraxsource_demo" translatable="false">CameraXSource live preview settings</string>
+    <string name="pref_category_info" translatable="false">Detection Info</string>
+    <string name="pref_category_face_detection" translatable="false">Face Detection</string>
+    <string name="pref_category_object_detection" translatable="false">Object Detection / Custom Object Detection</string>
+    <string name="pref_category_automl" translatable="false">AutoML Image Labeling</string>
+    <string name="pref_category_pose_detection" translatable="false">Pose Detection</string>
+    <string name="pref_category_segmentation" translatable="false">Selfie Segmentation</string>
+    <string name="pref_category_text_recognition" translatable="false">Text Recognition</string>
+
+    <!-- Strings for camera settings. -->
+    <string name="pref_category_key_camera" translatable="false">pckc</string>
+    <string name="pref_category_title_camera" translatable="false">Camera</string>
+    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
+    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
+    <string name="pref_key_front_camera_preview_size" translatable="false">fcpvs</string>
+    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
+    <string name="pref_key_camerax_rear_camera_target_resolution" translatable="false">crctas</string>
+    <string name="pref_key_camerax_front_camera_target_resolution" translatable="false">cfctas</string>
+    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
+    <string name="pref_title_rear_camera_preview_size" translatable="false">Rear camera preview size</string>
+    <string name="pref_title_front_camera_preview_size" translatable="false">Front camera preview size</string>
+    <string name="pref_title_camerax_rear_camera_target_resolution" translatable="false">CameraX rear camera target resolution</string>
+    <string name="pref_title_camerax_front_camera_target_resolution" translatable="false">CameraX front camera target resolution</string>
+    <string name="pref_title_camera_live_viewport" translatable="false">Enable live viewport</string>
+    <string name="pref_summary_camera_live_viewport" translatable="false">Do not block camera preview drawing on detection</string>
+
+    <!-- Strings for info preference. -->
+    <string name="pref_title_info_hide" translatable="false">Hide detection info</string>
+    <string name="pref_key_info_hide" translatable="false">ih</string>
+
+    <!-- Strings for text recognition preference. -->
+    <string name="pref_title_group_recognized_text_in_blocks" translatable="false">Group recognized text in paragraphs</string>
+    <string name="pref_key_group_recognized_text_in_blocks" translatable="false">grtib</string>
+    <string name="pref_title_show_language_tag" translatable="false">Show language identified</string>
+    <string name="pref_key_show_language_tag" translatable="false">slt</string>
+
+    <!-- Strings for object detector enable multiple objects preference. -->
+    <string name="pref_title_object_detector_enable_multiple_objects" translatable="false">Enable multiple objects</string>
+    <string name="pref_key_live_preview_object_detector_enable_multiple_objects" translatable="false">lpodemo</string>
+    <string name="pref_key_still_image_object_detector_enable_multiple_objects" translatable="false">siodemo</string>
+
+    <!-- Strings for object detector enable classification preference. -->
+    <string name="pref_title_object_detector_enable_classification" translatable="false">Enable classification</string>
+    <string name="pref_key_live_preview_object_detector_enable_classification" translatable="false">lpodec</string>
+    <string name="pref_key_still_image_object_detector_enable_classification" translatable="false">siodec</string>
+
+    <!-- Strings for face detector landmark mode preference. -->
+    <string name="pref_title_face_detector_landmark_mode" translatable="false">Landmark mode</string>
+    <string name="pref_key_live_preview_face_detection_landmark_mode" translatable="false">lpfdlm</string>
+    <string name="pref_entries_face_detector_landmark_mode_no_landmarks" translatable="false">No landmarks</string>
+    <string name="pref_entries_face_detector_landmark_mode_all_landmarks" translatable="false">All landmarks</string>
+    <!-- The following entry values must match the ones in FaceDetectorOptions#LandmarkMode -->
+    <string name="pref_entry_values_face_detector_landmark_mode_no_landmarks" translatable="false">1</string>
+    <string name="pref_entry_values_face_detector_landmark_mode_all_landmarks" translatable="false">2</string>
+
+    <!-- Strings for face detector contour mode preference. -->
+    <string name="pref_title_face_detector_contour_mode" translatable="false">Contour mode</string>
+    <string name="pref_key_live_preview_face_detection_contour_mode" translatable="false">lpfdcm</string>
+    <string name="pref_entries_face_detector_contour_mode_no_contours" translatable="false">No contours</string>
+    <string name="pref_entries_face_detector_contour_mode_all_contours" translatable="false">All contours</string>
+    <!-- The following entry values must match the ones in FaceDetectorOptions#ContourMode -->
+    <string name="pref_entry_values_face_detector_contour_mode_no_contours" translatable="false">1</string>
+    <string name="pref_entry_values_face_detector_contour_mode_all_contours" translatable="false">2</string>
+
+    <!-- Strings for face detector classification mode preference. -->
+    <string name="pref_title_face_detector_classification_mode" translatable="false">Classification mode</string>
+    <string name="pref_key_live_preview_face_detection_classification_mode" translatable="false">lpfdcfm</string>
+    <string name="pref_entries_face_detector_classification_mode_no_classifications" translatable="false">No classifications</string>
+    <string name="pref_entries_face_detector_classification_mode_all_classifications" translatable="false">All classifications</string>
+    <!-- The following entry values must match the ones in FaceDetectorOptions#ClassificationMode -->
+    <string name="pref_entry_values_face_detector_classification_mode_no_classifications" translatable="false">1</string>
+    <string name="pref_entry_values_face_detector_classification_mode_all_classifications" translatable="false">2</string>
+
+    <!-- Strings for face detector performance mode preference. -->
+    <string name="pref_title_face_detector_performance_mode" translatable="false">Performance mode</string>
+    <string name="pref_key_live_preview_face_detection_performance_mode" translatable="false">lpfdpm</string>
+    <string name="pref_entries_face_detector_performance_mode_fast" translatable="false">Fast</string>
+    <string name="pref_entries_face_detector_performance_mode_accurate" translatable="false">Accurate</string>
+    <!-- The following entry values must match the ones in FaceDetectorOptions#PerformanceMode -->
+    <string name="pref_entry_values_face_detector_performance_mode_fast" translatable="false">1</string>
+    <string name="pref_entry_values_face_detector_performance_mode_accurate" translatable="false">2</string>
+
+    <!-- Strings for face detector face tracking preference. -->
+    <string name="pref_title_face_detector_face_tracking" translatable="false">Face tracking</string>
+    <string name="pref_key_live_preview_face_detection_face_tracking" translatable="false">lpfdft</string>
+
+    <!-- Strings for face detector min face size preference. -->
+    <string name="pref_title_face_detector_min_face_size" translatable="false">Minimum face size</string>
+    <string name="pref_key_live_preview_face_detection_min_face_size" translatable="false">lpfdmfs</string>
+    <string name="pref_dialog_message_face_detector_min_face_size" translatable="false">Proportion of the head width to the image width, and the valid value range is [0.0, 1.0]</string>
+    <string name="pref_toast_invalid_min_face_size" translatable="false">Minimum face size must be a float value and in the range [0.0, 1.0]</string>
+
+    <!-- Strings for pose detector performance mode preference. -->
+    <string name="pref_title_pose_detector_performance_mode" translatable="false">Performance mode</string>
+    <string name="pref_key_live_preview_pose_detection_performance_mode" translatable="false">lppdpm</string>
+    <string name="pref_key_still_image_pose_detection_performance_mode" translatable="false">sipdpm</string>
+    <string name="pref_entries_pose_detector_performance_mode_fast" translatable="false">Fast</string>
+    <string name="pref_entries_pose_detector_performance_mode_accurate" translatable="false">Accurate</string>
+    <string name="pref_entry_values_pose_detector_performance_mode_fast" translatable="false">1</string>
+    <string name="pref_entry_values_pose_detector_performance_mode_accurate" translatable="false">2</string>
+
+    <!-- Strings for pose detector prefer gpu preference. -->
+    <string name="pref_title_pose_detector_prefer_gpu" translatable="false">Prefer using GPU</string>
+    <string name="pref_key_pose_detector_prefer_gpu" translatable="false">pdpg</string>
+    <string name="pref_summary_pose_detector_prefer_gpu" translatable="false">If enabled, GPU will be used as long as it is available, stable and returns correct results. In this case, the detector will not check if GPU is really faster than CPU.</string>
+
+    <!-- Strings for pose detector showInFrameLikelihood preference. -->
+    <string name="pref_title_pose_detector_show_in_frame_likelihood" translatable="false">Show in-frame likelihood</string>
+    <string name="pref_key_live_preview_pose_detector_show_in_frame_likelihood" translatable="false">lppdsifl</string>
+    <string name="pref_key_still_image_pose_detector_show_in_frame_likelihood" translatable="false">sipdsifl</string>
+
+    <!-- Strings for pose detector z value visualization preference. -->
+    <string name="pref_title_pose_detector_visualize_z" translatable="false">Visualize z value</string>
+    <string name="pref_key_pose_detector_visualize_z" translatable="false">pdvz</string>
+    <string name="pref_title_pose_detector_rescale_z" translatable="false">Rescale z value for visualization</string>
+    <string name="pref_key_pose_detector_rescale_z" translatable="false">pdrz</string>
+
+    <!-- Strings for pose classification preference. -->
+    <string name="pref_title_pose_detector_run_classification" translatable="false">Run Classification</string>
+    <string name="pref_key_pose_detector_run_classification" translatable="false">pdrc</string>
+    <string name="pref_summary_pose_detector_run_classification" translatable="false">Classify squat and pushup poses. Count reps in streaming mode. To get the best classification results based on the current sample data, face the camera side way and make sure your full body is in the frame.</string>
+
+    <!-- Strings for segmentation preference. -->
+    <string name="pref_title_segmentation_raw_size_mask" translatable="false">Enable raw size mask</string>
+    <string name="pref_key_segmentation_raw_size_mask" translatable="false">srsm</string>
+
+    <!-- Cropper. -->
+    <string name="result_image_desc">crop result</string>
+
+    <!-- Barcode scanner. -->
+    <string name="menu_item_settings" translatable="false">Settings</string>
+    <string name="tralatedText">Translated text</string>
+    <string name="no_project_currently_available">No project currently available</string>
+</resources>

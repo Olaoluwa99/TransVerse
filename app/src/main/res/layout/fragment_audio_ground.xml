@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.audioGround.AudioGroundFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/screen_padding"
+        tools:context=".ui.audioGround.AudioGroundFragment">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/micLayout"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/micState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_baseline_mic_24" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/click_to_start_recording"
+            app:layout_constraintEnd_toEndOf="@+id/micLayout"
+            app:layout_constraintStart_toStartOf="@+id/micLayout"
+            app:layout_constraintTop_toBottomOf="@+id/micLayout" />
+
+        <Button
+            android:id="@+id/getTextFromAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/get_text_from_speech"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <TextView
+            android:id="@+id/transcriptTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Transcripted text"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="24sp"
+            android:layout_marginTop="@dimen/layout_entity_header_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/getTextFromAudio" />
+
+        <TextView
+            android:id="@+id/srcLang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
+            app:layout_constraintTop_toBottomOf="@+id/transcriptTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Source language" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/transcriptScroll"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/transcribed_text"
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/srcLang">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/transcribedEdittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="6"
+                android:gravity="top"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/targetLangSelector"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/transcriptScroll" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@+id/targetLangSelector"
+            app:layout_constraintTop_toTopOf="@id/targetLangSelector"
+            app:layout_constraintBottom_toBottomOf="@id/targetLangSelector" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/downloading_model_files"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/progressBar"
+            app:layout_constraintBottom_toBottomOf="@id/progressBar"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="@id/progressBar" />
+
+        <View
+            android:id="@+id/separator1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressText" />
+
+        <TextView
+            android:id="@+id/translationTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Translated text"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="24sp"
+            android:layout_marginTop="@dimen/layout_entity_header_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator1" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/translationScroll"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/tralatedText"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="@dimen/layout_entity_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/translationTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/translationEdittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="6"
+                android:gravity="top"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/playAudioCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/playAudioCard"
+            app:layout_constraintTop_toTopOf="@+id/playAudioCard" />
+
+        <com.masoudss.lib.WaveformSeekBar
+            android:id="@+id/waveSeekbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            app:wave_progress="33"
+            app:wave_max_progress="100"
+            app:wave_width="5dp"
+            app:wave_gap="2dp"
+            app:wave_min_height="5dp"
+            app:wave_corner_radius="2dp"
+            app:wave_background_color="@color/white"
+            app:wave_progress_color="@color/blue"
+            app:wave_gravity="center"
+            app:wave_padding_top="2dp"
+            app:wave_padding_Bottom="2dp"
+            app:wave_padding_right="2dp"
+            app:wave_padding_left="2dp"
+            app:wave_visible_progress="50"
+            app:marker_color="@color/red"
+            app:marker_width="1dp"
+            app:marker_text_color="@color/colorAccent"
+            app:marker_text_padding="2dp"
+            app:marker_text_size="12dp"
+            app:layout_constraintStart_toStartOf="@+id/seekBar"
+            app:layout_constraintEnd_toEndOf="@+id/seekBar"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar"/>
+
+        <!--
+        // setting wave_visible_progress will disable markers
+        -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/playAudioCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="24dp"
+            android:layout_marginTop="@dimen/layout_entity_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/translationScroll">
+
+            <ImageView
+                android:id="@+id/playAudioImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_play_arrow_24" />
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/downloadAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_entity_margin"
+            android:text="Download audio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/waveSeekbar" />
+
+        <Button
+            android:id="@+id/shareAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Share audio"
+            app:layout_constraintBottom_toBottomOf="@+id/downloadAudio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/downloadAudio" />
+
+        <View
+            android:id="@+id/separator3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/downloadAudio" />
+
+        <TextView
+            android:id="@+id/entitiesTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Extracted entities"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="24sp"
+            android:layout_marginTop="@dimen/layout_entity_header_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator3" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/entitiesGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/entitiesTitle"/>
+
+        <View
+            android:id="@+id/separator4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/entitiesGroup" />
+
+        <TextView
+            android:id="@+id/smartReplyHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Smart Reply"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="24sp"
+            android:layout_marginTop="@dimen/layout_entity_header_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator4" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/smartReplyGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/smartReplyHeader"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/content_description_google_translate_attribution"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_location_searching_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

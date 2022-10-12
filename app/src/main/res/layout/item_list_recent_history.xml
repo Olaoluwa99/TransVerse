@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="clickListener"
+            type="com.easit.aiscanner.adapters.ScanHistoryClickListener" />
+
+        <variable
+            name="scan"
+            type="com.easit.aiscanner.model.Scan" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="10dp"
+        android:onClick="@{() -> clickListener.onClick(scan)}">
+
+        <ImageView
+            android:id="@+id/backgroundColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/easino_lemon"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:id="@+id/iconBackground"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:gravity="center"
+                android:background="@drawable/history_icon_background"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/scanText"
+                app:cardCornerRadius="@dimen/options_card_radius">
+
+                <ImageView
+                    android:id="@+id/scanType"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_insert_photo_24"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/scanText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:lines="6"
+                android:textColor="@color/black"
+                tools:text="app:layout_constraintappappapp:layout_constraintBottom_toBottomOf:layout_constraintBottom_toBottomOf:layout_constraintBottom_toBottomOfBottom_toBottomOf"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iconBackground"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
+
+

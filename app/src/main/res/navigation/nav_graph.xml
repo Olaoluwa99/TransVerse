@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/typeChooserFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.easit.aiscanner.ui.text.TextFragment"
+        android:label="Text"
+        tools:layout="@layout/fragment_text" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.easit.aiscanner.ui.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/baseFragment"
+        android:name="com.easit.aiscanner.ui.BaseFragment"
+        android:label="fragment_base"
+        tools:layout="@layout/fragment_base" >
+        <action
+            android:id="@+id/action_baseFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/audioGroundFragment"
+        android:name="com.easit.aiscanner.ui.audioGround.AudioGroundFragment"
+        android:label="Audio"
+        tools:layout="@layout/fragment_audio_ground" />
+    <fragment
+        android:id="@+id/barcodeCaptureFragment"
+        android:name="com.easit.aiscanner.ui.barcode.BarcodeCaptureFragment"
+        android:label="Barcode"
+        tools:layout="@layout/fragment_barcode_capture" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.easit.aiscanner.ui.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/imageGroundFragment"
+        android:name="com.easit.aiscanner.ui.imageGround.ImageGroundFragment"
+        android:label="Image"
+        tools:layout="@layout/fragment_image_ground" />
+    <fragment
+        android:id="@+id/typeChooserFragment"
+        android:name="com.easit.aiscanner.ui.typeChooser.TypeChooserFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_type_chooser" >
+        <action
+            android:id="@+id/action_typeChooserFragment_to_audioGroundFragment"
+            app:destination="@id/audioGroundFragment" />
+        <action
+            android:id="@+id/action_typeChooserFragment_to_imageGroundFragment"
+            app:destination="@id/imageGroundFragment" />
+        <action
+            android:id="@+id/action_typeChooserFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_typeChooserFragment_to_barcodeCaptureFragment"
+            app:destination="@id/barcodeCaptureFragment" />
+        <argument
+            android:name="selectedScanId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+</navigation>

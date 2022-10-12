@@ -1,0 +1,12 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding">16dp</dimen>
+
+    <dimen name="settings_spacing">24dp</dimen>
+    <dimen name="options_card_radius">16dp</dimen>
+
+    <dimen name="layout_entity_margin">16dp</dimen>
+    <dimen name="layout_entity_header_margin">48dp</dimen>
+
+    <dimen name="screen_padding">24dp</dimen>
+</resources>

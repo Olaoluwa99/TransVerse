@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="background">#21B327</color>
+    <color name="sky_blue">#32B5C6</color>
+
+    <color name="primary">#607D8B</color>
+    <color name="primary_dark">#455A64</color>
+    <color name="primary_light">#CFD8DC</color>
+    <color name="accent">#FF5722</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+
+    <color name="blue">#4254B5</color>
+    <color name="red">#CC1717</color>
+    <color name="colorAccent">#8C63D6</color>
+
+
+
+    <color name="white_opaque">#80FFFFFF</color>
+    <color name="easino_purple">#452b4f</color>
+    <color name="easino_yellow">#fecc7b</color>
+    <color name="easino_orange">#fe805d</color>
+    <color name="easino_lemon">#ccf6c8</color>
+    <color name="easino_cream">#fcfcc3</color>
+    <color name="easino_light_purple">#62426b</color>
+
+    <color name="easino_error">#EC0A0A</color>
+
+    <color name="projectGridBackgroundColor">#FFFBFA</color>
+</resources>
