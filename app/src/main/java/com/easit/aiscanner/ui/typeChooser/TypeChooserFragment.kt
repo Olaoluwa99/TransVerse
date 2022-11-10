@@ -6,18 +6,37 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.core.view.doOnPreDraw
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.easit.aiscanner.R
 import com.easit.aiscanner.adapters.RecentHistoryAdapter
 import com.easit.aiscanner.adapters.ScanHistoryClickListener
+import com.easit.aiscanner.adapters.SwipeToDeleteCallback
 import com.easit.aiscanner.databinding.FragmentTypeChooserBinding
+import com.easit.aiscanner.model.Scan
+import com.easit.aiscanner.ui.settings.SettingsViewModel
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.MaterialElevationScale
 
 class TypeChooserFragment : Fragment() {
 
     private var _binding: FragmentTypeChooserBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var chooserText: TextView
+
+    private lateinit var audioText: TextView
+    private lateinit var imageText: TextView
+    private lateinit var barcodeText: TextView
+    private lateinit var textText: TextView
 
     private lateinit var audioCard: MaterialCardView
     private lateinit var textCard: MaterialCardView
@@ -27,21 +46,26 @@ class TypeChooserFragment : Fragment() {
 
     private lateinit var scanHistoryRecyclerView: RecyclerView
 
-    private lateinit var viewModel: TypeChooserViewModel
+    val viewModel by activityViewModels<TypeChooserViewModel>()
+    var appFontSize = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(TypeChooserViewModel::class.java)
         _binding = FragmentTypeChooserBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //Transition
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
+        //Main
         initializations()
-        viewModel.getAllScansHistory()
+        setFontSize()
         setUpRecyclerViewAdapter()
         audioCard.setOnClickListener {
             findNavController().navigate(
@@ -60,18 +84,44 @@ class TypeChooserFragment : Fragment() {
             })
         }
         barcodeCard.setOnClickListener {
-            findNavController().navigate(R.id.action_typeChooserFragment_to_barcodeCaptureFragment, Bundle().apply {
+            findNavController().navigate(R.id.action_typeChooserFragment_to_barcodeLiveFragment, Bundle().apply {
                 putString("selectedScanId", "")
             })
         }
     }
 
     private fun initializations(){
+        chooserText = binding.welcomeText
+
         audioCard = binding.openAudioGround
         textCard = binding.openTextGround
         imageCard = binding.openImageGround
         barcodeCard = binding.openBarcodeScanner
         scanHistoryRecyclerView = binding.scanHistoryRecyclerView
+
+        textText = binding.textText
+        audioText = binding.audioText
+        imageText = binding.imageText
+        barcodeText = binding.barcodeText
+    }
+
+    private fun setFontSize() {
+        //
+        appFontSize = viewModel.selectedFontSize!!
+        chooserText.textSize = (appFontSize + 10).toFloat()
+        textText.textSize = (appFontSize + 2).toFloat()
+        audioText.textSize = (appFontSize + 2).toFloat()
+        barcodeText.textSize = (appFontSize + 2).toFloat()
+        imageText.textSize = (appFontSize + 2).toFloat()
+    }
+
+    fun deleteScan(id: String){
+        viewModel.getSelectedScanObject(id)
+        viewModel.currentHistoryItem.observe(
+            viewLifecycleOwner,
+            androidx.lifecycle.Observer { scanObject ->
+                viewModel.deleteScan(scanObject)
+            })
     }
 
     private fun setUpRecyclerViewAdapter(){
@@ -97,16 +147,39 @@ class TypeChooserFragment : Fragment() {
                         putString("selectedScanId", selectedScanId)
                     })
             }
-            if (scan.scanType == "barcode"){
-                findNavController()
-                    .navigate(R.id.action_typeChooserFragment_to_barcodeCaptureFragment, Bundle().apply {
-                        putString("selectedScanId", selectedScanId)
-                    })
+        }, viewModel.selectedFontSize!!)
+
+        //On swipe action performed
+        val swipeToDeleteCallback = object : SwipeToDeleteCallback(){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val scanObject = viewModel.allScans.value?.get(position)
+                viewModel.deleteScan(scanObject!!)
+                scanHistoryRecyclerView.adapter?.notifyItemRemoved(position)
+                Snackbar.make(scanHistoryRecyclerView, "Undo", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", View.OnClickListener {
+                        viewModel.addScan(scanObject)
+                    }).show()
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(scanHistoryRecyclerView)
+
+        //On delete button clicked
+        adapter.setOnDeleteClickListener(object : RecentHistoryAdapter.OnDeleteClickListener {
+            override fun onImageClick(position: Int) {
+                val scanObject = viewModel.allScans.value?.get(position)
+                viewModel.deleteScan(scanObject!!)
+                Snackbar.make(scanHistoryRecyclerView, "Undo", Snackbar.LENGTH_LONG)
+                    .setAction("Undo", View.OnClickListener {
+                        viewModel.addScan(scanObject)
+                    }).show()
             }
         })
 
         scanHistoryRecyclerView.adapter = adapter
 
+        //On observation
         viewModel.allScans.observe(this.viewLifecycleOwner) { items ->
             items.let {
                 adapter.submitList(it)

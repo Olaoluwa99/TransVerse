@@ -7,10 +7,21 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <!-- Page titles -->
+    <string name="title_home">Home</string>
+    <string name="title_audio">Audio</string>
+    <string name="title_text">Text</string>
+    <string name="title_image">Image</string>
+    <string name="title_barcode">Barcode</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_help">Help &amp; support</string>
+    <string name="title_privacy_policy">Privacy policy</string>
+    <string name="title_third_party">Third party notice</string>
+
 
     <!-- For AI -->
     <string name="unknown_error">Unknown error occurred.</string>
-    <string name="content_description_google_translate_attribution">Google Translate attribution</string>
+    <string name="content_description_google_translate_attribution">Easit Limited</string>
     <string name="overlay_help">Center text in box</string>
     <string name="downloading_model_files">Downloading model files…</string>
 
@@ -167,8 +178,8 @@
     <string name="transcribed_text">Transcribed text is here</string>
     <string name="get_text_from_speech">Get text from speech</string>
     <string name="click_to_start_recording">Click to start recording</string>
+    <string name="click_to_select_image">Click to select an image from gallery</string>
     <string name="get_text_from_image">Get text from image</string>
-
 
 
     <!-- Settings related strings. -->
@@ -185,22 +196,24 @@
     <string name="pref_category_segmentation" translatable="false">Selfie Segmentation</string>
     <string name="pref_category_text_recognition" translatable="false">Text Recognition</string>
 
-    <!-- Strings for camera settings. -->
-    <string name="pref_category_key_camera" translatable="false">pckc</string>
-    <string name="pref_category_title_camera" translatable="false">Camera</string>
-    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
-    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
-    <string name="pref_key_front_camera_preview_size" translatable="false">fcpvs</string>
-    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
-    <string name="pref_key_camerax_rear_camera_target_resolution" translatable="false">crctas</string>
-    <string name="pref_key_camerax_front_camera_target_resolution" translatable="false">cfctas</string>
-    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
-    <string name="pref_title_rear_camera_preview_size" translatable="false">Rear camera preview size</string>
-    <string name="pref_title_front_camera_preview_size" translatable="false">Front camera preview size</string>
-    <string name="pref_title_camerax_rear_camera_target_resolution" translatable="false">CameraX rear camera target resolution</string>
-    <string name="pref_title_camerax_front_camera_target_resolution" translatable="false">CameraX front camera target resolution</string>
-    <string name="pref_title_camera_live_viewport" translatable="false">Enable live viewport</string>
-    <string name="pref_summary_camera_live_viewport" translatable="false">Do not block camera preview drawing on detection</string>
+    <!-- Strings for barcode detection settings. -->
+    <string name="pref_category_barcode_detection">Barcode detection</string>
+    <string name="pref_key_barcode_reticle_width" translatable="false">barcode_brw</string>
+    <string name="pref_title_barcode_reticle_width">Barcode reticle width</string>
+    <string name="pref_summary_barcode_reticle_width" formatted="false">Relative to the camera view width, ranges from 50% to 95%</string>
+    <string name="pref_key_barcode_reticle_height" translatable="false">barcode_brh</string>
+    <string name="pref_title_barcode_reticle_height">Barcode reticle height</string>
+    <string name="pref_summary_barcode_reticle_height" formatted="false">Relative to the camera view height, ranges from 20% to 80%</string>
+    <string name="pref_key_enable_barcode_size_check" translatable="false">barcode_ebsc</string>
+    <string name="pref_title_enable_barcode_size_check">Enable barcode size check</string>
+    <string name="pref_summary_enable_barcode_size_check">Will prompt user to move camera closer if the detected barcode is too small</string>
+    <string name="pref_key_minimum_barcode_width" translatable="false">barcode_mbw</string>
+    <string name="pref_title_minimum_barcode_width">Minimum barcode width</string>
+    <string name="pref_summary_minimum_barcode_width" formatted="false">Relative to the reticle width, ranges from 20% to 80% (only applicable when barcode size check enabled)</string>
+    <string name="pref_key_delay_loading_barcode_result" translatable="false">barcode_dlbr</string>
+    <string name="pref_title_delay_loading_barcode_result">Delay loading barcode result</string>
+    <string name="pref_summary_delay_loading_barcode_result">Will show the loading spinner for 2s</string>
+
 
     <!-- Strings for info preference. -->
     <string name="pref_title_info_hide" translatable="false">Hide detection info</string>
@@ -212,101 +225,36 @@
     <string name="pref_title_show_language_tag" translatable="false">Show language identified</string>
     <string name="pref_key_show_language_tag" translatable="false">slt</string>
 
-    <!-- Strings for object detector enable multiple objects preference. -->
-    <string name="pref_title_object_detector_enable_multiple_objects" translatable="false">Enable multiple objects</string>
-    <string name="pref_key_live_preview_object_detector_enable_multiple_objects" translatable="false">lpodemo</string>
-    <string name="pref_key_still_image_object_detector_enable_multiple_objects" translatable="false">siodemo</string>
-
-    <!-- Strings for object detector enable classification preference. -->
-    <string name="pref_title_object_detector_enable_classification" translatable="false">Enable classification</string>
-    <string name="pref_key_live_preview_object_detector_enable_classification" translatable="false">lpodec</string>
-    <string name="pref_key_still_image_object_detector_enable_classification" translatable="false">siodec</string>
-
-    <!-- Strings for face detector landmark mode preference. -->
-    <string name="pref_title_face_detector_landmark_mode" translatable="false">Landmark mode</string>
-    <string name="pref_key_live_preview_face_detection_landmark_mode" translatable="false">lpfdlm</string>
-    <string name="pref_entries_face_detector_landmark_mode_no_landmarks" translatable="false">No landmarks</string>
-    <string name="pref_entries_face_detector_landmark_mode_all_landmarks" translatable="false">All landmarks</string>
-    <!-- The following entry values must match the ones in FaceDetectorOptions#LandmarkMode -->
-    <string name="pref_entry_values_face_detector_landmark_mode_no_landmarks" translatable="false">1</string>
-    <string name="pref_entry_values_face_detector_landmark_mode_all_landmarks" translatable="false">2</string>
-
-    <!-- Strings for face detector contour mode preference. -->
-    <string name="pref_title_face_detector_contour_mode" translatable="false">Contour mode</string>
-    <string name="pref_key_live_preview_face_detection_contour_mode" translatable="false">lpfdcm</string>
-    <string name="pref_entries_face_detector_contour_mode_no_contours" translatable="false">No contours</string>
-    <string name="pref_entries_face_detector_contour_mode_all_contours" translatable="false">All contours</string>
-    <!-- The following entry values must match the ones in FaceDetectorOptions#ContourMode -->
-    <string name="pref_entry_values_face_detector_contour_mode_no_contours" translatable="false">1</string>
-    <string name="pref_entry_values_face_detector_contour_mode_all_contours" translatable="false">2</string>
-
-    <!-- Strings for face detector classification mode preference. -->
-    <string name="pref_title_face_detector_classification_mode" translatable="false">Classification mode</string>
-    <string name="pref_key_live_preview_face_detection_classification_mode" translatable="false">lpfdcfm</string>
-    <string name="pref_entries_face_detector_classification_mode_no_classifications" translatable="false">No classifications</string>
-    <string name="pref_entries_face_detector_classification_mode_all_classifications" translatable="false">All classifications</string>
-    <!-- The following entry values must match the ones in FaceDetectorOptions#ClassificationMode -->
-    <string name="pref_entry_values_face_detector_classification_mode_no_classifications" translatable="false">1</string>
-    <string name="pref_entry_values_face_detector_classification_mode_all_classifications" translatable="false">2</string>
-
-    <!-- Strings for face detector performance mode preference. -->
-    <string name="pref_title_face_detector_performance_mode" translatable="false">Performance mode</string>
-    <string name="pref_key_live_preview_face_detection_performance_mode" translatable="false">lpfdpm</string>
-    <string name="pref_entries_face_detector_performance_mode_fast" translatable="false">Fast</string>
-    <string name="pref_entries_face_detector_performance_mode_accurate" translatable="false">Accurate</string>
-    <!-- The following entry values must match the ones in FaceDetectorOptions#PerformanceMode -->
-    <string name="pref_entry_values_face_detector_performance_mode_fast" translatable="false">1</string>
-    <string name="pref_entry_values_face_detector_performance_mode_accurate" translatable="false">2</string>
-
-    <!-- Strings for face detector face tracking preference. -->
-    <string name="pref_title_face_detector_face_tracking" translatable="false">Face tracking</string>
-    <string name="pref_key_live_preview_face_detection_face_tracking" translatable="false">lpfdft</string>
-
-    <!-- Strings for face detector min face size preference. -->
-    <string name="pref_title_face_detector_min_face_size" translatable="false">Minimum face size</string>
-    <string name="pref_key_live_preview_face_detection_min_face_size" translatable="false">lpfdmfs</string>
-    <string name="pref_dialog_message_face_detector_min_face_size" translatable="false">Proportion of the head width to the image width, and the valid value range is [0.0, 1.0]</string>
-    <string name="pref_toast_invalid_min_face_size" translatable="false">Minimum face size must be a float value and in the range [0.0, 1.0]</string>
-
-    <!-- Strings for pose detector performance mode preference. -->
-    <string name="pref_title_pose_detector_performance_mode" translatable="false">Performance mode</string>
-    <string name="pref_key_live_preview_pose_detection_performance_mode" translatable="false">lppdpm</string>
-    <string name="pref_key_still_image_pose_detection_performance_mode" translatable="false">sipdpm</string>
-    <string name="pref_entries_pose_detector_performance_mode_fast" translatable="false">Fast</string>
-    <string name="pref_entries_pose_detector_performance_mode_accurate" translatable="false">Accurate</string>
-    <string name="pref_entry_values_pose_detector_performance_mode_fast" translatable="false">1</string>
-    <string name="pref_entry_values_pose_detector_performance_mode_accurate" translatable="false">2</string>
-
-    <!-- Strings for pose detector prefer gpu preference. -->
-    <string name="pref_title_pose_detector_prefer_gpu" translatable="false">Prefer using GPU</string>
-    <string name="pref_key_pose_detector_prefer_gpu" translatable="false">pdpg</string>
-    <string name="pref_summary_pose_detector_prefer_gpu" translatable="false">If enabled, GPU will be used as long as it is available, stable and returns correct results. In this case, the detector will not check if GPU is really faster than CPU.</string>
-
-    <!-- Strings for pose detector showInFrameLikelihood preference. -->
-    <string name="pref_title_pose_detector_show_in_frame_likelihood" translatable="false">Show in-frame likelihood</string>
-    <string name="pref_key_live_preview_pose_detector_show_in_frame_likelihood" translatable="false">lppdsifl</string>
-    <string name="pref_key_still_image_pose_detector_show_in_frame_likelihood" translatable="false">sipdsifl</string>
-
-    <!-- Strings for pose detector z value visualization preference. -->
-    <string name="pref_title_pose_detector_visualize_z" translatable="false">Visualize z value</string>
-    <string name="pref_key_pose_detector_visualize_z" translatable="false">pdvz</string>
-    <string name="pref_title_pose_detector_rescale_z" translatable="false">Rescale z value for visualization</string>
-    <string name="pref_key_pose_detector_rescale_z" translatable="false">pdrz</string>
-
-    <!-- Strings for pose classification preference. -->
-    <string name="pref_title_pose_detector_run_classification" translatable="false">Run Classification</string>
-    <string name="pref_key_pose_detector_run_classification" translatable="false">pdrc</string>
-    <string name="pref_summary_pose_detector_run_classification" translatable="false">Classify squat and pushup poses. Count reps in streaming mode. To get the best classification results based on the current sample data, face the camera side way and make sure your full body is in the frame.</string>
-
-    <!-- Strings for segmentation preference. -->
-    <string name="pref_title_segmentation_raw_size_mask" translatable="false">Enable raw size mask</string>
-    <string name="pref_key_segmentation_raw_size_mask" translatable="false">srsm</string>
-
-    <!-- Cropper. -->
-    <string name="result_image_desc">crop result</string>
+    <!-- Strings for camera settings. -->
+    <string name="pref_category_camera">Camera</string>
+    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
+    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
+    <string name="pref_title_rear_camera_preview_size">Rear camera preview size</string>
 
     <!-- Barcode scanner. -->
     <string name="menu_item_settings" translatable="false">Settings</string>
     <string name="tralatedText">Translated text</string>
     <string name="no_project_currently_available">No project currently available</string>
+
+    <!-- cd barcode scanner. -->
+    <string name="cd_settings_button">Settings</string>
+    <string name="cd_close_button">Back</string>
+    <string name="cd_flash_button">Toggle camera flash</string>
+    <string name="cd_photo_library_button">Upload image</string>
+
+    <!-- prompts. -->
+    <string name="prompt_point_at_a_barcode">Point your camera at a barcode</string>
+    <string name="prompt_hold_camera_steady">Keep camera still for a moment</string>
+    <string name="prompt_move_camera_closer">Move closer to search</string>
+    <string name="prompt_searching">Searching&#8230;</string>
+
+    <!-- Unknown label. -->
+    <string name="product_search_button">Search object</string>
+    <string name="pref_key_confirmation_time_in_manual_search" translatable="false">ctims</string>
+    <string name="pref_key_confirmation_time_in_auto_search" translatable="false">ctias</string>
+    <string name="pref_key_enable_auto_search" translatable="false">pkeas</string>
+    <string name="pref_key_object_detector_enable_classification" translatable="false">odec</string>
+    <string name="pref_key_object_detector_enable_multiple_objects" translatable="false">odemo</string>
+    <string name="get_details">Get translation</string>
+
 </resources>

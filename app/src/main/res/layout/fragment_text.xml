@@ -1,229 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
-        android:padding="@dimen/screen_padding"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.text.TextFragment">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/transcriptTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Transcripted text"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="24sp"
-            android:layout_marginTop="@dimen/layout_entity_header_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/transcriptScroll"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/srcLang">
+            android:padding="@dimen/screen_padding"
+            tools:context=".ui.text.TextFragment">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/transcriptEditText"
+            <TextView
+                android:id="@+id/transcriptTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_entity_header_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:hint="Transcripted text"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/transcriptScroll"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="top"
-                android:hint="@string/input_text"
-                android:lines="5" />
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/srcLang">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/transcriptEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:hint="@string/input_text"
+                    android:lines="5" />
 
-        <TextView
-            android:id="@+id/srcLang"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
-            app:layout_constraintTop_toBottomOf="@+id/transcriptTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Source language" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/setSourceText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Set Translate text"
-            app:layout_constraintEnd_toEndOf="@+id/transcriptScroll"
-            app:layout_constraintTop_toBottomOf="@+id/transcriptScroll" />
+            <Spinner
+                android:id="@+id/targetLangSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transcriptScroll" />
 
-        <View
-            android:id="@+id/separator1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/setSourceText" />
+            <TextView
+                android:id="@+id/targetLangSelectorCover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/targetLangSelector"
+                app:layout_constraintStart_toStartOf="@+id/targetLangSelector"
+                app:layout_constraintTop_toTopOf="@+id/targetLangSelector"
+                tools:text="English" />
 
-        <TextView
-            android:id="@+id/translationTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Translated text"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="24sp"
-            android:layout_marginTop="@dimen/layout_entity_header_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separator1" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/targetLangSelector"
+                app:layout_constraintStart_toEndOf="@+id/targetLangSelector"
+                app:layout_constraintTop_toTopOf="@id/targetLangSelector" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/translationScroll"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/tralatedText"
-            android:inputType="textMultiLine"
-            android:layout_marginTop="@dimen/layout_entity_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/translationTitle">
+            <TextView
+                android:id="@+id/progressText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:text="@string/downloading_model_files"
+                app:layout_constraintBottom_toBottomOf="@id/progressBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/progressBar"
+                app:layout_constraintTop_toTopOf="@id/progressBar" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/translationEdittext"
+            <TextView
+                android:id="@+id/srcLang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/transcriptTitle"
+                tools:text="Source language" />
+
+            <View
+                android:id="@+id/separator1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/targetLangSelector" />
+
+            <Button
+                android:id="@+id/getDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/get_details"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator1" />
+
+            <TextView
+                android:id="@+id/translationTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_entity_header_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:hint="Translated text"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/getDetails" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/translationScroll"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="6"
-                android:gravity="top"/>
+                android:layout_marginTop="@dimen/layout_entity_margin"
+                android:hint="@string/tralatedText"
+                android:inputType="textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/translationTitle">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/translationEdittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:lines="6" />
 
-        <View
-            android:id="@+id/separator3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/targetLangSelector" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/entitiesTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Extracted entities"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="24sp"
-            android:layout_marginTop="@dimen/layout_entity_header_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separator3" />
+            <View
+                android:id="@+id/separator3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/translationScroll" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/entitiesGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:singleLine="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/entitiesTitle"/>
+            <TextView
+                android:id="@+id/entitiesTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_entity_header_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:hint="Extracted entities"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator3" />
 
-        <View
-            android:id="@+id/separator4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/entitiesGroup" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/entitiesGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/entitiesTitle"
+                app:singleLine="true" />
+
+            <View
+                android:id="@+id/separator4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/entitiesGroup" />
 
 
-        <TextView
-            android:id="@+id/smartReplyHeader"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="Smart Reply"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="24sp"
-            android:layout_marginTop="@dimen/layout_entity_header_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separator4" />
+            <TextView
+                android:id="@+id/smartReplyHeader"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_entity_header_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:hint="Smart Reply"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator4" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/smartReplyGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="48dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/smartReplyHeader" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/smartReplyGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/smartReplyHeader" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/content_description_google_translate_attribution"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_baseline_location_searching_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="108dp"
+                android:contentDescription="@string/content_description_google_translate_attribution"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_baseline_location_searching_24"
+                app:layout_constraintTop_toBottomOf="@+id/smartReplyGroup"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <Spinner
-            android:id="@+id/targetLangSelector"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/translationScroll" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:visibility="invisible"
-            app:layout_constraintStart_toEndOf="@+id/targetLangSelector"
-            app:layout_constraintTop_toTopOf="@id/targetLangSelector"
-            app:layout_constraintBottom_toBottomOf="@id/targetLangSelector" />
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/progressText"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:text="@string/downloading_model_files"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/progressBar"
-            app:layout_constraintBottom_toBottomOf="@id/progressBar"
-            android:gravity="center_vertical"
-            app:layout_constraintTop_toTopOf="@id/progressBar" />
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:foreground="@color/easino_light_purple"
+        android:background="@color/easino_light_purple"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
 
 
 

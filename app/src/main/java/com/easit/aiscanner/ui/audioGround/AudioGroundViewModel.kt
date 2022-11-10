@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.*
 import com.easit.aiscanner.R
 import com.easit.aiscanner.data.Constants
+import com.easit.aiscanner.data.Preference
 import com.easit.aiscanner.database.ScanDatabase
 import com.easit.aiscanner.database.ScanRepository
 import com.easit.aiscanner.model.Message
@@ -29,53 +30,66 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
-class AudioGroundViewModel (application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class AudioGroundViewModel  @Inject constructor(
+    application: Application,
+    private val preference: Preference
+) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
     private val repository : ScanRepository
-
-    private var _currentScanObject = MutableLiveData<Scan>()
-    val currentScanObject: LiveData<Scan> = _currentScanObject
-
     lateinit var currentHistoryItem: LiveData<Scan>
 
     init {
         val dao = ScanDatabase.getDatabase(application).getScanDao()
         repository = ScanRepository(dao)
-
     }
 
-    fun getSelectedScanObject(id: String): Scan{
-        //currentHistoryItem = repository.getSelectedScanById(id)
-        return _currentScanObject.value!!
-    }
+    var selectedIncognitoMode
+        get() = preference.appIncognitoMode
+        set(value) {
+            preference.appIncognitoMode = value
+        }
 
-    fun getSelectedScanObject2(id: String) = viewModelScope.launch{
+    var selectedFontSize
+        get() = preference.appFontSize
+        set(value) {
+            preference.appFontSize = value
+        }
+
+    var selectedReadingSpeed
+        get() = preference.appReadingSpeed
+        set(value) {
+            preference.appReadingSpeed = value
+        }
+
+    var selectedSpeechPitch
+        get() = preference.appSpeechPitch
+        set(value) {
+            preference.appSpeechPitch = value
+        }
+
+    fun getSelectedScanObject(id: String) = viewModelScope.launch{
         currentHistoryItem = repository.getSelectedScanById(id)
     }
 
-    fun createScan(id: String, transcribedText: String, translatedText: String,
-                    date: String, time: String, scanType: String, entities: String, smartReplies: String,
-                    imageUrl: String, audioUrl: String, barcodeScan: String){
+    fun createScan(id: String, transcribedText: String, translatedText: String, sourceLanguage: String,
+                   translatedLanguage: String, entities: List<String>, smartReplies: List<String>,
+                   audioUrl: String){
 
-        val scan = Scan(getCurrentDateTime(), getCurrentDate(), getCurrentTime(), "audio", transcribedText, translatedText, "entities", "smartReplies",
-                    "", "", "barcodeScan")
+        val scan = Scan(id, getCurrentDateTime(), System.currentTimeMillis(), "audio", transcribedText,
+            translatedText, sourceLanguage, translatedLanguage, entities, smartReplies, "",
+            audioUrl, "barcodeScan")
 
-        val testScan = Scan(getCurrentDateTime(), date, time, scanType, transcribedText, translatedText, entities, smartReplies,
-            imageUrl, audioUrl, barcodeScan)
-        addScan(scan)
-    }
-
-    fun createScanTest(transcribedText: String, translatedText: String){
-        val scan = Scan(getCurrentDateTime(), getCurrentDate(), getCurrentTime(), "audio", transcribedText, translatedText, "entities", "smartReplies",
-            "imageUrl", "audioUrl", "barcodeScan")
         addScan(scan)
     }
 
@@ -85,17 +99,8 @@ class AudioGroundViewModel (application: Application) : AndroidViewModel(applica
 
     private fun getCurrentDateTime(): String {
         val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
-        return currentTime.format(formatter)
-    }
-    private fun getCurrentDate(): String {
-        val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return currentTime.format(formatter)
-    }
-    private fun getCurrentTime(): String {
-        val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HHmmssSSS")
+        //val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+        val formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")
         return currentTime.format(formatter)
     }
 
@@ -196,26 +201,36 @@ class AudioGroundViewModel (application: Application) : AndroidViewModel(applica
     init {
         modelDownloading.setValue(false)
         translating.value = false
+    }
+
+    fun extractReplies(text: String){
+        clearSuggestions()
+        generateReplies(text, System.currentTimeMillis()).addOnSuccessListener {repliesList ->
+            suggestionResultList.value = repliesList
+        }.addOnFailureListener {e ->
+            Log.d("Chips", e.message.toString())
+        }
+    }
+
+    fun setUpTranslation(){
         // Create a translation result or error object.
         val processTranslation =
             OnCompleteListener<String> { task ->
                 if (task.isSuccessful) {
                     translatedText.value = ResultOrError(task.result, null)
+
+
                     //TODO SHOW SMART REPLY
+                    /*
                     clearSuggestions()
-                    Log.d("Chips", "Before thr generate reply block")
                     generateReplies(task.result, System.currentTimeMillis()).addOnSuccessListener {repliesList ->
-                        Log.d("Chips", "stuff successful")
                         suggestionResultList.value = repliesList
                     }.addOnFailureListener {e ->
                         Log.d("Chips", e.message.toString())
-                    }
+                    }*/
 
-
-
-                    //TODO ENTITY EXTRACTION
                 } else {
-                    clearSuggestions()
+                    //clearSuggestions()
                     if (task.isCanceled) {
                         // Tasks are cancelled for reasons such as gating; ignore.
                         return@OnCompleteListener
@@ -224,9 +239,9 @@ class AudioGroundViewModel (application: Application) : AndroidViewModel(applica
                 }
             }
         // Start translation if any of the following change: detected text, source lang, target lang.
-        translatedText.addSource(sourceText) { translate().addOnCompleteListener(processTranslation) }
-        translatedText.addSource(sourceLang) { translate().addOnCompleteListener(processTranslation) }
-        translatedText.addSource(targetLang) { translate().addOnCompleteListener(processTranslation) }
+        //translatedText.addSource(sourceText) { translate().addOnCompleteListener(processTranslation) }
+        //translatedText.addSource(sourceLang) { translate().addOnCompleteListener(processTranslation) }
+        //translatedText.addSource(targetLang) { translate().addOnCompleteListener(processTranslation) }
     }
 
     private fun translate(): Task<String> {

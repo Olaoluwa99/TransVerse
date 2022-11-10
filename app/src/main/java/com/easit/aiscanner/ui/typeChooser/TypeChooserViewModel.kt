@@ -2,18 +2,26 @@ package com.easit.aiscanner.ui.typeChooser
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.easit.aiscanner.data.Preference
+import com.easit.aiscanner.database.ScanDao
 import com.easit.aiscanner.database.ScanDatabase
 import com.easit.aiscanner.database.ScanRepository
 import com.easit.aiscanner.model.Scan
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.ArrayList
+import javax.inject.Inject
 
 enum class ScanHistoryStatus { LOADING, ERROR, DONE, NO_PROJECT }
 
-class TypeChooserViewModel(application: Application) : AndroidViewModel(application) {
-    // TODO: Implement the ViewModel
+@HiltViewModel
+class TypeChooserViewModel @Inject constructor(
+    application: Application,
+    private val preference: Preference
+) : AndroidViewModel(application) {
     lateinit var allScans: LiveData<List<Scan>>
+
     private val repository : ScanRepository
 
     private val _scanObject = MutableLiveData<Scan>()
@@ -25,39 +33,27 @@ class TypeChooserViewModel(application: Application) : AndroidViewModel(applicat
     private val _status = MutableLiveData<ScanHistoryStatus>()
     val status: LiveData<ScanHistoryStatus> = _status
 
+    lateinit var currentHistoryItem: LiveData<Scan>
+
+
     init {
         _status.value = ScanHistoryStatus.LOADING
         val dao = ScanDatabase.getDatabase(application).getScanDao()
         repository = ScanRepository(dao)
-        //createTestHistory()
+        allScans = repository.allScans.asLiveData()
     }
 
-    fun getAllScansHistory() = viewModelScope.launch {
-        allScans = repository.allScans
-        if (allScans.value.isNullOrEmpty()){
-            _status.value = ScanHistoryStatus.NO_PROJECT
-        }else{
-            _status.value = ScanHistoryStatus.DONE
+    var selectedFontSize
+        get() = preference.appFontSize
+        set(value) {
+            preference.appFontSize = value
         }
-    }
 
-    private fun createTestHistory(){
-        val list1 = ArrayList<String>()
-        list1.add("Ola")
-        list1.add("Fikayo")
-        val list2 = ArrayList<String>()
-        list2.add("Ife")
-        list2.add("Mum")
-        val testScan = Scan("12345", "15092022", "9:45", "audio", "I am olaoluwa",
-            "Selected Translated text for here", "entities", "smart_replies",
-            "", "", "barcode_scan")
-        addScan(testScan)
-
-        val testScan2 = Scan("54321", "15092022", "9:45", "audio", "I am not olaoluwa",
-            "Unknown: Selected Translated text for here. Why", "entities", "smart_replies",
-            "", "", "barcode_scan")
-        addScan(testScan2)
-    }
+    var selectedIncognitoMode
+        get() = preference.appIncognitoMode
+        set(value) {
+            preference.appIncognitoMode = value
+        }
 
     fun deleteScan(scan: Scan) = viewModelScope.launch (Dispatchers.IO) {
         repository.delete(scan)
@@ -69,6 +65,10 @@ class TypeChooserViewModel(application: Application) : AndroidViewModel(applicat
 
     fun addScan(scan: Scan) = viewModelScope.launch (Dispatchers.IO) {
         repository.insert(scan)
+    }
+
+    fun getSelectedScanObject(id: String) = viewModelScope.launch{
+        currentHistoryItem = repository.getSelectedScanById(id)
     }
 
     fun onScanObjectClicked(scan: Scan) {

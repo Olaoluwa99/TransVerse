@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="viewModel"
-            type="com.easit.aiscanner.ui.typeChooser.TypeChooserViewModel" />
-    </data>
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,10 +20,11 @@
                 android:id="@+id/welcomeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
                 android:layout_marginTop="18dp"
-                android:text="Welcome Olaoluwa,"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Select a scan method:"
                 android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,6 +88,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Text"
+                                android:fontFamily="@font/poppins_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/textImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -139,6 +137,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Image"
+                                android:fontFamily="@font/poppins_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/imageImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -185,6 +184,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Audio"
+                                android:fontFamily="@font/poppins_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/audioImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -232,6 +232,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Barcode"
+                                android:fontFamily="@font/poppins_bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/barcodeImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -261,44 +262,28 @@
                 android:id="@+id/scan_history_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="60dp"
-                android:paddingBottom="200dp"
+                android:paddingBottom="108dp"
+                android:transitionGroup="true"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/historyTitle"
-                app:listAllScansHistory="@{viewModel.allScans}"
                 app:spanCount="1"
                 tools:itemCount="32"
                 tools:listitem="@layout/item_list_recent_history" />
 
-            <TextView
-                android:id="@+id/noProjectText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_project_currently_available"
-                style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:textSize="24sp"
-                android:visibility="gone"
-                app:emptyScanHistoryStatus="@{viewModel.status}"
-                app:layout_constraintTop_toTopOf="@+id/scan_history_recycler_view"
-                app:layout_constraintBottom_toBottomOf="@id/scan_history_recycler_view"
-                app:layout_constraintStart_toStartOf="@id/scan_history_recycler_view"
-                app:layout_constraintEnd_toEndOf="@id/scan_history_recycler_view"/>
-
-            <ProgressBar
-                android:id="@+id/loadingProgress"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:visibility="gone"
-                app:loadingScanHistoryStatus="@{viewModel.status}"
-                app:layout_constraintTop_toTopOf="@+id/scan_history_recycler_view"
-                app:layout_constraintBottom_toBottomOf="@id/scan_history_recycler_view"
-                app:layout_constraintStart_toStartOf="@id/scan_history_recycler_view"
-                app:layout_constraintEnd_toEndOf="@id/scan_history_recycler_view"/>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-</layout>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:foreground="@color/easino_light_purple"
+        android:background="@color/easino_light_purple"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

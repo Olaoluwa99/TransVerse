@@ -2,11 +2,49 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding">16dp</dimen>
 
-    <dimen name="settings_spacing">24dp</dimen>
+    <!--RANDOM STUFF-->
     <dimen name="options_card_radius">16dp</dimen>
-
     <dimen name="layout_entity_margin">16dp</dimen>
     <dimen name="layout_entity_header_margin">48dp</dimen>
-
     <dimen name="screen_padding">24dp</dimen>
+
+    <!--SETTINGS PAGE-->
+    <dimen name="settings_spacing">16dp</dimen>
+    <dimen name="settings_layout_padding">16dp</dimen>
+    <dimen name="settings_layout_margin">8dp</dimen>
+    <dimen name="settings_view_margin">16dp</dimen>
+    <dimen name="settings_headers_margin">36dp</dimen>
+
+    <!--DIALOGS PAGE-->
+    <dimen name="dialog_margins">16dp</dimen>
+
+    <!--TOP ACTION STUFF-->
+    <dimen name="top_action_bar_padding_horizontal">8dp</dimen>
+    <dimen name="top_action_bar_height">64dp</dimen>
+    <dimen name="top_action_button_padding">12dp</dimen>
+
+    <!--BARCODE CAMERA STUFF-->
+    <dimen name="search_progress_bar_size">48dp</dimen>
+    <dimen name="search_button_text_size">16sp</dimen>
+    <dimen name="search_button_margin_bottom">24dp</dimen>
+
+    <!--BARCODE BOTTOM PROMPT-->
+    <dimen name="bottom_prompt_chip_text_size">14sp</dimen>
+    <dimen name="bottom_prompt_chip_margin_bottom">28dp</dimen>
+    <dimen name="bottom_prompt_chip_corner_radius">8dp</dimen>
+    <dimen name="bottom_sheet_title_margin">16dp</dimen>
+    <dimen name="bottom_sheet_title_size">16sp</dimen>
+
+    <!--BARCODE SCANNER-->
+    <dimen name="barcode_bottom_sheet_padding_vertical">12dp</dimen>
+    <dimen name="barcode_reticle_ripple_stroke_width">4dp</dimen>
+    <dimen name="barcode_reticle_ripple_size_offset">40dp</dimen>
+    <dimen name="barcode_reticle_stroke_width">4dp</dimen>
+    <dimen name="barcode_reticle_corner_radius">8dp</dimen>
+    <dimen name="barcode_field_padding_horizontal">24dp</dimen>
+    <dimen name="barcode_field_padding_vertical">12dp</dimen>
+    <dimen name="barcode_field_value_size">16sp</dimen>
+    <dimen name="barcode_field_value_padding">16dp</dimen>
+    <dimen name="barcode_field_label_size">12sp</dimen>
+    <dimen name="barcode_field_label_padding">4dp</dimen>
 </resources>

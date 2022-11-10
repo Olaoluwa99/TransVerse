@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Elevated"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/selectBubbleSizeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select bubble size"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="@font/poppins_bold"/>
+
+        <RadioGroup
+            android:id="@+id/bubbleSizeGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dialog_margins"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectBubbleSizeText">
+
+            <RadioButton
+                android:id="@+id/verySmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Very small" />
+
+            <RadioButton
+                android:id="@+id/small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Small" />
+
+            <RadioButton
+                android:id="@+id/medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medium" />
+
+            <RadioButton
+                android:id="@+id/large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Large" />
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

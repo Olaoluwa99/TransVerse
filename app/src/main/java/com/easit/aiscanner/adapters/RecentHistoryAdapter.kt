@@ -1,6 +1,7 @@
 package com.easit.aiscanner.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,8 +11,20 @@ import com.easit.aiscanner.R
 import com.easit.aiscanner.databinding.ItemListRecentHistoryBinding
 import com.easit.aiscanner.model.Scan
 
-class RecentHistoryAdapter (val clickListener: ScanHistoryClickListener):
+class RecentHistoryAdapter (
+    private val clickListener: ScanHistoryClickListener,
+    private val fontSize: Int):
     ListAdapter<Scan, RecentHistoryViewHolder>(DiffCallback) {
+
+    lateinit var deleteClickListener: OnDeleteClickListener
+
+    interface OnDeleteClickListener{
+        fun onImageClick(position: Int)
+    }
+
+    fun setOnDeleteClickListener(listener: OnDeleteClickListener){
+        deleteClickListener = listener
+    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Scan>() {
         override fun areItemsTheSame(oldItem: Scan, newItem: Scan): Boolean {
@@ -25,14 +38,14 @@ class RecentHistoryAdapter (val clickListener: ScanHistoryClickListener):
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentHistoryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return RecentHistoryViewHolder(
+        return RecentHistoryViewHolder(deleteClickListener,
             ItemListRecentHistoryBinding.inflate(layoutInflater, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: RecentHistoryViewHolder, position: Int) {
         val scanItem = getItem(position)
-        holder.bind(clickListener,scanItem)
+        holder.bind(clickListener, scanItem, fontSize)
     }
 }
 
@@ -42,6 +55,7 @@ class ScanHistoryClickListener(val clickListener: (scan: Scan) -> Unit) {
 }
 
 class RecentHistoryViewHolder(
+    deleteClickListener: RecentHistoryAdapter.OnDeleteClickListener,
     private var binding: ItemListRecentHistoryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -50,7 +64,7 @@ class RecentHistoryViewHolder(
     var img3 = R.drawable.ic_baseline_mic_24
     val img4 = R.drawable.ic_baseline_qr_code_scanner_24
 
-    fun bind(clickListener: ScanHistoryClickListener, scan: Scan) {
+    fun bind(clickListener: ScanHistoryClickListener, scan: Scan, myFontSize: Int) {
 
         binding.scan = scan
         binding.clickListener = clickListener
@@ -84,7 +98,9 @@ class RecentHistoryViewHolder(
                     .into(scanType)
                 backgroundColor.setImageResource(R.drawable.background_barcode)
             }
-
+            scanDate.textSize = myFontSize.toFloat()
+            scanText.textSize = myFontSize.toFloat()
+            scanDate.text = scan.dateTime
             scanText.text = scan.translatedText
             executePendingBindings()
         }

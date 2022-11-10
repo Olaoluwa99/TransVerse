@@ -10,6 +10,7 @@ import androidx.lifecycle.*
 import com.easit.aiscanner.R
 import com.easit.aiscanner.data.Constants.DESIRED_HEIGHT_CROP_PERCENT
 import com.easit.aiscanner.data.Constants.DESIRED_WIDTH_CROP_PERCENT
+import com.easit.aiscanner.data.Preference
 import com.easit.aiscanner.database.ScanDatabase
 import com.easit.aiscanner.database.ScanRepository
 import com.easit.aiscanner.model.Message
@@ -30,14 +31,20 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
-class TextViewModel (application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class TextViewModel  @Inject constructor(
+    application: Application,
+    private val preference: Preference
+) : AndroidViewModel(application) {
 
     private val repository : ScanRepository
     lateinit var currentHistoryItem: LiveData<Scan>
@@ -47,13 +54,29 @@ class TextViewModel (application: Application) : AndroidViewModel(application) {
         repository = ScanRepository(dao)
     }
 
+    var selectedFontSize
+        get() = preference.appFontSize
+        set(value) {
+            preference.appFontSize = value
+        }
+
+    var selectedIncognitoMode
+        get() = preference.appIncognitoMode
+        set(value) {
+            preference.appIncognitoMode = value
+        }
+
     fun getSelectedScanObject(id: String) = viewModelScope.launch{
         currentHistoryItem = repository.getSelectedScanById(id)
     }
 
-    fun createScanTest(transcribedText: String, translatedText: String){
-        val scan = Scan(getCurrentDateTime(), getCurrentDate(), getCurrentTime(), "text", transcribedText, translatedText, "entities", "smartReplies",
-            "imageUrl", "audioUrl", "barcodeScan")
+    fun createScan(id: String, transcribedText: String, translatedText: String, sourceLanguage: String,
+                   translatedLanguage: String, entities: List<String>, smartReplies: List<String>){
+
+        val scan = Scan(id, getCurrentDateTime(), System.currentTimeMillis(), "text", transcribedText,
+            translatedText, sourceLanguage, translatedLanguage, entities, smartReplies, "",
+            "", "barcodeScan")
+
         addScan(scan)
     }
 
@@ -63,17 +86,8 @@ class TextViewModel (application: Application) : AndroidViewModel(application) {
 
     private fun getCurrentDateTime(): String {
         val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
-        return currentTime.format(formatter)
-    }
-    private fun getCurrentDate(): String {
-        val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return currentTime.format(formatter)
-    }
-    private fun getCurrentTime(): String {
-        val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HHmmssSSS")
+        //val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+        val formatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy")
         return currentTime.format(formatter)
     }
 

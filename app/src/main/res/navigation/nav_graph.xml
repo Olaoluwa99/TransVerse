@@ -6,39 +6,30 @@
     app:startDestination="@id/typeChooserFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/textGroundFragment"
         android:name="com.easit.aiscanner.ui.text.TextFragment"
         android:label="Text"
-        tools:layout="@layout/fragment_text" />
+        tools:layout="@layout/fragment_text"/>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.easit.aiscanner.ui.settings.SettingsFragment"
         android:label="Settings"
-        tools:layout="@layout/fragment_settings" />
-    <fragment
-        android:id="@+id/baseFragment"
-        android:name="com.easit.aiscanner.ui.BaseFragment"
-        android:label="fragment_base"
-        tools:layout="@layout/fragment_base" >
+        tools:layout="@layout/fragment_settings" >
         <action
-            android:id="@+id/action_baseFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_settingsFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_thirdPartyNoticeFragment"
+            app:destination="@id/thirdPartyNoticeFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_privacyPolicyFragment"
+            app:destination="@id/privacyPolicyFragment" />
     </fragment>
     <fragment
         android:id="@+id/audioGroundFragment"
         android:name="com.easit.aiscanner.ui.audioGround.AudioGroundFragment"
         android:label="Audio"
         tools:layout="@layout/fragment_audio_ground" />
-    <fragment
-        android:id="@+id/barcodeCaptureFragment"
-        android:name="com.easit.aiscanner.ui.barcode.BarcodeCaptureFragment"
-        android:label="Barcode"
-        tools:layout="@layout/fragment_barcode_capture" />
-    <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.easit.aiscanner.ui.history.HistoryFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/imageGroundFragment"
         android:name="com.easit.aiscanner.ui.imageGround.ImageGroundFragment"
@@ -57,13 +48,32 @@
             app:destination="@id/imageGroundFragment" />
         <action
             android:id="@+id/action_typeChooserFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_typeChooserFragment_to_barcodeCaptureFragment"
-            app:destination="@id/barcodeCaptureFragment" />
+            app:destination="@id/textGroundFragment" />
         <argument
             android:name="selectedScanId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_typeChooserFragment_to_barcodeLiveFragment"
+            app:destination="@id/barcodeLiveFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/barcodeLiveFragment"
+        android:name="com.easit.aiscanner.ui.barcode.BarcodeLiveFragment"
+        android:label="BarcodeLiveFragment" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.easit.aiscanner.ui.settings.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="com.easit.aiscanner.ui.settings.PrivacyPolicyFragment"
+        android:label="fragment_privacy_policy"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/thirdPartyNoticeFragment"
+        android:name="com.easit.aiscanner.ui.settings.ThirdPartyNoticeFragment"
+        android:label="fragment_third_party_notice"
+        tools:layout="@layout/fragment_third_party_notice" />
 </navigation>

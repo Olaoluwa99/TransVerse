@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.easit.aiscanner.model.Scan
 
 @Database(entities = arrayOf(Scan::class), version = 1, exportSchema = false)
+@TypeConverters(MyTypeConverter::class)
 abstract class ScanDatabase: RoomDatabase() {
     abstract fun getScanDao(): ScanDao
 

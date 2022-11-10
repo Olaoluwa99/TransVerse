@@ -1,233 +1,638 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.settings.SettingsFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        tools:context=".ui.settings.SettingsFragment">
 
-        <TextView
-            android:id="@+id/general_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GENERAL"
-            android:fontFamily="@font/poppins_bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/general_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="@dimen/settings_headers_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:text="GENERAL"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/launchModeLayout" />
+
+            <LinearLayout
+                android:id="@+id/launchModeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_spacing"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/general_text">
+
+                <TextView
+                    android:id="@+id/launchModeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Launch mode" />
+
+                <TextView
+                    android:id="@+id/launchModeValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin"
+                    android:text="Normal" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/appThemeLayout" />
+
+            <LinearLayout
+                android:id="@+id/appThemeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/launchModeLayout">
+
+                <TextView
+                    android:id="@+id/appTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="App Theme" />
+
+                <TextView
+                    android:id="@+id/appThemeValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/appLanguageLayout" />
+
+            <LinearLayout
+                android:id="@+id/appLanguageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appThemeLayout">
+
+                <TextView
+                    android:id="@+id/appLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="App Language" />
+
+                <TextView
+                    android:id="@+id/appLanguageValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/fontSizeLayout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fontSizeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appLanguageLayout">
+
+                <TextView
+                    android:id="@+id/fontSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Font size"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/fontSizeSeekbar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin"
+                    android:layout_marginEnd="16dp"
+                    android:max="28"
+                    android:progress="14"
+                    android:min="8"
+                    android:progressTint="@color/easino_light_purple"
+                    android:thumbTint="@color/easino_light_purple"
+                    app:layout_constraintEnd_toStartOf="@+id/fontSizeSeekbarValue"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fontSize" />
+
+                <TextView
+                    android:id="@+id/fontSizeSeekbarValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/settings_layout_padding"
+                    app:layout_constraintBottom_toBottomOf="@+id/fontSizeSeekbar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/fontSizeSeekbar"
+                    app:layout_constraintTop_toTopOf="@+id/fontSizeSeekbar"
+                    tools:text="24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bubbleSizeLayout" />
+
+            <LinearLayout
+                android:id="@+id/bubbleSizeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fontSizeLayout">
+
+                <TextView
+                    android:id="@+id/bubbleSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bubble size" />
+
+                <TextView
+                    android:id="@+id/bubbleSizeValueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bubbleSizeLayout" />
+
+            <TextView
+                android:id="@+id/audioHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="@dimen/settings_headers_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:text="AUDIO"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bubbleSizeLayout" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/audioSpeedLayout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/audioSpeedLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_layout_margin"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audioHeader">
+
+                <TextView
+                    android:id="@+id/readingSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Reading speed" />
+
+                <SeekBar
+                    android:id="@+id/readingSpeedSeekbar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin"
+                    android:layout_marginEnd="16dp"
+                    android:max="200"
+                    android:progress="50"
+                    android:progressTint="@color/easino_light_purple"
+                    android:thumbTint="@color/easino_light_purple"
+                    app:layout_constraintEnd_toStartOf="@+id/readingSpeedSeekbarValue"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/readingSpeed"/>
+
+                <TextView
+                    android:id="@+id/readingSpeedSeekbarValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/settings_layout_padding"
+                    app:layout_constraintBottom_toBottomOf="@+id/readingSpeedSeekbar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/readingSpeedSeekbar"
+                    app:layout_constraintTop_toTopOf="@+id/readingSpeedSeekbar"
+                    tools:text="24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/audioPitchLayout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/audioPitchLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audioSpeedLayout">
+
+                <TextView
+                    android:id="@+id/speechPitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Speech pitch" />
+
+                <SeekBar
+                    android:id="@+id/speechPitchSeekbar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/settings_layout_margin"
+                    android:layout_marginEnd="16dp"
+                    android:max="100"
+                    android:progress="50"
+                    android:progressTint="@color/easino_light_purple"
+                    android:thumbTint="@color/easino_light_purple"
+                    app:layout_constraintEnd_toStartOf="@+id/speechPitchSeekbarValue"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/speechPitch" />
+
+                <TextView
+                    android:id="@+id/speechPitchSeekbarValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/settings_layout_padding"
+                    app:layout_constraintBottom_toBottomOf="@+id/speechPitchSeekbar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/speechPitchSeekbar"
+                    app:layout_constraintTop_toTopOf="@+id/speechPitchSeekbar"
+                    tools:text="24"/>
 
 
-        <TextView
-            android:id="@+id/launchModeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Launch mode"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/general_text" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/appTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="App Theme"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/launchModeText" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audioPitchLayout" />
 
-        <TextView
-            android:id="@+id/bubbleSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Bubble size"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appTheme" />
+            <TextView
+                android:id="@+id/storageHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="@dimen/settings_headers_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:text="STORAGE"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/audioPitchLayout" />
 
-        <TextView
-            android:id="@+id/storageHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STORAGE"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_marginTop="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bubbleSize" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/goIncognitoLayout" />
 
-        <TextView
-            android:id="@+id/storageCapture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Automatically store cropped media"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/storageHeader" />
+            <LinearLayout
+                android:id="@+id/goIncognitoLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_spacing"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintEnd_toStartOf="@id/goIncognitoCheckbox"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/storageHeader">
 
-        <TextView
-            android:id="@+id/storageAudio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Store audio clips"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/storageCapture" />
+                <TextView
+                    android:id="@+id/incognitoText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Go incognito" />
 
-        <TextView
-            android:id="@+id/scannerResultPopUpHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SCANNER RESULT POPUP"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_marginTop="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/storageAudio" />
+                <TextView
+                    android:id="@+id/incognitoDetailText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stops saving history" />
 
-        <TextView
-            android:id="@+id/showCroppedImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Show cropped images in popup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scannerResultPopUpHeader" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/showEntity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Show entity in popup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showCroppedImage" />
+            <CheckBox
+                android:id="@+id/goIncognitoCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/settings_layout_padding"
+                app:layout_constraintBottom_toBottomOf="@+id/goIncognitoLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/goIncognitoLayout"
+                app:layout_constraintTop_toTopOf="@+id/goIncognitoLayout" />
 
-        <TextView
-            android:id="@+id/showReplies"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Show replies in popup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showEntity" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/deleteHistoryLayout" />
 
-        <TextView
-            android:id="@+id/showTranslation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Show translation in popup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showReplies" />
+            <LinearLayout
+                android:id="@+id/deleteHistoryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/goIncognitoLayout">
 
-        <TextView
-            android:id="@+id/showAudioButton"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Show audio in popup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showTranslation" />
+                <TextView
+                    android:id="@+id/deleteHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete history" />
 
-        <TextView
-            android:id="@+id/showBarcodeButton"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/settings_spacing"
-            android:text="Show barcode in popup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showAudioButton" />
+                <TextView
+                    android:id="@+id/deleteHistoryDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Deletes all history" />
 
-        <CheckBox
-            android:id="@+id/autoStoreCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/storageCapture"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/storageCapture" />
+            </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/showCroppedImageCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/showCroppedImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/showCroppedImage" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/deleteHistoryLayout" />
 
-        <CheckBox
-            android:id="@+id/showEntityCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/showEntity"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/showEntity" />
+            <TextView
+                android:id="@+id/othersHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_headers_margin"
+                android:fontFamily="@font/poppins_bold"
+                android:layout_marginHorizontal="16dp"
+                android:text="OTHERS"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/deleteHistoryLayout" />
 
-        <CheckBox
-            android:id="@+id/showRepliesCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/showReplies"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/showReplies" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/helpSupportLayout" />
 
-        <CheckBox
-            android:id="@+id/showTranslationCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/showTranslation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/showTranslation" />
+            <LinearLayout
+                android:id="@+id/helpSupportLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/settings_spacing"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/othersHeader">
 
-        <CheckBox
-            android:id="@+id/showAudioCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/showAudioButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/showAudioButton" />
+                <TextView
+                    android:id="@+id/helpSupport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Help and support" />
 
-        <CheckBox
-            android:id="@+id/showBarcodeCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/showBarcodeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/showBarcodeButton" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/permissionsHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PERMISSIONS"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_marginTop="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showBarcodeButton" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/helpSupportLayout" />
 
-        <TextView
-            android:id="@+id/aboutUsHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="About us"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/permissionsHeader" />
+            <LinearLayout
+                android:id="@+id/privacyPermissionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/helpSupportLayout">
 
-        <TextView
-            android:id="@+id/contactUsHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact us"
-            android:fontFamily="@font/poppins_bold"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/aboutUsHeader" />
+                <TextView
+                    android:id="@+id/privacyPermission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Privacy and permissions" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/privacyPermissionLayout" />
+
+            <LinearLayout
+                android:id="@+id/thirdPartyNoticesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/privacyPermissionLayout">
+
+                <TextView
+                    android:id="@+id/thirdPartyNotices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Third party notices" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/thirdPartyNoticesLayout" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/sendFeedbacksLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/thirdPartyNoticesLayout">
 
+                <TextView
+                    android:id="@+id/sendFeedbacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send feedbacks" />
 
-</ScrollView>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sendFeedbacksLayout" />
+
+            <LinearLayout
+                android:id="@+id/rateUsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/settings_layout_padding"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sendFeedbacksLayout">
+
+                <TextView
+                    android:id="@+id/rateUs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rate us" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rateUsLayout" />
+
+            <TextView
+                android:id="@+id/versionInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/settings_headers_margin"
+                android:layout_marginHorizontal="16dp"
+                android:text="Version 1.0.0 (2.45.49.5839)"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rateUsLayout" />
+
+            <TextView
+                android:id="@+id/companyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="©2022 Easit Limited"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/versionInfo" />
+
+            <TextView
+                android:id="@+id/allRightsReserved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="All rights reserved"
+                android:layout_marginBottom="108dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/companyName"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:foreground="@color/easino_light_purple"
+        android:background="@color/easino_light_purple"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

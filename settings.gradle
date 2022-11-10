@@ -1,3 +1,4 @@
+/*
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -13,6 +14,6 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-}
+}*/
 rootProject.name = "AIScanner"
 include ':app'
