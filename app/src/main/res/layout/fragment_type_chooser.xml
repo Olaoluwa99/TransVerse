@@ -28,22 +28,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
+            <Button
+                android:id="@+id/launchScanner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Launch Scanner"
+                app:layout_constraintEnd_toEndOf="@+id/pageOptions"
+                app:layout_constraintStart_toStartOf="@+id/pageOptions"
+                app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pageOptions"
+                style="@style/Widget.Material3.CardView.Outlined"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:layout_marginBottom="24dp"
-                android:layout_marginEnd="24dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="24dp"
                 android:padding="16dp"
                 app:cardCornerRadius="24dp"
-                style="@style/Widget.Material3.CardView.Outlined"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/welcomeText">
+                app:layout_constraintTop_toBottomOf="@id/launchScanner">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -61,7 +68,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/openImageGround"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" >
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -70,7 +77,7 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@color/easino_lemon"/>
+                                android:src="@color/easino_lemon" />
 
                             <ImageView
                                 android:id="@+id/textImage"
@@ -87,8 +94,8 @@
                                 android:id="@+id/textText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Text"
                                 android:fontFamily="@font/poppins_bold"
+                                android:text="Text"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/textImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -110,7 +117,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/openTextGround"
-                        app:layout_constraintTop_toTopOf="@+id/openTextGround" >
+                        app:layout_constraintTop_toTopOf="@+id/openTextGround">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -119,7 +126,7 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@color/easino_cream"/>
+                                android:src="@color/easino_cream" />
 
                             <ImageView
                                 android:id="@+id/imageImage"
@@ -136,8 +143,8 @@
                                 android:id="@+id/imageText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Image"
                                 android:fontFamily="@font/poppins_bold"
+                                android:text="Image"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/imageImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -156,7 +163,7 @@
                         app:cardCornerRadius="@dimen/options_card_radius"
                         app:layout_constraintEnd_toEndOf="@+id/openTextGround"
                         app:layout_constraintStart_toStartOf="@+id/openTextGround"
-                        app:layout_constraintTop_toBottomOf="@+id/openTextGround" >
+                        app:layout_constraintTop_toBottomOf="@+id/openTextGround">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -165,7 +172,7 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@color/easino_yellow"/>
+                                android:src="@color/easino_yellow" />
 
                             <ImageView
                                 android:id="@+id/audioImage"
@@ -183,8 +190,8 @@
                                 android:id="@+id/audioText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Audio"
                                 android:fontFamily="@font/poppins_bold"
+                                android:text="Audio"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/audioImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -205,7 +212,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/openImageGround"
                         app:layout_constraintStart_toStartOf="@+id/openImageGround"
-                        app:layout_constraintTop_toBottomOf="@+id/openImageGround" >
+                        app:layout_constraintTop_toBottomOf="@+id/openImageGround">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -214,7 +221,7 @@
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@color/easino_orange"/>
+                                android:src="@color/easino_orange" />
 
                             <ImageView
                                 android:id="@+id/barcodeImage"
@@ -231,8 +238,8 @@
                                 android:id="@+id/barcodeText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Barcode"
                                 android:fontFamily="@font/poppins_bold"
+                                android:text="Barcode"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/barcodeImage"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -247,6 +254,16 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <Button
+                android:id="@+id/codexTranslate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Codex"
+                app:layout_constraintEnd_toEndOf="@+id/pageOptions"
+                app:layout_constraintStart_toStartOf="@+id/pageOptions"
+                app:layout_constraintTop_toBottomOf="@+id/pageOptions" />
+
             <TextView
                 android:id="@+id/historyTitle"
                 android:layout_width="wrap_content"
@@ -256,7 +273,7 @@
                 android:textSize="24sp"
                 android:layout_marginTop="36dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pageOptions" />
+                app:layout_constraintTop_toBottomOf="@+id/codexTranslate" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/scan_history_recycler_view"
@@ -278,7 +295,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:foreground="@color/easino_light_purple"
         android:background="@color/easino_light_purple"
         app:cardCornerRadius="16dp"

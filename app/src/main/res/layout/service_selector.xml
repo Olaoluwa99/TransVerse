@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ImageView
+        android:id="@+id/global_screenshot_background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="#99000000"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/global_screenshot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:background="@drawable/screenshot_panel"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/global_screenshot_flash"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@android:color/white"
+        android:visibility="gone" />
+
+    <com.easit.aiscanner.floatingWindow.ScreenshotSelectorView
+        android:id="@+id/global_screenshot_selector"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="40.0dip"
+        android:gravity="center"
+        android:text="Drag to scan"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/white" />
+</FrameLayout>

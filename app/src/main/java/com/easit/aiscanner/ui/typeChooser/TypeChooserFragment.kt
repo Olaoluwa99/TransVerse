@@ -15,6 +15,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
 import com.easit.aiscanner.adapters.RecentHistoryAdapter
 import com.easit.aiscanner.adapters.ScanHistoryClickListener
@@ -43,6 +44,9 @@ class TypeChooserFragment : Fragment() {
     private lateinit var imageCard: MaterialCardView
     private lateinit var barcodeCard: MaterialCardView
     private lateinit var selectedScanId: String
+
+    private lateinit var launchScanner: Button
+    private lateinit var codexTranslate: Button
 
     private lateinit var scanHistoryRecyclerView: RecyclerView
 
@@ -88,6 +92,12 @@ class TypeChooserFragment : Fragment() {
                 putString("selectedScanId", "")
             })
         }
+        launchScanner.setOnClickListener {
+            (activity as MainActivity).launchScanner()
+        }
+        codexTranslate.setOnClickListener {
+            (activity as MainActivity).launchFloater()
+        }
     }
 
     private fun initializations(){
@@ -99,10 +109,14 @@ class TypeChooserFragment : Fragment() {
         barcodeCard = binding.openBarcodeScanner
         scanHistoryRecyclerView = binding.scanHistoryRecyclerView
 
+        launchScanner = binding.launchScanner
+        codexTranslate = binding.codexTranslate
+
         textText = binding.textText
         audioText = binding.audioText
         imageText = binding.imageText
         barcodeText = binding.barcodeText
+
     }
 
     private fun setFontSize() {
@@ -113,6 +127,9 @@ class TypeChooserFragment : Fragment() {
         audioText.textSize = (appFontSize + 2).toFloat()
         barcodeText.textSize = (appFontSize + 2).toFloat()
         imageText.textSize = (appFontSize + 2).toFloat()
+
+        launchScanner.textSize = appFontSize.toFloat()
+        codexTranslate.textSize = appFontSize.toFloat()
     }
 
     fun deleteScan(id: String){

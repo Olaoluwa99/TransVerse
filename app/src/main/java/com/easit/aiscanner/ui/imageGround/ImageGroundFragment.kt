@@ -22,6 +22,7 @@ import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
 import com.easit.aiscanner.databinding.FragmentImageGroundBinding
 import com.easit.aiscanner.model.InternalStoragePhoto
@@ -72,6 +73,9 @@ class ImageGroundFragment : Fragment() {
     private var pageRepliesList = mutableListOf<String>()
     var appFontSize = 0
 
+    var isAppLaunchedFromScanner = false
+    var scannerImageURI = ""
+
 
     //BATCH 1
     private lateinit var clickTextView: TextView
@@ -117,6 +121,7 @@ class ImageGroundFragment : Fragment() {
         selectedImage.setOnClickListener {
             startCameraWithoutUri()
         }
+        showValuesForScanner() //Only when app is launched from scanner
         setupTargetLanguageSpinner()
         retrieveAndSetDetailsForHistory()
         getFullScan()
@@ -151,6 +156,22 @@ class ImageGroundFragment : Fragment() {
         smartReplyHeader = binding.smartReplyHeader
         entitiesTitle = binding.entitiesTitle
     }
+
+    private fun showValuesForScanner(){
+        //TODO Here
+        scannerImageURI = (activity as MainActivity).scannedImageURI
+        if (scannerImageURI.isNotBlank() && scannerImageURI != "" && scannerImageURI != "null"){
+            clickTextView.visibility = View.GONE
+            val path =
+                "${requireContext().filesDir.path}/SCAN.$scannerImageURI.jpg"
+            val fileURI = Uri.fromFile(File(path))
+            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, Uri.parse(fileURI.toString()))
+            showImageWithGlide(bitmap)
+            convertImageToText(fileURI)
+            (activity as MainActivity).scannedImageURI = ""
+        }
+    }
+
     private fun setFontSize() {
         //
         clickTextView.textSize = appFontSize.toFloat()
@@ -238,8 +259,14 @@ class ImageGroundFragment : Fragment() {
         }
     }
     private fun retrieveAndSetDetailsForHistory(){
-        val currentScanId = requireArguments().getString("selectedScanId").toString()
-        if (currentScanId != ""){
+        var currentScanId = ""
+        // val currentScanId = requireArguments().getString("selectedScanId").toString()
+        try {
+            currentScanId = requireArguments().getString("selectedScanId").toString()
+        }catch (e: Exception){
+
+        }
+        if (currentScanId != "" && currentScanId != "null"){
             viewModel.getSelectedScanObject(currentScanId)
 
             viewModel.currentHistoryItem.observe(viewLifecycleOwner, androidx.lifecycle.Observer { scanObject ->
@@ -481,6 +508,16 @@ class ImageGroundFragment : Fragment() {
         }catch (e: Exception){
             e.printStackTrace()
             false
+        }
+    }
+
+    private fun retrieveImageByID(imageID: String){
+        lifecycleScope.launch {
+            val imageList = loadImageFromInternalStorage(imageID)
+            if (imageList.isNotEmpty()){
+                val image = imageList[0]
+                showImageWithGlide(image.bmp)
+            }
         }
     }
 

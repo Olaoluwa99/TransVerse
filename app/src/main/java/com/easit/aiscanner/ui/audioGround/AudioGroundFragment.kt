@@ -9,6 +9,7 @@ import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -35,6 +36,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
 import com.easit.aiscanner.data.Constants
 import com.easit.aiscanner.databinding.FragmentAudioGroundBinding
@@ -54,7 +56,6 @@ import java.util.*
 @AndroidEntryPoint
 class AudioGroundFragment : Fragment() {
 
-
     private val REQUEST_SPEECH_RECORDING = Constants.REQUEST_SPEECH_RECORDING
     private val REQUEST_RECORD_AUDIO = Constants.REQUEST_RECORD_AUDIO
     private val WRITE_EXTERNAL_STORAGE_CODE = Constants.WRITE_EXTERNAL_STORAGE
@@ -71,6 +72,7 @@ class AudioGroundFragment : Fragment() {
     var mMediaPlayer: MediaPlayer? = null
     private var restartAudio = true
     private var pauseLength: Int? = null
+    var floatingAudioTranscribedText = ""
 
     //BATCH 1
     private lateinit var recordButton: ImageView
@@ -139,6 +141,7 @@ class AudioGroundFragment : Fragment() {
         initializations()
         setFontSize()
         setupTargetLanguageSpinner()
+        showValuesForScanner() //Only when app is launched from scanner
         retrieveAndSetDetailsForHistory()
         performSpeechToText()
         playAudioImage.setOnClickListener {
@@ -219,13 +222,21 @@ class AudioGroundFragment : Fragment() {
         smartReplyHeader.textSize = (appFontSize + 10).toFloat()
 
     }
+
+    private fun showValuesForScanner(){
+        //TODO Here
+        floatingAudioTranscribedText = (activity as MainActivity).floatingAudioTranscribedText
+        if (floatingAudioTranscribedText.isNotBlank()){
+            transcriptEditText.setText(floatingAudioTranscribedText)
+            (activity as MainActivity).floatingAudioTranscribedText = ""
+        }
+    }
+
     private fun setupTargetLanguageSpinner() {
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item, viewModel.availableLanguages
         )
-        targetLangSelector.adapter = adapter
-        targetLangSelector.setSelection(adapter.getPosition(Language("en")))
         targetLangSelector.adapter = adapter
         targetLangSelector.setSelection(adapter.getPosition(Language("en")))
         targetLangSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -251,9 +262,11 @@ class AudioGroundFragment : Fragment() {
             progressText.visibility = progressBar.visibility
         })
     }
+
     private fun observeTranslatedTextResponse(){
         viewModel.newTranslatedText.observe(viewLifecycleOwner, androidx.lifecycle.Observer { result ->
             translationEditText.setText(result)
+            prepareAndSynthesizeAudioToFile()
         })
     }
     private fun observeForReturnedEntities(){

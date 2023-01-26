@@ -30,6 +30,7 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -38,6 +39,7 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
+@HiltViewModel
 class TextViewModel2 @Inject constructor(
     application: Application,
     private val preference: Preference

@@ -56,6 +56,10 @@
         <action
             android:id="@+id/action_typeChooserFragment_to_barcodeLiveFragment"
             app:destination="@id/barcodeLiveFragment" />
+        <argument
+            android:name="scannedImageURI"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/barcodeLiveFragment"

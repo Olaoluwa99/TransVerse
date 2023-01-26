@@ -117,8 +117,6 @@ class TextFragment : Fragment() {
         )
         targetLangSelector.adapter = adapter
         targetLangSelector.setSelection(adapter.getPosition(Language("en")))
-        targetLangSelector.adapter = adapter
-        targetLangSelector.setSelection(adapter.getPosition(Language("en")))
         targetLangSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,

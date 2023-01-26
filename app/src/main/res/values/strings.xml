@@ -256,5 +256,6 @@
     <string name="pref_key_object_detector_enable_classification" translatable="false">odec</string>
     <string name="pref_key_object_detector_enable_multiple_objects" translatable="false">odemo</string>
     <string name="get_details">Get translation</string>
+    <string name="recording">Recording</string>
 
 </resources>
