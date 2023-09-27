@@ -1,4 +1,4 @@
-# AIScanner
+# SmartText Assistant
 
 ![SmartText Assistant Logo](/path/to/logo.png) <!-- Replace with your logo -->
 
