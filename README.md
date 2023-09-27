@@ -34,7 +34,7 @@ The SmartText Assistant is a versatile mobile application designed to enhance te
 
 1. Clone the repository.
    ```shell
-   git clone https://github.com/yourusername/smarttext-assistant.git
+   git clone https://github.com/Olaoluwa99/AIScanner.git
    ```
 
 2. Install the app on your Android device.
@@ -53,7 +53,7 @@ The SmartText Assistant is a versatile mobile application designed to enhance te
 
 - Android Studio
 - Android SDK
-- Dependencies (list any dependencies here)
+- Google play services
 
 ### Building and Running
 
@@ -77,4 +77,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 - Email: olaoluwadaniel99@gmail.com
 - Website: [www.yourwebsite.com](https://www.yourwebsite.com/)
-- LinkedIn: [Your Name](https://www.linkedin.com/in/yourname/)
+- LinkedIn: [Olaoluwa Odewale](https://www.linkedin.com/in/yourname/)
