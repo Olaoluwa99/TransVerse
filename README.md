@@ -1,6 +1,6 @@
 # SmartText Assistant
 
-![SmartText Assistant Logo](/path/to/logo.png) <!-- Replace with your logo -->
+![SmartText Assistant Logo](https://static.vecteezy.com/system/resources/previews/024/673/150/non_2x/document-paper-text-written-by-smart-chat-ai-assistant-3d-render-icon-illustration-design-png.png)
 
 ## Overview
 
