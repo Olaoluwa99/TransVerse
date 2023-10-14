@@ -76,5 +76,5 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 - Email: olaoluwadaniel99@gmail.com
-- Website: [www.yourwebsite.com](https://www.yourwebsite.com/)
-- LinkedIn: [Olaoluwa Odewale](https://www.linkedin.com/in/yourname/)
+- Website: NIL
+- LinkedIn: [Olaoluwa Odewale](https://www.linkedin.com/in/Olaoluwa-Odewale/)
