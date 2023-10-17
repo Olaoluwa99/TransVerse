@@ -6,7 +6,11 @@
 
 The SmartText Assistant is a versatile mobile application designed to enhance text communication and productivity. This app offers a wide range of features, including text input, image text extraction, voice-to-text transcription, language detection, smart replies, entity extraction, translation, a floating text box, and a history log.
 
-![SmartText Assistant Screenshot](/path/to/screenshot.png) <!-- Replace with your app screenshot -->
+## Screenshots 
+![Zed-01](https://github.com/Olaoluwa99/SmartText-Assistant/assets/85140182/76c74558-9d6c-4efc-b816-e458e18b0bdd)
+![Zed-02](https://github.com/Olaoluwa99/SmartText-Assistant/assets/85140182/b8a572ff-78d3-4a35-beef-ea2f0cabf427)
+![Zed-03](https://github.com/Olaoluwa99/SmartText-Assistant/assets/85140182/d67d0648-c17f-4d7d-8ccd-7584e48f964f)
+
 
 ## Key Features
 
