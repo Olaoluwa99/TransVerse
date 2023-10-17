@@ -38,7 +38,7 @@ The SmartText Assistant is a versatile mobile application designed to enhance te
 
 1. Clone the repository.
    ```shell
-   git clone https://github.com/Olaoluwa99/AIScanner.git
+   git clone https://github.com/Olaoluwa99/SmartText-Assistant.git
    ```
 
 2. Install the app on your Android device.
