@@ -1,5 +1,8 @@
 package com.easit.aiscanner.ui.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
+
+    private val shareURL = ""
+    private val appURL = ""
 
     //GENERAL
     private lateinit var generalText: TextView
@@ -61,12 +67,12 @@ class SettingsFragment : Fragment() {
     private lateinit var helpSupportLayout: LinearLayout
     private lateinit var privacyPermissionLayout: LinearLayout
     private lateinit var thirdPartyNoticesLayout: LinearLayout
-    private lateinit var sendFeedbacksLayout: LinearLayout
+    private lateinit var shareAppLayout: LinearLayout
     private lateinit var rateUsLayout: LinearLayout
     private lateinit var helpSupport: TextView
     private lateinit var privacyPermission: TextView
     private lateinit var thirdPartyNotices: TextView
-    private lateinit var sendFeedbacks: TextView
+    private lateinit var shareApp: TextView
     private lateinit var rateUs: TextView
 
     //LAST
@@ -177,12 +183,12 @@ class SettingsFragment : Fragment() {
         helpSupport = binding.helpSupport
         privacyPermission = binding.privacyPermission
         thirdPartyNotices = binding.thirdPartyNotices
-        sendFeedbacks = binding.sendFeedbacks
+        shareApp = binding.shareApp
         rateUs = binding.rateUs
         helpSupportLayout = binding.helpSupportLayout
         privacyPermissionLayout = binding.privacyPermissionLayout
         thirdPartyNoticesLayout = binding.thirdPartyNoticesLayout
-        sendFeedbacksLayout = binding.sendFeedbacksLayout
+        shareAppLayout = binding.shareAppLayout
         rateUsLayout = binding.rateUsLayout
         //
         versionInfo = binding.versionInfo
@@ -260,25 +266,41 @@ class SettingsFragment : Fragment() {
     }
     private fun othersListeners(){
         helpSupportLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_helpFragment)
+            //findNavController().navigate(R.id.action_settingsFragment_to_helpFragment)
         }
         privacyPermissionLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_privacyPolicyFragment)
+            //findNavController().navigate(R.id.action_settingsFragment_to_privacyPolicyFragment)
         }
         thirdPartyNoticesLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_thirdPartyNoticeFragment)
+            //findNavController().navigate(R.id.action_settingsFragment_to_thirdPartyNoticeFragment)
         }
-        sendFeedbacksLayout.setOnClickListener {
-            Toast.makeText(requireContext(), "Open gmail Intent", Snackbar.LENGTH_LONG).show()
+        shareAppLayout.setOnClickListener {
+            Toast.makeText(requireContext(), "Share stuff", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Share App")
+            intent.putExtra(Intent.EXTRA_TEXT, "This is an awesome app for your android mobile. Check it out at " + shareURL + requireActivity().packageName)
+            startActivity(Intent.createChooser(intent, "Share App Via..."))
         }
         rateUsLayout.setOnClickListener {
-            Toast.makeText(requireContext(), "Open play-store Intent", Snackbar.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Open play-store Intent", Toast.LENGTH_SHORT).show()
+            try {
+                val rateIntent = Intent(Intent.ACTION_VIEW)
+                rateIntent.data = Uri.parse(appURL + requireActivity().packageName)
+                rateIntent.setPackage("com.android.vending")
+                startActivity(rateIntent)
+            } catch (e: ActivityNotFoundException) {
+                val rateIntent = Intent(Intent.ACTION_VIEW)
+                rateIntent.data = Uri.parse(appURL + requireActivity().packageName)
+                startActivity(rateIntent)
+            }
         }
     }
     private fun setFontSize(){
         //
         generalText.textSize = appFontSize.toFloat()
         launchModeText.textSize = appFontSize.toFloat()
+
         launchModeValueText.textSize = appFontSize.toFloat()
         appTheme.textSize = appFontSize.toFloat()
         appThemeValueText.textSize = appFontSize.toFloat()
@@ -304,7 +326,7 @@ class SettingsFragment : Fragment() {
         helpSupport.textSize = appFontSize.toFloat()
         privacyPermission.textSize = appFontSize.toFloat()
         thirdPartyNotices.textSize = appFontSize.toFloat()
-        sendFeedbacks.textSize = appFontSize.toFloat()
+        shareApp.textSize = appFontSize.toFloat()
         rateUs.textSize = appFontSize.toFloat()
         //
         versionInfo.textSize = appFontSize.toFloat()
@@ -454,7 +476,7 @@ class SettingsFragment : Fragment() {
         dialogDeleteHistoryBinding?.confirmButton?.setOnClickListener {
             viewModel.deleteAllHistory()
             deleteHistoryAlertDialog?.dismiss()
-            Toast.makeText(requireContext(), "All history deleted successfully", Snackbar.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "All history deleted successfully", Toast.LENGTH_SHORT).show()
         }
         deleteHistoryAlertDialog?.show()
     }

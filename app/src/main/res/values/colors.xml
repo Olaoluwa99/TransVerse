@@ -54,4 +54,7 @@
     <color name="teal_700">#FF018786</color>
 
     <color name="red_error">#ED0F0F</color>
+
+    <color name="toolbar_line">#000000</color>
+
 </resources>

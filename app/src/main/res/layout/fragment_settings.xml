@@ -541,7 +541,7 @@
 
 
             <LinearLayout
-                android:id="@+id/sendFeedbacksLayout"
+                android:id="@+id/shareAppLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -551,10 +551,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/thirdPartyNoticesLayout">
 
                 <TextView
-                    android:id="@+id/sendFeedbacks"
+                    android:id="@+id/shareApp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Send feedbacks" />
+                    android:text="Share app" />
 
             </LinearLayout>
 
@@ -564,7 +564,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sendFeedbacksLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/shareAppLayout" />
 
             <LinearLayout
                 android:id="@+id/rateUsLayout"
@@ -574,7 +574,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/settings_layout_padding"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sendFeedbacksLayout">
+                app:layout_constraintTop_toBottomOf="@+id/shareAppLayout">
 
                 <TextView
                     android:id="@+id/rateUs"
@@ -617,22 +617,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:text="All rights reserved"
-                android:layout_marginBottom="108dp"
+                android:paddingBottom="108dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/companyName"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:foreground="@color/easino_light_purple"
-        android:background="@color/easino_light_purple"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

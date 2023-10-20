@@ -46,7 +46,6 @@ class TypeChooserFragment : Fragment() {
     private lateinit var selectedScanId: String
 
     private lateinit var launchScanner: Button
-    private lateinit var codexTranslate: Button
 
     private lateinit var scanHistoryRecyclerView: RecyclerView
 
@@ -95,9 +94,6 @@ class TypeChooserFragment : Fragment() {
         launchScanner.setOnClickListener {
             (activity as MainActivity).launchScanner()
         }
-        codexTranslate.setOnClickListener {
-            (activity as MainActivity).launchFloater()
-        }
     }
 
     private fun initializations(){
@@ -110,7 +106,6 @@ class TypeChooserFragment : Fragment() {
         scanHistoryRecyclerView = binding.scanHistoryRecyclerView
 
         launchScanner = binding.launchScanner
-        codexTranslate = binding.codexTranslate
 
         textText = binding.textText
         audioText = binding.audioText
@@ -129,7 +124,6 @@ class TypeChooserFragment : Fragment() {
         imageText.textSize = (appFontSize + 2).toFloat()
 
         launchScanner.textSize = appFontSize.toFloat()
-        codexTranslate.textSize = appFontSize.toFloat()
     }
 
     fun deleteScan(id: String){
