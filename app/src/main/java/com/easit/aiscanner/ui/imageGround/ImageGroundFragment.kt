@@ -1,5 +1,8 @@
 package com.easit.aiscanner.ui.imageGround
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -103,6 +106,10 @@ class ImageGroundFragment : Fragment() {
     private lateinit var entitiesTitle: TextView
     private lateinit var entitiesGroup: ChipGroup
 
+    //
+    private lateinit var copyTranscript: ImageView
+    private lateinit var copyTranslate: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -130,6 +137,13 @@ class ImageGroundFragment : Fragment() {
         observeModelDownloading()
         observeForReturnedEntities()
         observeForReturnedReplies()
+
+        copyTranscript.setOnClickListener {
+            saveToClipboard("TRANSCRIPTED_TEXT", transcriptEditText.text.toString())
+        }
+        copyTranslate.setOnClickListener {
+            saveToClipboard("TRANSLATED_TEXT", translationEditText.text.toString())
+        }
     }
 
     private fun initializations(){
@@ -155,6 +169,9 @@ class ImageGroundFragment : Fragment() {
 
         smartReplyHeader = binding.smartReplyHeader
         entitiesTitle = binding.entitiesTitle
+
+        copyTranscript = binding.copyTranscript
+        copyTranslate = binding.copyTranslate
     }
 
     private fun showValuesForScanner(){
@@ -313,6 +330,13 @@ class ImageGroundFragment : Fragment() {
             e.printStackTrace()
         }
     }
+
+    private fun saveToClipboard(label: String, saveText: String) {
+        val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, saveText)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
     private fun showSmartReply(suggestionsList: List<SmartReplySuggestion>) {
         smartReplyGroup.removeAllViews()
         suggestionsList.forEachIndexed { index, suggestion ->
@@ -323,6 +347,10 @@ class ImageGroundFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("SmartReplyChip", copyText)
+                }
             }
             smartReplyGroup.addView(chip as View)
         }
@@ -337,6 +365,10 @@ class ImageGroundFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("SmartReplyChip", copyText)
+                }
             }
             smartReplyGroup.addView(chip as View)
         }
@@ -351,6 +383,10 @@ class ImageGroundFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("EntityExtractChip", copyText)
+                }
             }
             entitiesGroup.addView(chip as View)
         }

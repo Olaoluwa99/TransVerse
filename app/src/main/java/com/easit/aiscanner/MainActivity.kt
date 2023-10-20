@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                         }
                     }
                     R.id.barcodeLiveFragment -> {
-                        toolbarText.text = getString(R.string.title_audio)
+                        toolbarText.text = getString(R.string.title_barcode)
                         toolbarSettingsIcon.visibility = View.VISIBLE
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)

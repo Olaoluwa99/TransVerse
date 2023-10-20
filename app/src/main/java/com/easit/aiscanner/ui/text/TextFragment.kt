@@ -1,32 +1,30 @@
 package com.easit.aiscanner.ui.text
 
-import android.graphics.Color
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context.CLIPBOARD_SERVICE
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.lifecycle.lifecycleScope
 import com.easit.aiscanner.R
 import com.easit.aiscanner.databinding.FragmentTextBinding
 import com.easit.aiscanner.scannerAI.phase2.Language
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.transition.MaterialContainerTransform
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class TextFragment : Fragment() {
 
-    private lateinit var viewModel: TextViewModel2
+    private lateinit var viewModel: TextViewModel
 
     private var _binding: FragmentTextBinding? = null
     private val binding get() = _binding!!
@@ -57,11 +55,15 @@ class TextFragment : Fragment() {
     private lateinit var entitiesTitle: TextView
     private lateinit var entitiesGroup: ChipGroup
 
+    //
+    private lateinit var copyTranscript: ImageView
+    private lateinit var copyTranslate: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(TextViewModel2::class.java)
+        viewModel = ViewModelProvider(this).get(TextViewModel::class.java)
         _binding = FragmentTextBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -74,11 +76,19 @@ class TextFragment : Fragment() {
         setupTargetLanguageSpinner()
         retrieveAndSetDetailsForHistory()
         getFullScan()
-        observeSourceLanguage()
+
         observeTranslatedTextResponse()
         observeModelDownloading()
         observeForReturnedEntities()
         observeForReturnedReplies()
+        observeSourceLanguage()
+
+        copyTranscript.setOnClickListener {
+            saveToClipboard("TRANSCRIPTED_TEXT", transcriptEditText.text.toString())
+        }
+        copyTranslate.setOnClickListener {
+            saveToClipboard("TRANSLATED_TEXT", translationEditText.text.toString())
+        }
     }
     private fun initializations(){
         translationEditText = binding.translationEdittext
@@ -96,6 +106,9 @@ class TextFragment : Fragment() {
 
         smartReplyHeader = binding.smartReplyHeader
         entitiesTitle = binding.entitiesTitle
+
+        copyTranscript = binding.copyTranscript
+        copyTranslate = binding.copyTranslate
     }
     private fun setFontSize() {
         //
@@ -219,9 +232,20 @@ class TextFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("SmartReplyChip", copyText)
+                }
             }
             smartReplyGroup.addView(chip as View)
         }
+    }
+
+    private fun saveToClipboard(label: String, saveText: String) {
+        val clipboard = activity?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, saveText)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
     private fun showSmartReplyString(suggestionsList: List<String>) {
         smartReplyGroup.removeAllViews()
@@ -233,6 +257,10 @@ class TextFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("SmartReplyChip", copyText)
+                }
             }
             smartReplyGroup.addView(chip as View)
         }
@@ -247,6 +275,10 @@ class TextFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("EntityExtractChip", copyText)
+                }
             }
             entitiesGroup.addView(chip as View)
         }

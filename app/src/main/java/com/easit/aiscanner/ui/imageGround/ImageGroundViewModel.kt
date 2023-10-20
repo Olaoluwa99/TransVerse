@@ -127,6 +127,7 @@ class ImageGroundViewModel @Inject constructor(
         imageUrl: String) {
         languageIdentifier.identifyLanguage(transcriptText)
             .addOnSuccessListener { languageCode ->
+                _sourceLanguageText.value = Language(languageCode).displayName
                 if (languageCode != "und"){
                     translate(id = id, transcriptText = transcriptText,
                         sourceLanguage = Language(languageCode).displayName,

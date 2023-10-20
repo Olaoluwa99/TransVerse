@@ -32,8 +32,9 @@
                 android:id="@+id/launchScanner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="Launch floating scanner"
                 android:layout_marginTop="18dp"
-                android:text="Launch Scanner"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/pageOptions"
                 app:layout_constraintStart_toStartOf="@+id/pageOptions"
                 app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
@@ -50,7 +51,7 @@
                 app:cardCornerRadius="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/launchScanner">
+                app:layout_constraintTop_toBottomOf="@id/welcomeText">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -95,6 +96,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
+                                android:textColor="@color/black"
                                 android:text="Text"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/textImage"
@@ -144,6 +146,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
+                                android:textColor="@color/black"
                                 android:text="Image"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/imageImage"
@@ -191,6 +194,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
+                                android:textColor="@color/black"
                                 android:text="Audio"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/audioImage"
@@ -239,6 +243,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_bold"
+                                android:textColor="@color/black"
                                 android:text="Barcode"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/barcodeImage"
@@ -254,16 +259,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/codexTranslate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:text="Codex"
-                app:layout_constraintEnd_toEndOf="@+id/pageOptions"
-                app:layout_constraintStart_toStartOf="@+id/pageOptions"
-                app:layout_constraintTop_toBottomOf="@+id/pageOptions" />
-
             <TextView
                 android:id="@+id/historyTitle"
                 android:layout_width="wrap_content"
@@ -271,9 +266,9 @@
                 android:fontFamily="@font/poppins_bold"
                 android:text="HISTORY"
                 android:textSize="24sp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="48dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/codexTranslate" />
+                app:layout_constraintTop_toBottomOf="@+id/pageOptions" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/scan_history_recycler_view"
@@ -292,15 +287,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:foreground="@color/easino_light_purple"
-        android:background="@color/easino_light_purple"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

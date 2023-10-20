@@ -2,14 +2,14 @@ package com.easit.aiscanner.ui.audioGround
 
 import android.Manifest.permission.RECORD_AUDIO
 import android.app.Activity
-import android.app.Activity.DOWNLOAD_SERVICE
 import android.app.Activity.RESULT_OK
-import android.app.DownloadManager
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -23,7 +23,6 @@ import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +45,6 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Runnable
 import java.io.*
 import java.time.LocalDateTime
@@ -117,10 +115,14 @@ class AudioGroundFragment : Fragment() {
     private lateinit var designatedFileName: String
     private lateinit var mediaRecorder: MediaRecorder
 
+    //
+    private lateinit var copyTranscript: ImageView
+    private lateinit var copyTranslate: ImageView
+
     //SYSTEM
     private var _binding: FragmentAudioGroundBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: AudioGroundViewModel2
+    private lateinit var viewModel: AudioGroundViewModel
     var appFontSize = 0
 
 
@@ -128,7 +130,7 @@ class AudioGroundFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(AudioGroundViewModel2::class.java)
+        viewModel = ViewModelProvider(this).get(AudioGroundViewModel::class.java)
         _binding = FragmentAudioGroundBinding.inflate(inflater, container, false)
         mediaRecorder = MediaRecorder()
         return binding.root
@@ -171,6 +173,13 @@ class AudioGroundFragment : Fragment() {
         observeModelDownloading()
         observeForReturnedEntities()
         observeForReturnedReplies()
+
+        copyTranscript.setOnClickListener {
+            saveToClipboard("TRANSCRIPTED_TEXT", transcriptEditText.text.toString())
+        }
+        copyTranslate.setOnClickListener {
+            saveToClipboard("TRANSLATED_TEXT", translationEditText.text.toString())
+        }
     }
 
     private fun initializations() {
@@ -203,6 +212,9 @@ class AudioGroundFragment : Fragment() {
         seekBar = binding.seekBar
         passText = binding.passText
         dueText = binding.dueText
+
+        copyTranscript = binding.copyTranscript
+        copyTranslate = binding.copyTranslate
     }
     private fun setFontSize() {
         //
@@ -341,6 +353,13 @@ class AudioGroundFragment : Fragment() {
                 })
         }
     }
+
+    private fun saveToClipboard(label: String, saveText: String) {
+        val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, saveText)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
     private fun showSmartReply(suggestionsList: List<SmartReplySuggestion>) {
         smartReplyGroup.removeAllViews()
         suggestionsList.forEachIndexed { index, suggestion ->
@@ -351,6 +370,10 @@ class AudioGroundFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("SmartReplyChip", copyText)
+                }
             }
             smartReplyGroup.addView(chip as View)
         }
@@ -365,6 +388,10 @@ class AudioGroundFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("SmartReplyChip", copyText)
+                }
             }
             smartReplyGroup.addView(chip as View)
         }
@@ -379,6 +406,10 @@ class AudioGroundFragment : Fragment() {
                 isClickable = true
                 id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
+                setOnClickListener {view ->
+                    val copyText = (view as Chip).text.toString()
+                    saveToClipboard("EntityExtractChip", copyText)
+                }
             }
             entitiesGroup.addView(chip as View)
         }

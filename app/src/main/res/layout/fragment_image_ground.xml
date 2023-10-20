@@ -31,7 +31,7 @@
                     android:id="@+id/selectedImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_baseline_insert_photo_24"
+                    android:src="@drawable/baseline_photo_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -81,6 +81,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/transcriptTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="Source language" />
+
+                <ImageView
+                    android:id="@+id/copyTranscript"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_baseline_content_copy_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/transcriptScroll"
+                    app:layout_constraintEnd_toEndOf="@id/transcriptScroll"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/transcriptScroll"
@@ -175,6 +185,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/getDetails" />
+
+                <ImageView
+                    android:id="@+id/copyTranslate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_baseline_content_copy_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/translationScroll"
+                    app:layout_constraintEnd_toEndOf="@id/translationScroll"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/translationScroll"
@@ -283,16 +303,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:foreground="@color/easino_light_purple"
-        android:background="@color/easino_light_purple"
-        app:cardCornerRadius="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
