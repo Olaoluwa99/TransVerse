@@ -117,7 +117,7 @@ class TypeChooserFragment : Fragment() {
     private fun setFontSize() {
         //
         appFontSize = viewModel.selectedFontSize!!
-        chooserText.textSize = (appFontSize + 10).toFloat()
+        chooserText.textSize = (appFontSize + 6).toFloat()
         textText.textSize = (appFontSize + 2).toFloat()
         audioText.textSize = (appFontSize + 2).toFloat()
         barcodeText.textSize = (appFontSize + 2).toFloat()

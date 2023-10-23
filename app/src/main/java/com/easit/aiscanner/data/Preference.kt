@@ -40,11 +40,11 @@ class Preference @Inject constructor(
         set(value) = appBubbleSizeSharedPreferences.edit { putString(KEY_BUBBLE_SIZE_PREF, value!!)}
 
     var appReadingSpeed : Int?
-        get() = appReadingSpeedSharedPreferences.getInt(KEY_READING_SPEED_PREF, 1)
+        get() = appReadingSpeedSharedPreferences.getInt(KEY_READING_SPEED_PREF, 50)
         set(value) = appReadingSpeedSharedPreferences.edit { putInt(KEY_READING_SPEED_PREF, value!!)}
 
     var appSpeechPitch : Int?
-        get() = appSpeechPitchSharedPreferences.getInt(KEY_SPEECH_PITCH_PREF, 1)
+        get() = appSpeechPitchSharedPreferences.getInt(KEY_SPEECH_PITCH_PREF, 50)
         set(value) = appSpeechPitchSharedPreferences.edit { putInt(KEY_SPEECH_PITCH_PREF, value!!)}
 
     var appIncognitoMode : Boolean?

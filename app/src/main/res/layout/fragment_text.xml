@@ -32,16 +32,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/copyTranscript"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_baseline_content_copy_24"
-                app:layout_constraintBottom_toBottomOf="@+id/transcriptScroll"
-                app:layout_constraintEnd_toEndOf="@id/transcriptScroll"/>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/transcriptScroll"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -61,6 +51,16 @@
                     android:lines="5" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/copyTranscript"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_baseline_content_copy_24"
+                app:layout_constraintBottom_toBottomOf="@+id/transcriptScroll"
+                app:layout_constraintEnd_toEndOf="@id/transcriptScroll"/>
 
             <Spinner
                 android:id="@+id/targetLangSelector"
@@ -143,16 +143,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/getDetails" />
 
-            <ImageView
-                android:id="@+id/copyTranslate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_baseline_content_copy_24"
-                app:layout_constraintBottom_toBottomOf="@+id/translationScroll"
-                app:layout_constraintEnd_toEndOf="@id/translationScroll"/>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/translationScroll"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -173,6 +163,16 @@
                     android:lines="6" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/copyTranslate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_baseline_content_copy_24"
+                app:layout_constraintBottom_toBottomOf="@+id/translationScroll"
+                app:layout_constraintEnd_toEndOf="@id/translationScroll"/>
 
             <View
                 android:id="@+id/separator3"

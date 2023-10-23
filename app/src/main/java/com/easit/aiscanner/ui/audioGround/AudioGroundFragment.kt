@@ -33,8 +33,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.easit.aiscanner.BuildConfig
 import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
 import com.easit.aiscanner.data.Constants
@@ -143,7 +145,7 @@ class AudioGroundFragment : Fragment() {
         initializations()
         setFontSize()
         setupTargetLanguageSpinner()
-        showValuesForScanner() //Only when app is launched from scanner
+        //showValuesForScanner() //Only when app is launched from scanner
         retrieveAndSetDetailsForHistory()
         performSpeechToText()
         playAudioImage.setOnClickListener {
@@ -463,15 +465,18 @@ class AudioGroundFragment : Fragment() {
                 if (result!!.resultCode == RESULT_OK && result.data != null) {
                     val speechText =
                         result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) as ArrayList<Editable>
-                    transcriptEditText.setText(speechText[0])
+                    transcriptEditText.text = speechText[0]
                 }
             }
     }
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SPEECH_RECORDING && requestCode == Activity.RESULT_OK) {
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            transcriptEditText.setText(result?.get(0).toString())
+            if (result?.get(0).toString() != "null"){
+                transcriptEditText.setText(result?.get(0).toString())
+            }
         }
     }
     override fun onResume() {
@@ -479,7 +484,7 @@ class AudioGroundFragment : Fragment() {
         if (isMediaRecorderOn) {
             mediaRecorder.stop()
             isMediaRecorderOn = false
-            recordButton.setImageResource(R.drawable.ic_baseline_mic_24)
+            recordButton.setImageResource(R.drawable.baseline_mic_24)
         }
     }
     private fun recordAudioOnClick() {
@@ -677,11 +682,28 @@ class AudioGroundFragment : Fragment() {
             }
         }, 0)
     }
-    private fun shareAudio(){
-        val audioUri = Uri.parse("${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4")
+    private fun shareAudio2(){
+        val audioUri = Uri.parse("${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.3gp")
+
         val audioFile = Intent(Intent.ACTION_SEND)
-        audioFile.type = "audio/mp4"
+        audioFile.type = "audio/3gp"
+        audioFile.setDataAndType(audioUri, context?.contentResolver?.getType(audioUri))
         audioFile.putExtra(Intent.EXTRA_STREAM, audioUri)
+        //audioFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        context?.startActivity(Intent.createChooser(audioFile, "Select an application: "))
+    }
+
+    private fun shareAudio() {
+        val requestFile = File("${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.3gp")
+
+        val audioUri: Uri = FileProvider.getUriForFile(
+            requireNotNull(context), "${BuildConfig.APPLICATION_ID}.provider", requestFile
+        )
+        val audioFile = Intent(Intent.ACTION_SEND)
+        audioFile.type = "audio/*"
+        audioFile.setDataAndType(audioUri, context?.contentResolver?.getType(audioUri))
+        audioFile.putExtra(Intent.EXTRA_STREAM, audioUri)
+        audioFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context?.startActivity(Intent.createChooser(audioFile, "Select an application: "))
     }
     @RequiresApi(Build.VERSION_CODES.Q)
