@@ -19,6 +19,7 @@ import com.easit.aiscanner.databinding.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -229,9 +230,11 @@ class SettingsFragment : Fragment() {
     private fun audioListeners(){
         readingSpeedSeekbar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
-                viewModel.selectedReadingSpeed = progress
-                progressReadingSpeed = progress
-                readingSpeedSeekbarValue.text = "$progress"
+                val step = 10
+                val rangeProgress = ((progress.toDouble() / step.toDouble()).roundToInt() * step)
+                viewModel.selectedReadingSpeed = rangeProgress
+                progressReadingSpeed = rangeProgress
+                readingSpeedSeekbarValue.text = "$rangeProgress"
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -243,9 +246,11 @@ class SettingsFragment : Fragment() {
         })
         speechPitchSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
-                viewModel.selectedSpeechPitch = progress
-                progressSpeechPitch = progress
-                speechPitchSeekbarValue.text = "$progress"
+                val step = 10
+                val rangeProgress = ((progress.toDouble() / step.toDouble()).roundToInt() * step)
+                viewModel.selectedSpeechPitch = rangeProgress
+                progressSpeechPitch = rangeProgress
+                speechPitchSeekbarValue.text = "$rangeProgress"
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -269,7 +274,10 @@ class SettingsFragment : Fragment() {
             //findNavController().navigate(R.id.action_settingsFragment_to_helpFragment)
         }
         privacyPermissionLayout.setOnClickListener {
-            //findNavController().navigate(R.id.action_settingsFragment_to_privacyPolicyFragment)
+            val url = "https://olaoluwa99.github.io/privacy-policy-scanner/"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
         }
         thirdPartyNoticesLayout.setOnClickListener {
             //findNavController().navigate(R.id.action_settingsFragment_to_thirdPartyNoticeFragment)
@@ -283,7 +291,7 @@ class SettingsFragment : Fragment() {
             startActivity(Intent.createChooser(intent, "Share App Via..."))
         }
         rateUsLayout.setOnClickListener {
-            Toast.makeText(requireContext(), "Open play-store Intent", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), "Open play-store Intent", Toast.LENGTH_SHORT).show()
             try {
                 val rateIntent = Intent(Intent.ACTION_VIEW)
                 rateIntent.data = Uri.parse(appURL + requireActivity().packageName)

@@ -3,6 +3,8 @@ package com.easit.aiscanner.ui.barcode
 import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +16,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -29,6 +34,7 @@ import com.easit.aiscanner.camera.WorkflowModel
 import com.easit.aiscanner.databinding.FragmentAudioGroundBinding
 import com.easit.aiscanner.databinding.FragmentBarcodeLiveBinding
 import com.google.android.material.chip.Chip
+import com.google.android.material.textfield.TextInputEditText
 import com.google.common.base.Objects
 import java.io.IOException
 import java.util.ArrayList
@@ -46,8 +52,12 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
     private var flashButton: View? = null
     private var promptChip: Chip? = null
     private var promptChipAnimator: AnimatorSet? = null
-    //private var workflowModel: WorkflowModel? = null
     private var currentWorkflowState: WorkflowModel.WorkflowState? = null
+
+    private lateinit var transcriptEditText: TextInputEditText
+    private lateinit var infoText: TextView
+    private lateinit var copyBarcodeValue: ImageView
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,9 +74,19 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
             getRuntimePermissions()
         }
         initializations()
+        copyBarcodeValue.setOnClickListener {
+            if (transcriptEditText.text.toString() != ""){
+                saveToClipboard("BARCODE_VALUE_COPY", transcriptEditText.text.toString())
+            }
+        }
     }
 
     private fun initializations(){
+        //
+        transcriptEditText = binding.transcribedEdittext
+        copyBarcodeValue = binding.barcodeValueCopy
+        infoText = binding.infoText
+
         preview = requireActivity().findViewById(R.id.camera_preview)
         graphicOverlay = requireActivity().findViewById<GraphicOverlay>(R.id.camera_preview_graphic_overlay).apply {
             setOnClickListener(this@BarcodeLiveFragment)
@@ -79,14 +99,9 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
                 setTarget(promptChip)
             }
 
-        //requireActivity().findViewById<View>(R.id.close_button).setOnClickListener(this)
         flashButton = requireActivity().findViewById<View>(R.id.flash_button).apply {
             setOnClickListener(this@BarcodeLiveFragment)
         }
-        /*
-        settingsButton = requireActivity().findViewById<View>(R.id.settings_button).apply {
-            setOnClickListener(this@BarcodeLiveFragment)
-        }*/
 
         setUpWorkflowModel()
     }
@@ -95,18 +110,12 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
 
-        viewModel?.markCameraFrozen()
+        viewModel.markCameraFrozen()
         settingsButton?.isEnabled = true
         currentWorkflowState = WorkflowModel.WorkflowState.NOT_STARTED
-        cameraSource?.setFrameProcessor(BarcodeProcessor(graphicOverlay!!, viewModel!!))
-        viewModel?.setWorkflowState(WorkflowModel.WorkflowState.DETECTING)
+        cameraSource?.setFrameProcessor(BarcodeProcessor(graphicOverlay!!, viewModel))
+        viewModel.setWorkflowState(WorkflowModel.WorkflowState.DETECTING)
     }
-
-    /*
-    override fun onPostResume() {
-        super.onPostResume()
-        BarcodeResultFragment.dismiss(requireActivity().supportFragmentManager)
-    }*/
 
     override fun onPause() {
         super.onPause()
@@ -134,8 +143,14 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
-            //R.id.settings_button -> {}
         }
+    }
+
+    private fun saveToClipboard(label: String, saveText: String) {
+        val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, saveText)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     private fun startCameraPreview() {
@@ -144,7 +159,7 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
         if (!workflowModel.isCameraLive) {
             try {
                 workflowModel.markCameraLive()
-                preview?.start(cameraSource)
+                preview.start(cameraSource)
             } catch (e: IOException) {
                 Log.e(TAG, "Failed to start camera preview!", e)
                 cameraSource.release()
@@ -158,16 +173,12 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
         if (workflowModel.isCameraLive) {
             workflowModel.markCameraFrozen()
             flashButton?.isSelected = false
-            preview?.stop()
+            preview.stop()
         }
     }
 
     private fun setUpWorkflowModel() {
-        //workflowModel = ViewModelProviders.of(this).get(WorkflowModel::class.java)
-
-        // Observes the workflow state changes, if happens, update the overlay view indicators and
-        // camera preview state.
-        viewModel!!.workflowState.observe(viewLifecycleOwner, Observer { workflowState ->
+        viewModel.workflowState.observe(viewLifecycleOwner, Observer { workflowState ->
             if (workflowState == null || Objects.equal(currentWorkflowState, workflowState)) {
                 return@Observer
             }
@@ -179,38 +190,31 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
 
             when (workflowState) {
                 WorkflowModel.WorkflowState.DETECTING -> {
-                    promptChip?.visibility = View.VISIBLE
-                    promptChip?.setText(R.string.prompt_point_at_a_barcode)
+                    infoText.visibility = View.VISIBLE
+                    infoText.setText(R.string.prompt_point_at_a_barcode)
                     startCameraPreview()
                 }
                 WorkflowModel.WorkflowState.CONFIRMING -> {
-                    promptChip?.visibility = View.VISIBLE
-                    promptChip?.setText(R.string.prompt_move_camera_closer)
+                    infoText.visibility = View.VISIBLE
+                    infoText.setText(R.string.prompt_move_camera_closer)
                     startCameraPreview()
                 }
                 WorkflowModel.WorkflowState.SEARCHING -> {
-                    promptChip?.visibility = View.VISIBLE
-                    promptChip?.setText(R.string.prompt_searching)
+                    infoText.visibility = View.VISIBLE
+                    infoText.setText(R.string.prompt_searching)
                     stopCameraPreview()
                 }
                 WorkflowModel.WorkflowState.DETECTED, WorkflowModel.WorkflowState.SEARCHED -> {
-                    promptChip?.visibility = View.GONE
+                    infoText.visibility = View.GONE
                     stopCameraPreview()
                 }
-                else -> promptChip?.visibility = View.GONE
-            }
-
-            val shouldPlayPromptChipEnteringAnimation = wasPromptChipGone && promptChip?.visibility == View.VISIBLE
-            promptChipAnimator?.let {
-                if (shouldPlayPromptChipEnteringAnimation && !it.isRunning) it.start()
+                else -> infoText.visibility = View.GONE
             }
         })
 
-        viewModel?.detectedBarcode?.observe(viewLifecycleOwner, Observer { barcode ->
+        viewModel.detectedBarcode.observe(viewLifecycleOwner, Observer { barcode ->
             if (barcode != null) {
-                val barcodeFieldList = ArrayList<BarcodeField>()
-                barcodeFieldList.add(BarcodeField("Raw Value", barcode.rawValue ?: ""))
-                BarcodeResultFragment.show(requireActivity().supportFragmentManager, barcodeFieldList)
+                transcriptEditText.setText(barcode.rawValue)
             }
         })
     }
@@ -219,7 +223,7 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
     //PERMISSIONS
     private fun allRuntimePermissionsGranted(): Boolean {
         for (permission in REQUIRED_RUNTIME_PERMISSIONS) {
-            permission?.let {
+            permission.let {
                 if (!isPermissionGranted(requireContext(), it)) {
                     return false
                 }
@@ -231,7 +235,7 @@ class BarcodeLiveFragment : Fragment(), View.OnClickListener {
     private fun getRuntimePermissions() {
         val permissionsToRequest = ArrayList<String>()
         for (permission in REQUIRED_RUNTIME_PERMISSIONS) {
-            permission?.let {
+            permission.let {
                 if (!isPermissionGranted(requireContext(), it)) {
                     permissionsToRequest.add(permission)
                 }

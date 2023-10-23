@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/barcode_field_container"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/barcode_field_padding_vertical"
-    android:paddingStart="@dimen/barcode_field_padding_horizontal"
-    android:paddingEnd="@dimen/barcode_field_padding_horizontal"
-    android:background="@color/white">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/barcode_field_value"
-        android:layout_width="match_parent"
+
+    <FrameLayout
+        android:id="@+id/barcode_field_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/barcode_field_padding_vertical"
-        android:padding="@dimen/barcode_field_value_padding"
-        android:background="@drawable/barcode_field_box"
-        android:textColor="@color/barcode_field_value"
-        android:textSize="@dimen/barcode_field_value_size"/>
+        android:background="@color/white"
+        android:paddingStart="@dimen/barcode_field_padding_horizontal"
+        android:paddingEnd="@dimen/barcode_field_padding_horizontal"
+        android:paddingBottom="@dimen/barcode_field_padding_vertical"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/barcode_value_copy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/barcode_field_label"
+        <TextView
+            android:id="@+id/barcode_field_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/barcode_field_padding_vertical"
+            android:background="@drawable/barcode_field_box"
+            android:padding="@dimen/barcode_field_value_padding"
+            android:textColor="@color/barcode_field_value"
+            android:textSize="@dimen/barcode_field_value_size" />
+
+        <TextView
+            android:id="@+id/barcode_field_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/barcode_field_value_padding"
+            android:background="@color/white"
+            android:padding="@dimen/barcode_field_label_padding"
+            android:textColor="@color/black"
+            android:textSize="@dimen/barcode_field_label_size" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/barcode_value_copy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/barcode_field_value_padding"
-        android:padding="@dimen/barcode_field_label_padding"
-        android:background="@color/white"
-        android:textColor="@color/black"
-        android:textSize="@dimen/barcode_field_label_size"/>
+        android:layout_marginEnd="16dp"
+        android:contentDescription="Barcode value"
+        android:src="@drawable/ic_baseline_content_copy_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/barcode_field_container"
+        app:tint="@color/black" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
