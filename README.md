@@ -1,7 +1,6 @@
 # SmartText Assistant
 
-![SmartText Assistant Logo](https://static.vecteezy.com/system/resources/previews/024/673/150/non_2x/document-paper-text-written-by-smart-chat-ai-assistant-3d-render-icon-illustration-design-png.png)
-
+![SmartText Assistant Logo](app/src/main/ic_launcher-playstore.png)
 ## Overview
 
 The SmartText Assistant is a versatile mobile application designed to enhance text communication and productivity. This app offers a wide range of features, including text input, image text extraction, voice-to-text transcription, language detection, smart replies, entity extraction, translation, a floating text box, and a history log.
