@@ -2,6 +2,7 @@ package com.easit.aiscanner.ui.audioGround
 
 import android.Manifest.permission.RECORD_AUDIO
 import android.app.Activity
+import android.app.Activity.MODE_PRIVATE
 import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.ClipData
@@ -156,7 +157,7 @@ class AudioGroundFragment : Fragment() {
                 Toast.makeText(requireContext(), "No translated text available", Toast.LENGTH_SHORT).show()
             }
         }
-        downloadAudio.setOnClickListener {
+        shareAudio.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 downloadAudio()
             }else{
@@ -166,7 +167,7 @@ class AudioGroundFragment : Fragment() {
                 File.createTempFile(designatedFileName, ".mp4", storageDir)
             }
         }
-        shareAudio.setOnClickListener {
+        downloadAudio.setOnClickListener {
             shareAudio()
         }
         getFullScan()
@@ -706,8 +707,42 @@ class AudioGroundFragment : Fragment() {
         audioFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context?.startActivity(Intent.createChooser(audioFile, "Select an application: "))
     }
-    @RequiresApi(Build.VERSION_CODES.Q)
+
     private fun downloadAudio(){
+        //
+        //val savedAudio = requireActivity().contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
+        //val outputStream = savedAudio!!.let { this.requireActivity().contentResolver.openOutputStream(it) }
+        var fos: FileOutputStream? = null
+
+
+        try {
+            fos = activity?.openFileOutput("$AI_SPEECH$designatedFileName.mpeg", MODE_PRIVATE)
+            val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mpeg"
+            val file = File(path)
+            val fis = FileInputStream(file)
+            var length : Int
+            val buffer = ByteArray(8192)
+            while (fis.read(buffer).also { length = it } > 0) {
+                fos?.write(buffer, 0, length)
+            }
+            Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music/AIScanner", Toast.LENGTH_LONG).show()
+        }catch (e: FileNotFoundException){
+            e.printStackTrace()
+        }catch (e: IOException){
+            e.printStackTrace()
+        }finally {
+            if (fos != null){
+                try {
+                    fos.close()
+                }catch (e: IOException){
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    //@RequiresApi(Build.VERSION_CODES.Q)
+    private fun downloadAudioNN(){
         try {
             val values = ContentValues()
             values.put(MediaStore.MediaColumns.DISPLAY_NAME, "$AI_SPEECH$designatedFileName")
@@ -720,8 +755,6 @@ class AudioGroundFragment : Fragment() {
 
             val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4"
             val file = File(path)
-            //val fisTest = resources.openRawResource(R.raw.)
-            //val fis = InputStream(file)
             val fis = FileInputStream(file)
 
 
