@@ -1,4 +1,4 @@
-# SmartText Assistant
+# SmartText-Assistant
 
 ![SmartText Assistant Logo](app/src/main/ic_launcher-playstore.png)
 ## Overview
