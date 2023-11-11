@@ -157,7 +157,7 @@ class AudioGroundFragment : Fragment() {
                 Toast.makeText(requireContext(), "No translated text available", Toast.LENGTH_SHORT).show()
             }
         }
-        shareAudio.setOnClickListener {
+        downloadAudio.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 downloadAudio()
             }else{
@@ -167,7 +167,7 @@ class AudioGroundFragment : Fragment() {
                 File.createTempFile(designatedFileName, ".mp4", storageDir)
             }
         }
-        downloadAudio.setOnClickListener {
+        shareAudio.setOnClickListener {
             shareAudio()
         }
         getFullScan()
@@ -708,7 +708,7 @@ class AudioGroundFragment : Fragment() {
         context?.startActivity(Intent.createChooser(audioFile, "Select an application: "))
     }
 
-    private fun downloadAudio(){
+    private fun downloadAudioNN(){
         //
         //val savedAudio = requireActivity().contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
         //val outputStream = savedAudio!!.let { this.requireActivity().contentResolver.openOutputStream(it) }
@@ -742,34 +742,39 @@ class AudioGroundFragment : Fragment() {
     }
 
     //@RequiresApi(Build.VERSION_CODES.Q)
-    private fun downloadAudioNN(){
-        try {
-            val values = ContentValues()
-            values.put(MediaStore.MediaColumns.DISPLAY_NAME, "$AI_SPEECH$designatedFileName")
-            values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
-            values.put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_MUSIC}/AIScanner")
+    private fun downloadAudio(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+            try {
+                val values = ContentValues()
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, "$AI_SPEECH$designatedFileName")
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_MUSIC}/AIScanner")
 
-            val savedAudio = requireActivity().contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
-            val outputStream = savedAudio!!.let { this.requireActivity().contentResolver.openOutputStream(it) }
-
-
-            val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4"
-            val file = File(path)
-            val fis = FileInputStream(file)
+                val savedAudio = requireActivity().contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
+                val outputStream = savedAudio!!.let { this.requireActivity().contentResolver.openOutputStream(it) }
 
 
-            var length : Int
-            val buffer = ByteArray(8192)
-            while (fis.read(buffer).also { length = it } > 0) {
-                outputStream?.write(buffer, 0, length)
+                val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4"
+                val file = File(path)
+                val fis = FileInputStream(file)
+
+
+                var length : Int
+                val buffer = ByteArray(8192)
+                while (fis.read(buffer).also { length = it } > 0) {
+                    outputStream?.write(buffer, 0, length)
+                }
+                outputStream?.flush()
+                outputStream?.close()
+                fis.close()
+                Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music?AIScanner", Toast.LENGTH_LONG).show()
+
+            }catch (e: IOException){
+                e.printStackTrace()
             }
-            outputStream?.flush()
-            outputStream?.close()
-            fis.close()
-            Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music?AIScanner", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(requireContext(), "Audio download is currently unavailable for android version 9 and below", Toast.LENGTH_LONG).show()
 
-        }catch (e: IOException){
-            e.printStackTrace()
         }
     }
 

@@ -245,24 +245,24 @@
             </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/downloadAudio"
+                android:id="@+id/shareAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_margin"
-                android:text="Download audio"
+                android:text="Share audio"
                 android:visibility="invisible"
                 android:enabled="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/playAudioCard" />
 
             <Button
-                android:id="@+id/shareAudio"
+                android:id="@+id/downloadAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Share audio"
-                app:layout_constraintBottom_toBottomOf="@+id/downloadAudio"
+                android:text="Download audio"
+                app:layout_constraintBottom_toBottomOf="@+id/shareAudio"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/downloadAudio" />
+                app:layout_constraintTop_toTopOf="@+id/shareAudio" />
 
             <View
                 android:id="@+id/separator3"
@@ -274,7 +274,7 @@
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/downloadAudio" />
+                app:layout_constraintTop_toBottomOf="@id/shareAudio" />
 
             <TextView
                 android:id="@+id/entitiesTitle"

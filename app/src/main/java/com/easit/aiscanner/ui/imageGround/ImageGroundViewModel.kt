@@ -108,6 +108,7 @@ class ImageGroundViewModel @Inject constructor(
     private val remoteUserId = UUID.randomUUID().toString()
     private val smartReply = SmartReply.getClient()
     var suggestionResultList = MutableLiveData<List<SmartReplySuggestion>>()
+    var smartRepliesList = MutableLiveData<List<String>>()
 
     /**Entity extraction*/
     var entitiesLiveList = MutableLiveData<List<String>>()
@@ -201,19 +202,8 @@ class ImageGroundViewModel @Inject constructor(
             .continueWith { task ->
                 val result = task.result
                 when (result.status) {
-                    SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE ->
-                        // This error happens when the detected language is not English, as that is the
-                        // only supported language in Smart Reply.
-                        Toast.makeText(
-                            getApplication(),
-                            "R.string.error_not_supported_language",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    SmartReplySuggestionResult.STATUS_NO_REPLY ->
-                        // This error happens when the inference completed successfully, but no replies
-                        // were returned.
-                        Toast.makeText(getApplication(), "R.string.error_no_reply", Toast.LENGTH_SHORT).show()
+                    SmartReplySuggestionResult.STATUS_NOT_SUPPORTED_LANGUAGE -> {}
+                    SmartReplySuggestionResult.STATUS_NO_REPLY -> {}
                     else -> {
                         // Do nothing.
                     }
@@ -221,20 +211,20 @@ class ImageGroundViewModel @Inject constructor(
                 result!!.suggestions
             }.addOnSuccessListener {
                 suggestionResultList.value = it
-                val smartRepliesList = mutableListOf<String>()
+                val repliesList = mutableListOf<String>()
                 for (i in it){
-                    smartRepliesList.add(i.text)
+                    repliesList.add(i.text)
                 }
-                //TODO Run entity extraction
-                extractEntities(id = id, transcriptText = transcriptText, translatedText = translatedText,
-                    sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
-                    imageUrl = imageUrl, smartReplies = smartRepliesList)
+                smartRepliesList.value = repliesList
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Smart reply error", e)
-                Toast.makeText(getApplication(), "Smart reply error" + "\nError: " + e.localizedMessage + "\nCause: " + e.cause,
-                    Toast.LENGTH_LONG).show()
+                //Toast.makeText(getApplication(), "Smart reply error" + "\nError: " + e.localizedMessage + "\nCause: " + e.cause, Toast.LENGTH_LONG).show()
             }
+        extractEntities(id = id, transcriptText = transcriptText, translatedText = translatedText,
+            sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
+            imageUrl = imageUrl, smartReplies = smartRepliesList.value ?: emptyList()
+        )
     }
 
     /**ENTITY EXTRACTION*/
@@ -265,14 +255,15 @@ class ImageGroundViewModel @Inject constructor(
                     entitiesList.add(entityAnnotation.annotatedText)
                 }
                 entitiesLiveList.value = entitiesList
-                //TODO Create scan in database
-                if (!selectedIncognitoMode!!){
-                    createScan(id, transcriptText = transcriptText, translatedText = translatedText,
-                        sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
-                        imageUrl = imageUrl,
-                        smartReplies = smartReplies, entitiesList = entitiesList)
-                }
             }
+        //Final
+        if (!selectedIncognitoMode!!){
+            createScan(id, transcriptText = transcriptText, translatedText = translatedText,
+                sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
+                imageUrl = imageUrl,
+                smartReplies = smartReplies, entitiesList = entitiesLiveList.value ?: emptyList()
+            )
+        }
     }
 
     override fun onCleared() {

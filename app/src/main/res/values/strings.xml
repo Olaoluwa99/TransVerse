@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AIScanner</string>
+    <string name="app_name">TransVerse</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -9,7 +9,7 @@
 
     <!-- Page titles -->
     <string name="title_home">Home</string>
-    <string name="title_audio">Audio</string>
+    <string name="title_audio">Speech</string>
     <string name="title_text">Text</string>
     <string name="title_image">Image</string>
     <string name="title_barcode">Barcode</string>

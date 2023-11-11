@@ -110,6 +110,7 @@ private val repository : ScanRepository
     private val remoteUserId = UUID.randomUUID().toString()
     private val smartReply = SmartReply.getClient()
     var suggestionResultList = MutableLiveData<List<SmartReplySuggestion>>()
+    var smartRepliesList = MutableLiveData<List<String>>()
 
     /**Entity extraction*/
     var entitiesLiveList = MutableLiveData<List<String>>()
@@ -223,20 +224,21 @@ private val repository : ScanRepository
                 result!!.suggestions
             }.addOnSuccessListener {
                 suggestionResultList.value = it
-                val smartRepliesList = mutableListOf<String>()
+                val repliesList = mutableListOf<String>()
                 for (i in it){
-                    smartRepliesList.add(i.text)
+                    repliesList.add(i.text)
                 }
-                //TODO Run entity extraction
-                extractEntities(id = id, transcriptText = transcriptText, translatedText = translatedText,
-                    sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
-                    imageUrl = imageUrl, smartReplies = smartRepliesList)
+                smartRepliesList.value = repliesList
             }
             .addOnFailureListener { e ->
                 Log.e(TAG, "Smart reply error", e)
                 Toast.makeText(getApplication(), "Smart reply error" + "\nError: " + e.localizedMessage + "\nCause: " + e.cause,
                     Toast.LENGTH_LONG).show()
             }
+        extractEntities(id = id, transcriptText = transcriptText, translatedText = translatedText,
+            sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
+            imageUrl = imageUrl, smartReplies = smartRepliesList.value ?: emptyList()
+        )
     }
 
     /**ENTITY EXTRACTION*/
@@ -267,14 +269,15 @@ private val repository : ScanRepository
                     entitiesList.add(entityAnnotation.annotatedText)
                 }
                 entitiesLiveList.value = entitiesList
-                //TODO Create scan in database
-                if (!selectedIncognitoMode!!){
-                    createScan(id, transcriptText = transcriptText, translatedText = translatedText,
-                        sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
-                        imageUrl = imageUrl,
-                        smartReplies = smartReplies, entitiesList = entitiesList)
-                }
             }
+        //Final
+        if (!selectedIncognitoMode!!){
+            createScan(id, transcriptText = transcriptText, translatedText = translatedText,
+                sourceLanguage = sourceLanguage, translatedLanguage = translatedLanguage, scanType = scanType,
+                imageUrl = imageUrl,
+                smartReplies = smartReplies, entitiesList = entitiesLiveList.value ?: emptyList()
+            )
+        }
     }
 
     override fun onCleared() {
