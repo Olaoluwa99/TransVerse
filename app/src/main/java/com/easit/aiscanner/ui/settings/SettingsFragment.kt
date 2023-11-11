@@ -283,11 +283,13 @@ class SettingsFragment : Fragment() {
             //findNavController().navigate(R.id.action_settingsFragment_to_thirdPartyNoticeFragment)
         }
         shareAppLayout.setOnClickListener {
-            Toast.makeText(requireContext(), "Share stuff", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(requireContext(), "Share stuff", Toast.LENGTH_SHORT).show()
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_SUBJECT, "Share App")
-            intent.putExtra(Intent.EXTRA_TEXT, "This is an awesome app for your android mobile. Check it out at " + shareURL + requireActivity().packageName)
+            intent.putExtra(Intent.EXTRA_TEXT, "Lost in translation? Not anymore! Dive into global chats with TransVerse – " +
+                    "download now for text, speech, and even joke translations. Let the linguistic fun commence!" + shareURL + requireActivity().packageName)
+            //intent.putExtra(Intent.EXTRA_TEXT, "This is an awesome app for your android mobile. Check it out at " + shareURL + requireActivity().packageName)
             startActivity(Intent.createChooser(intent, "Share App Via..."))
         }
         rateUsLayout.setOnClickListener {

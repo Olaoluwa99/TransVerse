@@ -281,7 +281,7 @@ class ImageGroundFragment : Fragment() {
         try {
             currentScanId = requireArguments().getString("selectedScanId").toString()
         }catch (e: Exception){
-
+            //
         }
         if (currentScanId != "" && currentScanId != "null"){
             viewModel.getSelectedScanObject(currentScanId)
@@ -406,7 +406,7 @@ class ImageGroundFragment : Fragment() {
                 findNavController().popBackStack(R.id.imageGroundFragment, false)
 
                 if (result.uriContent != null){
-                    Toast.makeText(context, "Success here", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "Success here", Toast.LENGTH_SHORT).show()
                     if (result.uriContent != null){
                         loadImageThroughGlide(result.uriContent)
                         clickTextView.visibility = View.GONE

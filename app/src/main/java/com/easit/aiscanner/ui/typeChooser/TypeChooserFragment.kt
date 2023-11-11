@@ -39,6 +39,8 @@ class TypeChooserFragment : Fragment() {
     private lateinit var barcodeText: TextView
     private lateinit var textText: TextView
 
+    private lateinit var historyText: TextView
+
     private lateinit var audioCard: MaterialCardView
     private lateinit var textCard: MaterialCardView
     private lateinit var imageCard: MaterialCardView
@@ -112,6 +114,8 @@ class TypeChooserFragment : Fragment() {
         imageText = binding.imageText
         barcodeText = binding.barcodeText
 
+        historyText = binding.historyTitle
+
     }
 
     private fun setFontSize() {
@@ -124,6 +128,8 @@ class TypeChooserFragment : Fragment() {
         imageText.textSize = (appFontSize + 2).toFloat()
 
         launchScanner.textSize = appFontSize.toFloat()
+
+        historyText.textSize = (appFontSize + 6).toFloat()
     }
 
     fun deleteScan(id: String){

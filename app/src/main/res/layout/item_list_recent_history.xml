@@ -61,30 +61,15 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:lines="4"
+                android:lines="3"
                 android:text="This is a boy"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/scanDate"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/deleteItem"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/iconBackground"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="app:layout_constraintappappapp:layout_constraintBottom_toBottomOf:layout_constraintBottom_toBottomOf:layout_constraintBottom_toBottomOfBottom_toBottomOf" />
-
-            <ImageView
-                android:id="@+id/deleteItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                android:src="@drawable/ic_baseline_delete_24"
-                app:layout_constraintBottom_toBottomOf="@+id/scanText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/scanText"
-                app:layout_constraintTop_toTopOf="@+id/scanText" />
 
             <TextView
                 android:id="@+id/scanDate"
@@ -92,10 +77,11 @@
                 android:layout_height="wrap_content"
                 tools:text="15/02/2019"
                 android:textColor="@color/black"
-                android:paddingTop="8dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/scanText"
                 app:layout_constraintTop_toBottomOf="@+id/scanText" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
