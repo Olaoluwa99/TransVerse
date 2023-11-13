@@ -44,5 +44,7 @@ object Constants {
     const val LIGHT = "Light"
     const val DARK = "Dark"
 
+    const val APP_NAME = "TransVerse"
+
 
 }

@@ -256,7 +256,7 @@ class AudioGroundViewModel @Inject constructor(
         entityExtractor.downloadModelIfNeeded().onSuccessTask {
             entityExtractor.annotate(
                 getEntityExtractionParams(
-                    transcriptText
+                    translatedText
                 )
             )
         }.addOnFailureListener { e: Exception? ->

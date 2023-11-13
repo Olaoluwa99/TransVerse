@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/poppins_bold"
-                android:hint="Transcripted text"
+                android:text="Transcribed text"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:hint="Translated text"
+                android:text="Translated text"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:hint="Extracted entities"
+                android:text="Extracted entities"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +227,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:hint="Smart Reply"
+                android:text="Smart Reply"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -242,20 +242,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/smartReplyHeader" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="108dp"
-                android:contentDescription="@string/content_description_google_translate_attribution"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_baseline_location_searching_24"
-                app:layout_constraintTop_toBottomOf="@+id/smartReplyGroup"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

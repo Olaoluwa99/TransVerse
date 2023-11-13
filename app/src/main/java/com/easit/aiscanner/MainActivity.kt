@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
                         toolbarBackIcon.visibility = View.VISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarBackIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).popBackStack()
                         }
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                     R.id.imageGroundFragment -> {
                         toolbarText.text = getString(R.string.title_image)
                         toolbarSettingsIcon.visibility = View.VISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
@@ -130,6 +132,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                     R.id.barcodeLiveFragment -> {
                         toolbarText.text = getString(R.string.title_barcode)
                         toolbarSettingsIcon.visibility = View.VISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
@@ -141,6 +144,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                     R.id.textGroundFragment -> {
                         toolbarText.text = getString(R.string.title_text)
                         toolbarSettingsIcon.visibility = View.VISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
@@ -153,6 +157,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                         toolbarText.text = getString(R.string.title_settings)
                         toolbarSettingsIcon.visibility = View.INVISIBLE
                         toolbarBackIcon.visibility = View.VISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarBackIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).popBackStack()
                         }
@@ -163,14 +168,18 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
-                        toolbarBackIcon.visibility = View.GONE
+                        toolbarBackIcon.setImageResource(R.drawable.qwest)
+                        //toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
+
+                        //toolbarBackIcon.visibility = View.GONE
                         toolbarBackIcon.setOnClickListener {
-                            findNavController(R.id.nav_host_fragment_content_main).popBackStack()
+                            //findNavController(R.id.nav_host_fragment_content_main).popBackStack()
                         }
                     }
                     R.id.helpFragment -> {
                         toolbarText.text = getString(R.string.title_help)
                         toolbarSettingsIcon.visibility = View.INVISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
@@ -182,6 +191,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                     R.id.privacyPolicyFragment -> {
                         toolbarText.text = getString(R.string.title_privacy_policy)
                         toolbarSettingsIcon.visibility = View.INVISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }
@@ -193,6 +203,7 @@ class MainActivity : AppCompatActivity() , ItemClickListener {
                     R.id.thirdPartyNoticeFragment -> {
                         toolbarText.text = getString(R.string.title_third_party)
                         toolbarSettingsIcon.visibility = View.INVISIBLE
+                        toolbarBackIcon.setImageResource(R.drawable.ic_baseline_arrow_back_24)
                         toolbarSettingsIcon.setOnClickListener {
                             findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.settingsFragment)
                         }

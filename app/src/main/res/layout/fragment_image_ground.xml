@@ -65,7 +65,7 @@
                     android:id="@+id/transcriptTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Transcripted text"
+                    android:text="Transcribed text"
                     android:fontFamily="@font/poppins_bold"
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -178,7 +178,7 @@
                     android:id="@+id/translationTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Translated text"
+                    android:text="Translated text"
                     android:fontFamily="@font/poppins_bold"
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -233,7 +233,7 @@
                     android:id="@+id/entitiesTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Extracted entities"
+                    android:text="Extracted entities"
                     android:fontFamily="@font/poppins_bold"
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -266,7 +266,7 @@
                     android:id="@+id/smartReplyHeader"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Smart Reply"
+                    android:text="Smart Reply"
                     android:fontFamily="@font/poppins_bold"
                     android:textSize="24sp"
                     android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -283,20 +283,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/smartReplyHeader"/>
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="108dp"
-                    android:contentDescription="@string/content_description_google_translate_attribution"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_baseline_location_searching_24"
-                    app:layout_constraintTop_toBottomOf="@+id/smartReplyGroup"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

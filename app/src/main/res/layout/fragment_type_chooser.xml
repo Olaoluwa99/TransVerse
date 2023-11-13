@@ -16,7 +16,7 @@
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="24dp"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Select a scan method"
