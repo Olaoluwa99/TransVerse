@@ -1,6 +1,5 @@
 package com.easit.aiscanner.ui.typeChooser
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,8 +9,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,11 +18,8 @@ import com.easit.aiscanner.adapters.RecentHistoryAdapter
 import com.easit.aiscanner.adapters.ScanHistoryClickListener
 import com.easit.aiscanner.adapters.SwipeToDeleteCallback
 import com.easit.aiscanner.databinding.FragmentTypeChooserBinding
-import com.easit.aiscanner.model.Scan
-import com.easit.aiscanner.ui.settings.SettingsViewModel
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.MaterialElevationScale
 
 class TypeChooserFragment : Fragment() {
 

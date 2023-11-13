@@ -239,7 +239,7 @@ class ImageGroundViewModel @Inject constructor(
         entityExtractor.downloadModelIfNeeded().onSuccessTask {
                 entityExtractor.annotate(
                     getEntityExtractionParams(
-                        transcriptText
+                        translatedText
                     )
                 )
             }

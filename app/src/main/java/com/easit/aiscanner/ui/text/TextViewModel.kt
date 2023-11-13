@@ -253,7 +253,7 @@ private val repository : ScanRepository
         entityExtractor.downloadModelIfNeeded().onSuccessTask {
             entityExtractor.annotate(
                 getEntityExtractionParams(
-                    transcriptText
+                    translatedText
                 )
             )
         }

@@ -150,7 +150,6 @@ class AudioGroundFragment : Fragment() {
         retrieveAndSetDetailsForHistory()
         performSpeechToText()
         playAudioImage.setOnClickListener {
-            //Plays the recorded audio in new language
             if (audioHasBeenPrepared){
                 playAudioAsHistory()
             }else{
@@ -161,10 +160,12 @@ class AudioGroundFragment : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 downloadAudio()
             }else{
-                val storageDir = requireActivity().getExternalFilesDir("${Environment.DIRECTORY_MUSIC}/AIScanner")
+                Toast.makeText(requireContext(), "Audio download is currently unavailable for android version 9 and below", Toast.LENGTH_LONG).show()
+                /*
+                val storageDir = requireActivity().getExternalFilesDir("${Environment.DIRECTORY_MUSIC}/${Constants.APP_NAME}")
                 val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4"
                 val file = File(path)
-                File.createTempFile(designatedFileName, ".mp4", storageDir)
+                File.createTempFile(designatedFileName, ".mp4", storageDir)*/
             }
         }
         shareAudio.setOnClickListener {
@@ -544,37 +545,6 @@ class AudioGroundFragment : Fragment() {
                 }
             })
     }
-    private fun playAudioAsNew(){
-        if (audioHasBeenPrepared){
-            val speechListener = object : UtteranceProgressListener(){
-                override fun onStart(p0: String?) {
-                    //Code to convert drawable to stop
-                    playAudioImage.setImageResource(R.drawable.ic_baseline_stop_24)
-                }
-
-                override fun onDone(p0: String?) {
-                    //Code to convert drawable to play
-                    playAudioImage.setImageResource(R.drawable.ic_baseline_play_arrow_24)
-                }
-
-                override fun onError(p0: String?) {
-                    //
-                    Toast.makeText(requireContext(), p0.toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-            textToSpeech.setOnUtteranceProgressListener(speechListener)
-            textToSpeech.speak(
-                translationEditText.text.toString(),
-                TextToSpeech.QUEUE_ADD, null
-            )
-        }else{
-            Toast.makeText(
-                requireContext(),
-                "No translated text available",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
     private fun playAudioAsHistory() {
 
         val uri = Uri.parse("${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4")
@@ -725,7 +695,7 @@ class AudioGroundFragment : Fragment() {
             while (fis.read(buffer).also { length = it } > 0) {
                 fos?.write(buffer, 0, length)
             }
-            Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music/AIScanner", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music/${Constants.APP_NAME}", Toast.LENGTH_LONG).show()
         }catch (e: FileNotFoundException){
             e.printStackTrace()
         }catch (e: IOException){
@@ -743,38 +713,33 @@ class AudioGroundFragment : Fragment() {
 
     //@RequiresApi(Build.VERSION_CODES.Q)
     private fun downloadAudio(){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
-            try {
-                val values = ContentValues()
-                values.put(MediaStore.MediaColumns.DISPLAY_NAME, "$AI_SPEECH$designatedFileName")
-                values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
-                values.put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_MUSIC}/AIScanner")
+        try {
+            val values = ContentValues()
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, "$AI_SPEECH$designatedFileName")
+            values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_MUSIC}/${Constants.APP_NAME}")
 
-                val savedAudio = requireActivity().contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
-                val outputStream = savedAudio!!.let { this.requireActivity().contentResolver.openOutputStream(it) }
-
-
-                val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4"
-                val file = File(path)
-                val fis = FileInputStream(file)
+            val savedAudio = requireActivity().contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
+            val outputStream = savedAudio!!.let { this.requireActivity().contentResolver.openOutputStream(it) }
 
 
-                var length : Int
-                val buffer = ByteArray(8192)
-                while (fis.read(buffer).also { length = it } > 0) {
-                    outputStream?.write(buffer, 0, length)
-                }
-                outputStream?.flush()
-                outputStream?.close()
-                fis.close()
-                Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music?AIScanner", Toast.LENGTH_LONG).show()
+            val path = "${requireContext().filesDir.path}/${AI_SPEECH}$designatedFileName.mp4"
+            val file = File(path)
+            val fis = FileInputStream(file)
 
-            }catch (e: IOException){
-                e.printStackTrace()
+
+            var length : Int
+            val buffer = ByteArray(8192)
+            while (fis.read(buffer).also { length = it } > 0) {
+                outputStream?.write(buffer, 0, length)
             }
-        }else{
-            Toast.makeText(requireContext(), "Audio download is currently unavailable for android version 9 and below", Toast.LENGTH_LONG).show()
+            outputStream?.flush()
+            outputStream?.close()
+            fis.close()
+            Toast.makeText(requireContext(), "Download successful: /Internal Storage/Music?${Constants.APP_NAME}", Toast.LENGTH_LONG).show()
 
+        }catch (e: IOException){
+            e.printStackTrace()
         }
     }
 
