@@ -1,0 +1,29 @@
+
+
+;
+android*http://schemas.android.com/apk/res/android9
+4
+app'http://schemas.android.com/apk/res-auto9RelativeLayout" 
+*http://schemas.android.com/apk/res/android
+paddingEnd(@dimen/top_action_bar_padding_horizontal"(´‡„23
+1Ë†œø'dimen/top_action_bar_padding_horizontal0@"Œ
+*http://schemas.android.com/apk/res/android
+background@drawable/top_action_bar_scrim"(Ô„2)
+'¯‚ ødrawable/top_action_bar_scrim0"`
+*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"
+*http://schemas.android.com/apk/res/androidlayout_height@dimen/top_action_bar_height"(õ„2)
+'Ê†œødimen/top_action_bar_height0À€"¢
+*http://schemas.android.com/apk/res/androidpaddingStart(@dimen/top_action_bar_padding_horizontal"(³‡„23
+1Ë†œø'dimen/top_action_bar_padding_horizontal0@*²
+©	ImageView"†
+*http://schemas.android.com/apk/res/androidcontentDescription@string/cd_flash_button"(ó„„2"
+ ´€Ğøstring/cd_flash_button0"
+*http://schemas.android.com/apk/res/androidpadding @dimen/top_action_button_padding"(Õ„2+
+)Ì†œødimen/top_action_button_padding0@"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"X
+*http://schemas.android.com/apk/res/androidlayout_alignParentEndtrue"(¼‡„2:@"y
+'http://schemas.android.com/apk/res-auto	srcCompat@drawable/camera_flash"(ñˆø2!
+ ødrawable/camera_flash0"i
+*http://schemas.android.com/apk/res/androidid@+id/flash_button"(Ğ„2
+’‚¨øid/flash_button019

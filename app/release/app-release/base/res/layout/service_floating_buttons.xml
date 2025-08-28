@@ -1,0 +1,100 @@
+
+/
+;
+android*http://schemas.android.com/apk/res/android
+4
+app'http://schemas.android.com/apk/res-autoLinearLayout"€
+*http://schemas.android.com/apk/res/android
+background@drawable/all_background"(Ô„2#
+!÷€ ødrawable/all_background0"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"R
+*http://schemas.android.com/apk/res/androidorientationvertical"(Ä„2:0"Y
+*http://schemas.android.com/apk/res/androidid	@+id/root"(Ğ„2
+š„¨øid/root0*Å
+¼View"h
+*http://schemas.android.com/apk/res/android
+background@color/black"(Ô„2
+§€˜øcolor/black0"Q
+*http://schemas.android.com/apk/res/androidlayout_margin16dp"(ö„2:h "P
+*http://schemas.android.com/apk/res/androidlayout_width24dp"(ô„2:h0"P
+*http://schemas.android.com/apk/res/androidlayout_height5dp"(õ„2:h
+"S
+*http://schemas.android.com/apk/res/androidlayout_gravitycenter"(³„2:8,*å	
+Ü	LinearLayout"M
+*http://schemas.android.com/apk/res/android
+visibilitygone"(Ü„2:0"Š
+*http://schemas.android.com/apk/res/android
+background@drawable/floating_background"(Ô„2(
+&© ødrawable/floating_background0"Q
+*http://schemas.android.com/apk/res/androidlayout_margin16dp"(ö„2:h "`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"nstyle)@style/Widget.Material3.CardView.Elevated"26
+4…‡Ôø(style/Widget.Material3.CardView.Elevated0ÿÿ"R
+'http://schemas.android.com/apk/res-autocardCornerRadius16dp"(¥ø2:h "c
+*http://schemas.android.com/apk/res/androidid@+id/imageText"(Ğ„2
+Í‚¨øid/imageText0*®
+¥	ImageView"…
+*http://schemas.android.com/apk/res/androidsrc@drawable/ic_baseline_photo_24" (™‚„2)
+'º ødrawable/ic_baseline_photo_240"K
+*http://schemas.android.com/apk/res/androidpadding16dp" (Õ„2:h "`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content" (ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content" (õ„2:0şÿÿÿÿÿÿÿÿ <%*À
+·LinearLayout"Š
+*http://schemas.android.com/apk/res/android
+background@drawable/floating_background"*(Ô„2(
+&© ødrawable/floating_background0"Q
+*http://schemas.android.com/apk/res/androidlayout_margin16dp"*(ö„2:h "`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"*(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"*(õ„2:0şÿÿÿÿÿÿÿÿ"nstyle)@style/Widget.Material3.CardView.Elevated"*26
+4…‡Ôø(style/Widget.Material3.CardView.Elevated0ÿÿ"_
+*http://schemas.android.com/apk/res/androidid@+id/capture"*(Ğ„2
+–¨ø
+id/capture0*°
+§	ImageView"‡
+*http://schemas.android.com/apk/res/androidsrc@drawable/ic_baseline_camera_24"0(™‚„2*
+(° ødrawable/ic_baseline_camera_240"K
+*http://schemas.android.com/apk/res/androidpadding16dp"0(Õ„2:h "`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"0(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"0(õ„2:0şÿÿÿÿÿÿÿÿ0=*<*º
+
+±
+LinearLayout"M
+*http://schemas.android.com/apk/res/android
+visibilitygone"=(Ü„2:0"W
+*http://schemas.android.com/apk/res/androidlayout_marginBottom16dp"=(ú„2:h "Š
+*http://schemas.android.com/apk/res/android
+background@drawable/floating_background"=(Ô„2(
+&© ødrawable/floating_background0"Q
+*http://schemas.android.com/apk/res/androidlayout_margin16dp"=(ö„2:h "`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"=(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"=(õ„2:0şÿÿÿÿÿÿÿÿ"nstyle)@style/Widget.Material3.CardView.Elevated"=26
+4…‡Ôø(style/Widget.Material3.CardView.Elevated0ÿÿ"R
+'http://schemas.android.com/apk/res-autocardCornerRadius16dp"=(¥ø2:h "c
+*http://schemas.android.com/apk/res/androidid@+id/audioText"=(Ğ„2
+ï€¨øid/audioText0*ª
+¡	ImageView"
+*http://schemas.android.com/apk/res/androidsrc@drawable/ic_baseline_mic_24"C(™‚„2'
+%· ødrawable/ic_baseline_mic_240"K
+*http://schemas.android.com/apk/res/androidpadding16dp"C(Õ„2:h "`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"C(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"C(õ„2:0şÿÿÿÿÿÿÿÿC:=,*â	
+Ù	LinearLayout"W
+*http://schemas.android.com/apk/res/androidlayout_marginBottom16dp"O(ú„2:h "„
+*http://schemas.android.com/apk/res/android
+background@drawable/close_background"O(Ô„2%
+# ødrawable/close_background0"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"O(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"O(õ„2:0şÿÿÿÿÿÿÿÿ"nstyle)@style/Widget.Material3.CardView.Elevated"O26
+4…‡Ôø(style/Widget.Material3.CardView.Elevated0ÿÿ"R
+'http://schemas.android.com/apk/res-autocardCornerRadius16dp"O(¥ø2:h "[
+*http://schemas.android.com/apk/res/androidid
+@+id/close"O(Ğ„2
+ª¨øid/close0"S
+*http://schemas.android.com/apk/res/androidlayout_gravitycenter"O(³„2:8*­
+¤	ImageView"…
+*http://schemas.android.com/apk/res/androidsrc@drawable/ic_baseline_close_24"U(™‚„2)
+'± ødrawable/ic_baseline_close_240"J
+*http://schemas.android.com/apk/res/androidpadding4dp"U(Õ„2:h"`
+*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"U(ô„2:0şÿÿÿÿÿÿÿÿ"a
+*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"U(õ„2:0şÿÿÿÿÿÿÿÿU<O%

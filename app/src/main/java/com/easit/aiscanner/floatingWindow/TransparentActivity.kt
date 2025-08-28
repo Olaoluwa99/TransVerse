@@ -50,7 +50,7 @@ class TransparentActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK){
                 mediaProjection = mediaProjectionManager.getMediaProjection(
                     result.resultCode, result.data!!
-                )
+                )!!
                 startService(FloatingWindow.getStartIntent(this, result.resultCode, result.data!!))
             }
         }

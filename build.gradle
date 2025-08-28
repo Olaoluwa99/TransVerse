@@ -1,5 +1,35 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    /*repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
+    }*/
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.9.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
+        classpath "com.google.gms:google-services:4.4.2"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.52"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.8.5"
+    }
+}
+
+/*buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.9.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
+        classpath 'com.google.gms:google-services:4.4.3'
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.52" // latest
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.8.5")
+    }
+}*/
+plugins {
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+}
+
+
+/*buildscript {
     repositories {
         google()
         gradlePluginPortal()
@@ -7,20 +37,23 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.9.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
-        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.gms:google-services:4.4.3'
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.40.5"
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.2")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.9.1")
     }
 }
-allprojects{
+plugins {
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+}*/
+/*allprojects{
     repositories{
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-}
+}*/
 /*
 plugins {
     id 'com.android.application' version '7.2.1' apply false
@@ -28,6 +61,6 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
 }*/
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

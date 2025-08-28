@@ -30,6 +30,7 @@ fun bindErrorStatus(statusImageView: ImageView, status: ScanHistoryStatus?) {
         ScanHistoryStatus.NO_PROJECT -> {
             statusImageView.visibility = View.GONE
         }
+        else -> {}
     }
 }
 
@@ -48,6 +49,7 @@ fun bindLoadingStatus(statusProgressDialog: ProgressBar, status: ScanHistoryStat
         ScanHistoryStatus.NO_PROJECT -> {
             statusProgressDialog.visibility = View.GONE
         }
+        else -> {}
     }
 }
 
@@ -66,5 +68,6 @@ fun bindEmptyStatus(noProjectText: TextView, status: ScanHistoryStatus?) {
         ScanHistoryStatus.NO_PROJECT -> {
             noProjectText.visibility = View.VISIBLE
         }
+        else -> {}
     }
 }

@@ -1,0 +1,41 @@
+
+ˆ
+4
+app'http://schemas.android.com/apk/res-autoGPreferenceScreen*¢
+™PreferenceCategory"w
+'http://schemas.android.com/apk/res-autotitle@string/messages_header"(¥Šø2"
+ ¶Ğøstring/messages_header0*²
+©EditTextPreference"w
+'http://schemas.android.com/apk/res-autotitle@string/signature_title"(¥Šø2"
+ Ä‚Ğøstring/signature_title0"?
+'http://schemas.android.com/apk/res-autokey	signature(Á…ø"Y
+'http://schemas.android.com/apk/res-autouseSimpleSummaryProvidertrue"(ßŠø2:@3*Ô
+ËListPreference"u
+'http://schemas.android.com/apk/res-autoentryValues@array/reply_values"(õƒø2
+€Œøarray/reply_values0"o
+'http://schemas.android.com/apk/res-autotitle@string/reply_title"(¥Šø2
+¼‚Ğøstring/reply_title0";
+'http://schemas.android.com/apk/res-autokeyreply(Á…ø"Y
+'http://schemas.android.com/apk/res-autouseSimpleSummaryProvidertrue"(ßŠø2:@"s
+'http://schemas.android.com/apk/res-autoentries@array/reply_entries"(ôƒø2
+€€Œøarray/reply_entries0"D
+'http://schemas.android.com/apk/res-autodefaultValuereply(®ƒø3=*˜
+PreferenceCategory"o
+'http://schemas.android.com/apk/res-autotitle@string/sync_header"(¥Šø2
+Ç‚Ğøstring/sync_header0*Ì
+ÃSwitchPreferenceCompat"m
+'http://schemas.android.com/apk/res-autotitle@string/sync_title"(¥Šø2
+È‚Ğøstring/sync_title0":
+'http://schemas.android.com/apk/res-autokeysync(Á…ø.*¸
+¯SwitchPreferenceCompat"Š
+'http://schemas.android.com/apk/res-auto
+summaryOff@string/attachment_summary_off"(›‰ø2)
+' €Ğøstring/attachment_summary_off0"y
+'http://schemas.android.com/apk/res-autotitle@string/attachment_title"(¥Šø2#
+!¢€Ğøstring/attachment_title0"@
+'http://schemas.android.com/apk/res-autokey
+attachment(Á…ø"‡
+'http://schemas.android.com/apk/res-auto	summaryOn@string/attachment_summary_on"(œ‰ø2(
+&¡€Ğøstring/attachment_summary_on0"A
+'http://schemas.android.com/apk/res-auto
+dependencysync(±ƒø49G
