@@ -1,100 +1,0 @@
-
-/
-;
-android*http://schemas.android.com/apk/res/android4
-4
-app'http://schemas.android.com/apk/res-auto4
-navigation"‚
-'http://schemas.android.com/apk/res-autostartDestination@id/typeChooserFragment"(ôˆø2"
- É…¨øid/typeChooserFragment0"c
-*http://schemas.android.com/apk/res/androidid@+id/nav_graph"(Ð„2
-³ƒ¨øid/nav_graph0*­
-¤fragment"a
-*http://schemas.android.com/apk/res/androidname(com.easit.aiscanner.ui.text.TextFragment(ƒ€„"u
-*http://schemas.android.com/apk/res/androidid@+id/textGroundFragment"(Ð„2!
-•…¨øid/textGroundFragment0">
-*http://schemas.android.com/apk/res/androidlabelText(€„/*€
-
-÷	fragment"i
-*http://schemas.android.com/apk/res/androidname0com.easit.aiscanner.ui.settings.SettingsFragment(ƒ€„"q
-*http://schemas.android.com/apk/res/androidid@+id/settingsFragment"(Ð„2
-Ä„¨øid/settingsFragment0"B
-*http://schemas.android.com/apk/res/androidlabelSettings(€„*¤
-›action"o
-'http://schemas.android.com/apk/res-autodestination@id/helpFragment"(³ƒø2
-²‚¨øid/helpFragment0"Ÿ
-*http://schemas.android.com/apk/res/androidid,@+id/action_settingsFragment_to_helpFragment"(Ð„26
-4È€¨ø*id/action_settingsFragment_to_helpFragment02*Õ
-Ìaction"‡
-'http://schemas.android.com/apk/res-autodestination@id/thirdPartyNoticeFragment"(³ƒø2'
-%©…¨øid/thirdPartyNoticeFragment0"·
-*http://schemas.android.com/apk/res/androidid8@+id/action_settingsFragment_to_thirdPartyNoticeFragment"(Ð„2B
-@Ê€¨ø6id/action_settingsFragment_to_thirdPartyNoticeFragment0>*É
-Àaction"
-'http://schemas.android.com/apk/res-autodestination@id/privacyPolicyFragment"(³ƒø2$
-"„¨øid/privacyPolicyFragment0"±
-*http://schemas.android.com/apk/res/androidid5@+id/action_settingsFragment_to_privacyPolicyFragment"(Ð„2?
-=É€¨ø3id/action_settingsFragment_to_privacyPolicyFragment0;3*¾
-µfragment"o
-*http://schemas.android.com/apk/res/androidname6com.easit.aiscanner.ui.audioGround.AudioGroundFragment(ƒ€„"w
-*http://schemas.android.com/apk/res/androidid@+id/audioGroundFragment" (Ð„2"
- ê€¨øid/audioGroundFragment0"?
-*http://schemas.android.com/apk/res/androidlabelAudio(€„ 8*¾
-µfragment"o
-*http://schemas.android.com/apk/res/androidname6com.easit.aiscanner.ui.imageGround.ImageGroundFragment(ƒ€„"w
-*http://schemas.android.com/apk/res/androidid@+id/imageGroundFragment"%(Ð„2"
- Ë‚¨øid/imageGroundFragment0"?
-*http://schemas.android.com/apk/res/androidlabelImage(€„%8*ª
-¡fragment"o
-*http://schemas.android.com/apk/res/androidname6com.easit.aiscanner.ui.typeChooser.TypeChooserFragment(ƒ€„"w
-*http://schemas.android.com/apk/res/androidid@+id/typeChooserFragment"*(Ð„2"
- É…¨øid/typeChooserFragment0">
-*http://schemas.android.com/apk/res/androidlabelHome(€„*Æ
-½action"}
-'http://schemas.android.com/apk/res-autodestination@id/audioGroundFragment"-(³ƒø2"
- ê€¨øid/audioGroundFragment0"³
-*http://schemas.android.com/apk/res/androidid6@+id/action_typeChooserFragment_to_audioGroundFragment"-(Ð„2@
->Ì€¨ø4id/action_typeChooserFragment_to_audioGroundFragment0-9*Æ
-½action"}
-'http://schemas.android.com/apk/res-autodestination@id/imageGroundFragment"0(³ƒø2"
- Ë‚¨øid/imageGroundFragment0"³
-*http://schemas.android.com/apk/res/androidid6@+id/action_typeChooserFragment_to_imageGroundFragment"0(Ð„2@
->Ï€¨ø4id/action_typeChooserFragment_to_imageGroundFragment009*¶
-­action"{
-'http://schemas.android.com/apk/res-autodestination@id/textGroundFragment"3(³ƒø2!
-•…¨øid/textGroundFragment0"¥
-*http://schemas.android.com/apk/res/androidid/@+id/action_typeChooserFragment_to_homeFragment"3(Ð„29
-7Î€¨ø-id/action_typeChooserFragment_to_homeFragment038*é
-àargument"@
-'http://schemas.android.com/apk/res-autoargTypestring(Á€ø"G
-*http://schemas.android.com/apk/res/androidnameselectedScanId(ƒ€„"I
-'http://schemas.android.com/apk/res-autonullabletrue"7(¾‡ø2:@7#*Æ
-½action"}
-'http://schemas.android.com/apk/res-autodestination@id/barcodeLiveFragment":(³ƒø2"
- ø€¨øid/barcodeLiveFragment0"³
-*http://schemas.android.com/apk/res/androidid6@+id/action_typeChooserFragment_to_barcodeLiveFragment":(Ð„2@
->Í€¨ø4id/action_typeChooserFragment_to_barcodeLiveFragment0:9*ê
-áargument"@
-'http://schemas.android.com/apk/res-autoargTypestring(Á€ø"H
-*http://schemas.android.com/apk/res/androidnamescannedImageURI(ƒ€„"I
-'http://schemas.android.com/apk/res-autonullabletrue">(¾‡ø2:@>#*7*È
-¿fragment"k
-*http://schemas.android.com/apk/res/androidname2com.easit.aiscanner.ui.barcode.BarcodeLiveFragment(ƒ€„"w
-*http://schemas.android.com/apk/res/androidid@+id/barcodeLiveFragment"C(Ð„2"
- ø€¨øid/barcodeLiveFragment0"M
-*http://schemas.android.com/apk/res/androidlabelBarcodeLiveFragment(€„C/*®
-¥fragment"e
-*http://schemas.android.com/apk/res/androidname,com.easit.aiscanner.ui.settings.HelpFragment(ƒ€„"i
-*http://schemas.android.com/apk/res/androidid@+id/helpFragment"H(Ð„2
-²‚¨øid/helpFragment0"G
-*http://schemas.android.com/apk/res/androidlabelfragment_help(€„H0*Ó
-Êfragment"n
-*http://schemas.android.com/apk/res/androidname5com.easit.aiscanner.ui.settings.PrivacyPolicyFragment(ƒ€„"{
-*http://schemas.android.com/apk/res/androidid@+id/privacyPolicyFragment"M(Ð„2$
-"„¨øid/privacyPolicyFragment0"Q
-*http://schemas.android.com/apk/res/androidlabelfragment_privacy_policy(€„M:*á
-Øfragment"q
-*http://schemas.android.com/apk/res/androidname8com.easit.aiscanner.ui.settings.ThirdPartyNoticeFragment(ƒ€„"
-*http://schemas.android.com/apk/res/androidid@+id/thirdPartyNoticeFragment"R(Ð„2'
-%©…¨øid/thirdPartyNoticeFragment0"U
-*http://schemas.android.com/apk/res/androidlabelfragment_third_party_notice(€„R>4

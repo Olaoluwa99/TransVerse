@@ -1,21 +1,0 @@
-
-ª
-;
-android*http://schemas.android.com/apk/res/android6
-4
-app'http://schemas.android.com/apk/res-auto6menu*®
-¥item"O
-'http://schemas.android.com/apk/res-autoshowAsActionalways"
-(Êˆø2:8"y
-*http://schemas.android.com/apk/res/androidtitle@string/action_settings"
-(áƒ„2"
- ›€Ğøstring/action_settings0"Q
-*http://schemas.android.com/apk/res/androidorderInCategory100"
-(ßƒ„2:0d"Œ
-*http://schemas.android.com/apk/res/androidicon!@drawable/ic_baseline_settings_24"
-(‚€„2,
-*½ ø drawable/ic_baseline_settings_240"o
-*http://schemas.android.com/apk/res/androidid@+id/action_settings"
-(Ğ„2
-Ç€¨øid/action_settings0
-$6

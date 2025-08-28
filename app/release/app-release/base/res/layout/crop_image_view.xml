@@ -1,24 +1,0 @@
-
-š
-;
-android*http://schemas.android.com/apk/res/android7merge*õ
-ì	ImageView"S
-*http://schemas.android.com/apk/res/androidadjustViewBoundstrue"(‚„2:@"T
-*http://schemas.android.com/apk/res/android	scaleTypecenterInside"(‚„2:0"`
-*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
-*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"o
-*http://schemas.android.com/apk/res/androidid@+id/ImageView_image"(Ğ„2
-‡€¨øid/ImageView_image0,*·
-®"com.canhub.cropper.CropOverlayView"R
-*http://schemas.android.com/apk/res/android
-visibility	invisible"(Ü„2:0"`
-*http://schemas.android.com/apk/res/androidlayout_widthmatch_parent"(ô„2:0ÿÿÿÿÿÿÿÿÿ"a
-*http://schemas.android.com/apk/res/androidlayout_heightmatch_parent"(õ„2:0ÿÿÿÿÿÿÿÿÿ"o
-*http://schemas.android.com/apk/res/androidid@+id/CropOverlayView"(Ğ„2
-„€¨øid/CropOverlayView0)*¡
-˜ProgressBar"`
-*http://schemas.android.com/apk/res/androidlayout_widthwrap_content"(ô„2:0şÿÿÿÿÿÿÿÿ"a
-*http://schemas.android.com/apk/res/androidlayout_heightwrap_content"(õ„2:0şÿÿÿÿÿÿÿÿ"o
-*http://schemas.android.com/apk/res/androidid@+id/CropProgressBar"(Ğ„2
-…€¨øid/CropProgressBar0"S
-*http://schemas.android.com/apk/res/androidlayout_gravitycenter"(³„2:8*7
