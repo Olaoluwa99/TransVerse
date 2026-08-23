@@ -1,20 +1,14 @@
 package com.easit.aiscanner.database
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.easit.aiscanner.model.Scan
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ScanRepository(private val scanDao: ScanDao) {
-
-    val allScans: Flow<List<Scan>> = scanDao.reGetAllScans()
+class ScanRepository @Inject constructor(private val scanDao: ScanDao) {
 
     suspend fun insert(scan: Scan){
         scanDao.insert(scan)
-    }
-
-    suspend fun update(scan: Scan){
-        scanDao.update(scan)
     }
 
     suspend fun delete(scan: Scan){
@@ -28,5 +22,9 @@ class ScanRepository(private val scanDao: ScanDao) {
     suspend fun deleteAll(){
         scanDao.deleteAllScanHistory()
     }
+
+    fun searchScans(query: String): Flow<List<Scan>> = scanDao.searchScans(query)
+
+    suspend fun setFavorite(id: String, favorite: Boolean) = scanDao.setFavorite(id, favorite)
 
 }

@@ -3,7 +3,6 @@ package com.easit.aiscanner.utils
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -39,8 +38,6 @@ object Utils {
      * considered to be the same aspect ratio.
      */
     const val ASPECT_RATIO_TOLERANCE = 0.01f
-
-    internal const val REQUEST_CODE_PHOTO_LIBRARY = 1
 
     private const val TAG = "Utils"
 
@@ -155,13 +152,6 @@ object Utils {
         return null
     }
 
-    internal fun openImagePicker(activity: Activity) {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "image/*"
-        activity.startActivityForResult(intent, REQUEST_CODE_PHOTO_LIBRARY)
-    }
-
     @Throws(IOException::class)
     internal fun loadImage(context: Context, imageUri: Uri, maxImageDimension: Int): Bitmap? {
         var inputStreamForSize: InputStream? = null
@@ -189,6 +179,7 @@ object Utils {
     }
 
     private fun maybeTransformBitmap(resolver: ContentResolver, uri: Uri, bitmap: Bitmap?): Bitmap? {
+        val sourceBitmap = bitmap ?: return null
         val matrix: Matrix? = when (getExifOrientationTag(resolver, uri)) {
             ExifInterface.ORIENTATION_UNDEFINED, ExifInterface.ORIENTATION_NORMAL ->
                 // Set the matrix to be null to skip the image transform.
@@ -210,9 +201,17 @@ object Utils {
         }
 
         return if (matrix != null) {
-            Bitmap.createBitmap(bitmap!!, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            Bitmap.createBitmap(
+                sourceBitmap,
+                0,
+                0,
+                sourceBitmap.width,
+                sourceBitmap.height,
+                matrix,
+                true
+            )
         } else {
-            bitmap
+            sourceBitmap
         }
     }
 
@@ -228,10 +227,9 @@ object Utils {
             Log.e(TAG, "Failed to open file to read rotation meta data: $imageUri", e)
         }
 
-        return if (exif != null) {
-            exif!!.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        } else {
-            ExifInterface.ORIENTATION_UNDEFINED
-        }
+        return exif?.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        ) ?: ExifInterface.ORIENTATION_UNDEFINED
     }
 }

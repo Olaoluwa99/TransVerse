@@ -1,30 +1,18 @@
 package com.easit.aiscanner.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.easit.aiscanner.R
 import com.easit.aiscanner.databinding.ItemListRecentHistoryBinding
 import com.easit.aiscanner.model.Scan
 
-class RecentHistoryAdapter (
+class RecentHistoryAdapter(
     private val clickListener: ScanHistoryClickListener,
     private val fontSize: Int):
     ListAdapter<Scan, RecentHistoryViewHolder>(DiffCallback) {
-
-    lateinit var deleteClickListener: OnDeleteClickListener
-
-    interface OnDeleteClickListener{
-        fun onImageClick(position: Int)
-    }
-
-    fun setOnDeleteClickListener(listener: OnDeleteClickListener){
-        deleteClickListener = listener
-    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Scan>() {
         override fun areItemsTheSame(oldItem: Scan, newItem: Scan): Boolean {
@@ -38,9 +26,7 @@ class RecentHistoryAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentHistoryViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return RecentHistoryViewHolder(deleteClickListener,
-            ItemListRecentHistoryBinding.inflate(layoutInflater, parent, false)
-        )
+        return RecentHistoryViewHolder(ItemListRecentHistoryBinding.inflate(layoutInflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecentHistoryViewHolder, position: Int) {
@@ -49,20 +35,17 @@ class RecentHistoryAdapter (
     }
 }
 
-class ScanHistoryClickListener(val clickListener: (scan: Scan) -> Unit) {
+class ScanHistoryClickListener(
+    private val clickListener: (scan: Scan) -> Unit,
+    private val favoriteListener: (scan: Scan) -> Unit = {}
+) {
     fun onClick(scan: Scan) = clickListener(scan)
-
+    fun onFavorite(scan: Scan) = favoriteListener(scan)
 }
 
 class RecentHistoryViewHolder(
-    deleteClickListener: RecentHistoryAdapter.OnDeleteClickListener,
     private var binding: ItemListRecentHistoryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    var img1 = R.drawable.ic_baseline_edit_24
-    var img2 = R.drawable.ic_baseline_insert_photo_24
-    var img3 = R.drawable.ic_baseline_mic_24
-    val img4 = R.drawable.ic_baseline_qr_code_scanner_24
 
     fun bind(clickListener: ScanHistoryClickListener, scan: Scan, myFontSize: Int) {
 
@@ -70,38 +53,19 @@ class RecentHistoryViewHolder(
         binding.clickListener = clickListener
         binding.run {
 
-            if (scan.scanType == "text") {
-                Glide
-                    .with(scanType.context)
-                    .load(img1)
-                    .into(scanType)
-                backgroundColor.setImageResource(R.drawable.background_text)
+            val (icon, background) = when (scan.scanType) {
+                "image" -> R.drawable.ic_baseline_insert_photo_24 to R.drawable.background_image
+                "audio" -> R.drawable.ic_baseline_mic_24 to R.drawable.background_audio
+                "barcode" -> R.drawable.ic_baseline_qr_code_scanner_24 to R.drawable.background_barcode
+                else -> R.drawable.ic_baseline_edit_24 to R.drawable.background_text
             }
-            if (scan.scanType == "image") {
-                Glide
-                    .with(scanType.context)
-                    .load(img2)
-                    .into(scanType)
-                backgroundColor.setImageResource(R.drawable.background_image)
-            }
-            if (scan.scanType == "audio") {
-                Glide
-                    .with(scanType.context)
-                    .load(img3)
-                    .into(scanType)
-                backgroundColor.setImageResource(R.drawable.background_audio)
-            }
-            if (scan.scanType == "barcode") {
-                Glide
-                    .with(scanType.context)
-                    .load(img4)
-                    .into(scanType)
-                backgroundColor.setImageResource(R.drawable.background_barcode)
-            }
+            scanType.setImageResource(icon)
+            backgroundColor.setImageResource(background)
             scanDate.textSize = myFontSize.toFloat()
             scanText.textSize = myFontSize.toFloat()
-            scanDate.text = scan.dateTime
-            scanText.text = scan.translatedText
+            favoriteScan.setImageResource(
+                if (scan.isFavorite) R.drawable.ic_star_24 else R.drawable.ic_star_border_24
+            )
             executePendingBindings()
         }
     }

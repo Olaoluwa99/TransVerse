@@ -2,8 +2,8 @@ package com.easit.aiscanner.camera
 
 import android.content.Context
 import android.graphics.RectF
-import android.preference.PreferenceManager
 import androidx.annotation.StringRes
+import androidx.preference.PreferenceManager
 import com.easit.aiscanner.R
 import com.google.android.gms.common.images.Size
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -32,9 +32,11 @@ object PreferenceUtils {
             val previewSizePrefKey = context.getString(R.string.pref_key_rear_camera_preview_size)
             val pictureSizePrefKey = context.getString(R.string.pref_key_rear_camera_picture_size)
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            val previewSize = sharedPreferences.getString(previewSizePrefKey, null) ?: return null
+            val pictureSize = sharedPreferences.getString(pictureSizePrefKey, null) ?: return null
             CameraSizePair(
-                Size.parseSize(sharedPreferences.getString(previewSizePrefKey, null)!!),
-                Size.parseSize(sharedPreferences.getString(pictureSizePrefKey, null)!!)
+                Size.parseSize(previewSize),
+                Size.parseSize(pictureSize)
             )
         } catch (e: Exception) {
             null

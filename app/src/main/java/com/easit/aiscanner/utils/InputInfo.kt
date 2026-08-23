@@ -17,12 +17,13 @@ class CameraInputInfo(
 
     @Synchronized
     override fun getBitmap(): Bitmap {
-        return bitmap ?: let {
-            bitmap = Utils.convertToBitmap(
+        bitmap?.let { return it }
+        return requireNotNull(
+            Utils.convertToBitmap(
                 frameByteBuffer, frameMetadata.width, frameMetadata.height, frameMetadata.rotation
             )
-            bitmap!!
-        }
+        ) { "Unable to convert the camera frame to a bitmap" }
+            .also { bitmap = it }
     }
 }
 

@@ -1,11 +1,11 @@
 package com.easit.aiscanner.scannerAI.phase2
 
-import java.util.*
+import java.util.Locale
 
 class Language(val code: String) : Comparable<Language> {
 
     val displayName: String
-        get() = Locale(code).displayName
+        get() = Locale.forLanguageTag(code).getDisplayName(Locale.getDefault())
 
     override fun equals(other: Any?): Boolean {
         if (other === this) {
@@ -16,8 +16,7 @@ class Language(val code: String) : Comparable<Language> {
             return false
         }
 
-        val otherLang = other as Language?
-        return otherLang!!.code == code
+        return other.code.equals(code, ignoreCase = true)
     }
 
     override fun toString(): String {
@@ -29,6 +28,6 @@ class Language(val code: String) : Comparable<Language> {
     }
 
     override fun hashCode(): Int {
-        return code.hashCode()
+        return code.lowercase(Locale.ROOT).hashCode()
     }
 }

@@ -3,18 +3,21 @@ package com.easit.aiscanner.ui.text
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
 import com.easit.aiscanner.databinding.FragmentTextBinding
 import com.easit.aiscanner.scannerAI.phase2.Language
+import com.easit.aiscanner.utils.EntityActions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,55 +27,59 @@ import java.time.format.DateTimeFormatter
 @AndroidEntryPoint
 class TextFragment : Fragment() {
 
-    private lateinit var viewModel: TextViewModel
+    private val viewModel by viewModels<TextViewModel>()
 
     private var _binding: FragmentTextBinding? = null
-    private val binding get() = _binding!!
-    private var pageEntitiesList = mutableListOf<String>()
-    private var pageRepliesList = mutableListOf<String>()
+    private val binding get() = requireNotNull(_binding) {
+        "Binding accessed outside the view lifecycle"
+    }
     private lateinit var designatedFileName: String
     var appFontSize = 0
 
     //BATCH 1
-    private lateinit var transcriptTitle: TextView
-    private lateinit var transcriptEditText: TextInputEditText
-    private lateinit var getDetails: Button
+    private val transcriptTitle get() = binding.transcriptTitle
+    private val transcriptEditText get() = binding.transcriptEditText
+    private val getDetails get() = binding.getDetails
 
     //BATCH 3
-    private lateinit var translationTitle: TextView
-    private lateinit var srcLang: TextView
-    private lateinit var translationEditText: TextInputEditText
+    private val translationTitle get() = binding.translationTitle
+    private val srcLang get() = binding.srcLang
+    private val translationEditText get() = binding.translationEdittext
 
     //BATCH 4
-    private lateinit var targetLangSelector: Spinner
-    private lateinit var targetLangSelectorCover: TextView
-    private lateinit var progressText: TextView
-    private lateinit var progressBar: ProgressBar
+    private val targetLangSelector get() = binding.targetLangSelector
+    private val targetLangSelectorCover get() = binding.targetLangSelectorCover
+    private val progressText get() = binding.progressText
+    private val progressBar get() = binding.progressBar
 
     //BATCH 5
-    private lateinit var smartReplyHeader: TextView
-    private lateinit var smartReplyGroup: ChipGroup
-    private lateinit var entitiesTitle: TextView
-    private lateinit var entitiesGroup: ChipGroup
+    private val smartReplyHeader get() = binding.smartReplyHeader
+    private val smartReplyGroup get() = binding.smartReplyGroup
+    private val entitiesTitle get() = binding.entitiesTitle
+    private val entitiesGroup get() = binding.entitiesGroup
 
     //
-    private lateinit var copyTranscript: ImageView
-    private lateinit var copyTranslate: ImageView
+    private val copyTranscript get() = binding.copyTranscript
+    private val copyTranslate get() = binding.copyTranslate
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(TextViewModel::class.java)
         _binding = FragmentTextBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         designatedFileName = getCurrentDateTime()
-        initializations()
-        appFontSize = viewModel.selectedFontSize!!
+        appFontSize = viewModel.selectedFontSize
         setFontSize()
+        (activity as? MainActivity)?.let { mainActivity ->
+            if (mainActivity.incomingText.isNotBlank()) {
+                transcriptEditText.setText(mainActivity.incomingText)
+                mainActivity.incomingText = ""
+            }
+        }
         setupTargetLanguageSpinner()
         retrieveAndSetDetailsForHistory()
         getFullScan()
@@ -82,6 +89,7 @@ class TextFragment : Fragment() {
         observeForReturnedEntities()
         observeForReturnedReplies()
         observeSourceLanguage()
+        observeErrors()
 
         copyTranscript.setOnClickListener {
             saveToClipboard("TRANSCRIPTED_TEXT", transcriptEditText.text.toString())
@@ -89,26 +97,6 @@ class TextFragment : Fragment() {
         copyTranslate.setOnClickListener {
             saveToClipboard("TRANSLATED_TEXT", translationEditText.text.toString())
         }
-    }
-    private fun initializations(){
-        translationEditText = binding.translationEdittext
-        progressText = binding.progressText
-        progressBar = binding.progressBar
-        targetLangSelector = binding.targetLangSelector
-        targetLangSelectorCover = binding.targetLangSelectorCover
-        transcriptTitle = binding.transcriptTitle
-        translationTitle = binding.translationTitle
-        srcLang = binding.srcLang
-        transcriptEditText = binding.transcriptEditText
-        getDetails = binding.getDetails
-        smartReplyGroup = binding.smartReplyGroup
-        entitiesGroup = binding.entitiesGroup
-
-        smartReplyHeader = binding.smartReplyHeader
-        entitiesTitle = binding.entitiesTitle
-
-        copyTranscript = binding.copyTranscript
-        copyTranslate = binding.copyTranslate
     }
     private fun setFontSize() {
         //
@@ -162,9 +150,6 @@ class TextFragment : Fragment() {
         /**Entities extraction*/
         viewModel.entitiesLiveList.observe(viewLifecycleOwner) { entities ->
             if (entities != null){
-                for (entity in entities){
-                    pageEntitiesList.add(entity)
-                }
                 showEntities(entities)
                 //stop showing progressbar
             }
@@ -174,9 +159,6 @@ class TextFragment : Fragment() {
         /**Smart reply*/
         viewModel.suggestionResultList.observe(viewLifecycleOwner) { suggestions ->
             if (suggestions != null){
-                for (suggestion in suggestions){
-                    pageRepliesList.add(suggestion.text)
-                }
                 showSmartReply(suggestions)
             }
         }
@@ -185,6 +167,11 @@ class TextFragment : Fragment() {
         viewModel.sourceLanguageText.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             srcLang.text = it
         })
+    }
+    private fun observeErrors() {
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            message?.let { Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show() }
+        }
     }
     private fun getFullScan(){
         getDetails.setOnClickListener {
@@ -196,8 +183,8 @@ class TextFragment : Fragment() {
         }
     }
     private fun retrieveAndSetDetailsForHistory(){
-        val currentScanId = requireArguments().getString("selectedScanId").toString()
-        if (currentScanId != ""){
+        val currentScanId = arguments?.getString("selectedScanId").orEmpty()
+        if (currentScanId.isNotBlank()){
             viewModel.getSelectedScanObject(currentScanId)
 
             viewModel.currentHistoryItem.observe(viewLifecycleOwner, androidx.lifecycle.Observer { scanObject ->
@@ -224,20 +211,19 @@ class TextFragment : Fragment() {
     }
     private fun showSmartReply(suggestionsList: List<SmartReplySuggestion>) {
         smartReplyGroup.removeAllViews()
-        suggestionsList.forEachIndexed { index, suggestion ->
+        suggestionsList.forEach { suggestion ->
             val chip = Chip(requireContext())
             chip.apply {
                 text = suggestion.text
                 isCheckable = false
                 isClickable = true
-                id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
                 setOnClickListener {view ->
                     val copyText = (view as Chip).text.toString()
                     saveToClipboard("SmartReplyChip", copyText)
                 }
             }
-            smartReplyGroup.addView(chip as View)
+            smartReplyGroup.addView(chip)
         }
     }
 
@@ -245,42 +231,40 @@ class TextFragment : Fragment() {
         val clipboard = activity?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(label, saveText)
         clipboard.setPrimaryClip(clip)
-        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
     }
     private fun showSmartReplyString(suggestionsList: List<String>) {
         smartReplyGroup.removeAllViews()
-        suggestionsList.forEachIndexed { index, suggestion ->
+        suggestionsList.forEach { suggestion ->
             val chip = Chip(requireContext())
             chip.apply {
                 text = suggestion
                 isCheckable = false
                 isClickable = true
-                id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
                 setOnClickListener {view ->
                     val copyText = (view as Chip).text.toString()
                     saveToClipboard("SmartReplyChip", copyText)
                 }
             }
-            smartReplyGroup.addView(chip as View)
+            smartReplyGroup.addView(chip)
         }
     }
     private fun showEntities(entitiesList: List<String>) {
         entitiesGroup.removeAllViews()
-        entitiesList.forEachIndexed { index, entity ->
+        entitiesList.forEach { entity ->
             val chip = Chip(requireContext())
             chip.apply {
                 text = entity
                 isCheckable = false
                 isClickable = true
-                id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
                 setOnClickListener {view ->
                     val copyText = (view as Chip).text.toString()
-                    saveToClipboard("EntityExtractChip", copyText)
+                    EntityActions.openOrCopy(requireContext(), copyText)
                 }
             }
-            entitiesGroup.addView(chip as View)
+            entitiesGroup.addView(chip)
         }
     }
     private fun getCurrentDateTime(): String {
@@ -289,7 +273,7 @@ class TextFragment : Fragment() {
         return currentTime.format(formatter)
     }
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 }

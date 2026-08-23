@@ -22,7 +22,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="@dimen/settings_headers_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:text="GENERAL"
+                android:text="@string/settings_general"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,14 +50,14 @@
                     android:id="@+id/launchModeText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Launch mode" />
+                    android:text="@string/settings_quick_capture" />
 
                 <TextView
                     android:id="@+id/launchModeValueText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/settings_layout_margin"
-                    android:text="Normal" />
+                    android:text="@string/settings_quick_capture_summary" />
             </LinearLayout>
 
             <View
@@ -82,7 +82,7 @@
                     android:id="@+id/appTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="App Theme" />
+                    android:text="@string/settings_theme" />
 
                 <TextView
                     android:id="@+id/appThemeValueText"
@@ -90,37 +90,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/settings_layout_margin" />
 
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/appLanguageLayout" />
-
-            <LinearLayout
-                android:id="@+id/appLanguageLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:padding="@dimen/settings_layout_padding"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appThemeLayout">
-
-                <TextView
-                    android:id="@+id/appLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="App Language" />
-
-                <TextView
-                    android:id="@+id/appLanguageValueText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/settings_layout_margin"/>
             </LinearLayout>
 
             <View
@@ -140,13 +109,13 @@
                 android:padding="@dimen/settings_layout_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appLanguageLayout">
+                app:layout_constraintTop_toBottomOf="@+id/appThemeLayout">
 
                 <TextView
                     android:id="@+id/fontSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Font size"
+                    android:text="@string/settings_font_size"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -156,9 +125,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/settings_layout_margin"
                     android:layout_marginEnd="16dp"
-                    android:max="28"
+                    android:max="24"
                     android:progress="14"
-                    android:min="8"
+                    android:min="12"
                     android:progressTint="@color/easino_light_purple"
                     android:thumbTint="@color/easino_light_purple"
                     app:layout_constraintEnd_toStartOf="@+id/fontSizeSeekbarValue"
@@ -201,7 +170,7 @@
                     android:id="@+id/bubbleSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bubble size" />
+                    android:text="@string/settings_bubble_size" />
 
                 <TextView
                     android:id="@+id/bubbleSizeValueText"
@@ -226,7 +195,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="@dimen/settings_headers_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:text="AUDIO"
+                android:text="@string/settings_audio"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bubbleSizeLayout" />
 
@@ -255,7 +224,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="Reading speed" />
+                    android:text="@string/settings_reading_speed" />
 
                 <SeekBar
                     android:id="@+id/readingSpeedSeekbar"
@@ -263,7 +232,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/settings_layout_margin"
                     android:layout_marginEnd="16dp"
-                    android:max="200"
+                    android:max="100"
+                    android:min="20"
                     android:progress="50"
                     android:progressTint="@color/easino_light_purple"
                     android:thumbTint="@color/easino_light_purple"
@@ -308,7 +278,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:text="Speech pitch" />
+                    android:text="@string/settings_speech_pitch" />
 
                 <SeekBar
                     android:id="@+id/speechPitchSeekbar"
@@ -317,6 +287,7 @@
                     android:layout_marginTop="@dimen/settings_layout_margin"
                     android:layout_marginEnd="16dp"
                     android:max="100"
+                    android:min="20"
                     android:progress="50"
                     android:progressTint="@color/easino_light_purple"
                     android:thumbTint="@color/easino_light_purple"
@@ -353,7 +324,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="@dimen/settings_headers_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:text="STORAGE"
+                android:text="@string/settings_privacy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/audioPitchLayout" />
 
@@ -381,13 +352,13 @@
                     android:id="@+id/incognitoText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Go incognito" />
+                    android:text="@string/settings_incognito" />
 
                 <TextView
                     android:id="@+id/incognitoDetailText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Stops saving history" />
+                    android:text="@string/settings_incognito_summary" />
 
             </LinearLayout>
 
@@ -423,13 +394,13 @@
                     android:id="@+id/deleteHistory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Delete history" />
+                    android:text="@string/settings_delete_history" />
 
                 <TextView
                     android:id="@+id/deleteHistoryDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Deletes all history" />
+                    android:text="@string/settings_delete_history_summary" />
 
             </LinearLayout>
 
@@ -448,7 +419,7 @@
                 android:layout_marginTop="@dimen/settings_headers_margin"
                 android:fontFamily="@font/poppins_bold"
                 android:layout_marginHorizontal="16dp"
-                android:text="OTHERS"
+                android:text="@string/settings_about"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/deleteHistoryLayout" />
 
@@ -475,7 +446,7 @@
                     android:id="@+id/helpSupport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Help and support" />
+                    android:text="@string/title_help" />
 
             </LinearLayout>
 
@@ -501,7 +472,7 @@
                     android:id="@+id/privacyPermission"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Privacy and permissions" />
+                    android:text="@string/title_privacy_policy" />
 
             </LinearLayout>
 
@@ -527,7 +498,7 @@
                     android:id="@+id/thirdPartyNotices"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Third party notices" />
+                    android:text="@string/title_third_party" />
 
             </LinearLayout>
 
@@ -554,7 +525,7 @@
                     android:id="@+id/shareApp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Share app" />
+                    android:text="@string/settings_share_app" />
 
             </LinearLayout>
 
@@ -580,7 +551,7 @@
                     android:id="@+id/rateUs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rate us" />
+                    android:text="@string/settings_rate_app" />
 
             </LinearLayout>
 
@@ -598,7 +569,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/settings_headers_margin"
                 android:layout_marginHorizontal="16dp"
-                android:text="Version 1.0.0 (2.45.49.5839)"
+                android:text="@string/version_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rateUsLayout" />
 
@@ -607,7 +578,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="©2022 Easit Limited"
+                android:text="@string/copyright_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/versionInfo" />
 
@@ -616,7 +587,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="All rights reserved"
+                android:text="@string/all_rights_reserved"
                 android:paddingBottom="108dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/companyName"
@@ -625,4 +596,3 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

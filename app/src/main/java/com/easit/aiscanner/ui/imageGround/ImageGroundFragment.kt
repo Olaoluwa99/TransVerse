@@ -3,40 +3,38 @@ package com.easit.aiscanner.ui.imageGround
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Color.WHITE
 import android.net.Uri
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
-import com.canhub.cropper.options
 import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
 import com.easit.aiscanner.databinding.FragmentImageGroundBinding
-import com.easit.aiscanner.model.InternalStoragePhoto
 import com.easit.aiscanner.scannerAI.phase2.Language
-import com.google.android.gms.tasks.Task
+import com.easit.aiscanner.utils.EntityActions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.mlkit.nl.smartreply.SmartReplySuggestion
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -45,10 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -65,56 +60,52 @@ class ImageGroundFragment : Fragment() {
         const val AUTHORITY_SUFFIX = ".cropper.fileprovider"
     }
 
-    private var outputUri: Uri? = null
     private var _binding: FragmentImageGroundBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: ImageGroundViewModel
+    private val binding get() = requireNotNull(_binding) {
+        "Binding accessed outside the view lifecycle"
+    }
+    private val viewModel by viewModels<ImageGroundViewModel>()
     private lateinit var textRecognizer: TextRecognizer
     private lateinit var designatedFileName: String
+    private var imageFileName = ""
 
-    private var pageEntitiesList = mutableListOf<String>()
-    private var pageRepliesList = mutableListOf<String>()
     var appFontSize = 0
-
-    var isAppLaunchedFromScanner = false
-    var scannerImageURI = ""
 
 
     //BATCH 1
-    private lateinit var clickTextView: TextView
-    private lateinit var selectedImage: ImageView
+    private val clickTextView get() = binding.clickTextView
+    private val selectedImage get() = binding.selectedImage
 
     //BATCH 2
-    private lateinit var getDetails: Button
+    private val getDetails get() = binding.getDetails
 
     //BATCH 3
-    private lateinit var srcLang: TextView
-    private lateinit var transcriptTitle: TextView
-    private lateinit var translationTitle: TextView
-    private lateinit var transcriptEditText: TextInputEditText
-    private lateinit var translationEditText: TextInputEditText
+    private val srcLang get() = binding.srcLang
+    private val transcriptTitle get() = binding.transcriptTitle
+    private val translationTitle get() = binding.translationTitle
+    private val transcriptEditText get() = binding.transcribedEdittext
+    private val translationEditText get() = binding.translationEdittext
 
     //BATCH 4
-    private lateinit var targetLangSelector: Spinner
-    private lateinit var targetLangSelectorCover: TextView
-    private lateinit var progressText: TextView
-    private lateinit var progressBar: ProgressBar
+    private val targetLangSelector get() = binding.targetLangSelector
+    private val targetLangSelectorCover get() = binding.targetLangSelectorCover
+    private val progressText get() = binding.progressText
+    private val progressBar get() = binding.progressBar
 
     //BATCH 5
-    private lateinit var smartReplyHeader: TextView
-    private lateinit var smartReplyGroup: ChipGroup
-    private lateinit var entitiesTitle: TextView
-    private lateinit var entitiesGroup: ChipGroup
+    private val smartReplyHeader get() = binding.smartReplyHeader
+    private val smartReplyGroup get() = binding.smartReplyGroup
+    private val entitiesTitle get() = binding.entitiesTitle
+    private val entitiesGroup get() = binding.entitiesGroup
 
     //
-    private lateinit var copyTranscript: ImageView
-    private lateinit var copyTranslate: ImageView
+    private val copyTranscript get() = binding.copyTranscript
+    private val copyTranslate get() = binding.copyTranslate
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(ImageGroundViewModel::class.java)
         _binding = FragmentImageGroundBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -122,8 +113,8 @@ class ImageGroundFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         designatedFileName = getCurrentDateTime()
-        initializations()
-        appFontSize = viewModel.selectedFontSize!!
+        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        appFontSize = viewModel.selectedFontSize
         setFontSize()
         selectedImage.setOnClickListener {
             startCameraWithoutUri()
@@ -137,6 +128,7 @@ class ImageGroundFragment : Fragment() {
         observeModelDownloading()
         observeForReturnedEntities()
         observeForReturnedReplies()
+        observeErrors()
 
         copyTranscript.setOnClickListener {
             saveToClipboard("TRANSCRIPTED_TEXT", transcriptEditText.text.toString())
@@ -146,46 +138,25 @@ class ImageGroundFragment : Fragment() {
         }
     }
 
-    private fun initializations(){
-        clickTextView = binding.clickTextView
-        selectedImage = binding.selectedImage
-        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-        translationEditText = binding.translationEdittext
-        transcriptEditText = binding.transcribedEdittext
-        transcriptTitle = binding.transcriptTitle
-        translationTitle = binding.translationTitle
-
-        targetLangSelectorCover = binding.targetLangSelectorCover
-        targetLangSelector = binding.targetLangSelector
-
-        smartReplyGroup = binding.smartReplyGroup
-        entitiesGroup = binding.entitiesGroup
-
-        progressText = binding.progressText
-        progressBar = binding.progressBar
-        srcLang = binding.srcLang
-
-        getDetails = binding.getDetails
-
-        smartReplyHeader = binding.smartReplyHeader
-        entitiesTitle = binding.entitiesTitle
-
-        copyTranscript = binding.copyTranscript
-        copyTranslate = binding.copyTranslate
-    }
 
     private fun showValuesForScanner(){
-        //TODO Here
-        scannerImageURI = (activity as MainActivity).scannedImageURI
-        if (scannerImageURI.isNotBlank() && scannerImageURI != "" && scannerImageURI != "null"){
+        val scannerImageURI = (activity as? MainActivity)?.scannedImageURI.orEmpty()
+        if (scannerImageURI.isNotBlank()){
             clickTextView.visibility = View.GONE
-            val path =
-                "${requireContext().filesDir.path}/SCAN.$scannerImageURI.jpg"
-            val fileURI = Uri.fromFile(File(path))
-            val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, Uri.parse(fileURI.toString()))
-            showImageWithGlide(bitmap)
-            convertImageToText(fileURI)
-            (activity as MainActivity).scannedImageURI = ""
+            val imageUri = if (scannerImageURI.contains("://")) {
+                imageFileName = "$designatedFileName.jpg"
+                copyImageToInternalStorage(Uri.parse(scannerImageURI), imageFileName)
+                Uri.parse(scannerImageURI)
+            } else {
+                imageFileName = "SCAN.$scannerImageURI.jpg"
+                Uri.fromFile(File(requireContext().filesDir, "SCAN.$scannerImageURI.jpg"))
+            }
+            Glide.with(this)
+                .load(imageUri)
+                .placeholder(R.drawable.ic_baseline_insert_photo_24)
+                .into(selectedImage)
+            convertImageToText(imageUri)
+            (activity as? MainActivity)?.scannedImageURI = ""
         }
     }
 
@@ -242,9 +213,6 @@ class ImageGroundFragment : Fragment() {
         /**Entities extraction*/
         viewModel.entitiesLiveList.observe(viewLifecycleOwner) { entities ->
             if (entities != null){
-                for (entity in entities){
-                    pageEntitiesList.add(entity)
-                }
                 showEntities(entities)
                 //stop showing progressbar
             }
@@ -254,9 +222,6 @@ class ImageGroundFragment : Fragment() {
         /**Smart reply*/
         viewModel.suggestionResultList.observe(viewLifecycleOwner) { suggestions ->
             if (suggestions != null){
-                for (suggestion in suggestions){
-                    pageRepliesList.add(suggestion.text)
-                }
                 showSmartReply(suggestions)
             }
         }
@@ -266,24 +231,23 @@ class ImageGroundFragment : Fragment() {
             srcLang.text = it
         })
     }
+    private fun observeErrors() {
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            message?.let { Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show() }
+        }
+    }
     private fun getFullScan(){
         getDetails.setOnClickListener {
             viewModel.performLanguageActions(
                 id = designatedFileName,
                 transcriptText = transcriptEditText.text.toString(),
                 scanType = "image",
-                imageUrl = "$designatedFileName.jpg")
+                imageUrl = imageFileName)
         }
     }
     private fun retrieveAndSetDetailsForHistory(){
-        var currentScanId = ""
-        // val currentScanId = requireArguments().getString("selectedScanId").toString()
-        try {
-            currentScanId = requireArguments().getString("selectedScanId").toString()
-        }catch (e: Exception){
-            //
-        }
-        if (currentScanId != "" && currentScanId != "null"){
+        val currentScanId = arguments?.getString("selectedScanId").orEmpty()
+        if (currentScanId.isNotBlank()){
             viewModel.getSelectedScanObject(currentScanId)
 
             viewModel.currentHistoryItem.observe(viewLifecycleOwner, androidx.lifecycle.Observer { scanObject ->
@@ -308,13 +272,8 @@ class ImageGroundFragment : Fragment() {
                 targetLangSelector.visibility = View.INVISIBLE
                 targetLangSelectorCover.visibility = View.VISIBLE
                 targetLangSelectorCover.text = scanObject.translatedLanguage
-                Log.v("Directory", "ImageUrl = ${scanObject.imageUrl}")
                 lifecycleScope.launch {
-                    val imageList = loadImageFromInternalStorage(scanObject.imageUrl)
-                    if (imageList.isNotEmpty()){
-                        val image = imageList[0]
-                        showImageWithGlide(image.bmp)
-                    }
+                    loadImageFromInternalStorage(scanObject.imageUrl)?.let(::showImageWithGlide)
                 }
             })
         }
@@ -335,60 +294,57 @@ class ImageGroundFragment : Fragment() {
         val clipboard = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(label, saveText)
         clipboard.setPrimaryClip(clip)
-        Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
     }
     private fun showSmartReply(suggestionsList: List<SmartReplySuggestion>) {
         smartReplyGroup.removeAllViews()
-        suggestionsList.forEachIndexed { index, suggestion ->
+        suggestionsList.forEach { suggestion ->
             val chip = Chip(requireContext())
             chip.apply {
                 text = suggestion.text
                 isCheckable = false
                 isClickable = true
-                id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
                 setOnClickListener {view ->
                     val copyText = (view as Chip).text.toString()
                     saveToClipboard("SmartReplyChip", copyText)
                 }
             }
-            smartReplyGroup.addView(chip as View)
+            smartReplyGroup.addView(chip)
         }
     }
     private fun showSmartReplyString(suggestionsList: List<String>) {
         smartReplyGroup.removeAllViews()
-        suggestionsList.forEachIndexed { index, suggestion ->
+        suggestionsList.forEach { suggestion ->
             val chip = Chip(requireContext())
             chip.apply {
                 text = suggestion
                 isCheckable = false
                 isClickable = true
-                id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
                 setOnClickListener {view ->
                     val copyText = (view as Chip).text.toString()
                     saveToClipboard("SmartReplyChip", copyText)
                 }
             }
-            smartReplyGroup.addView(chip as View)
+            smartReplyGroup.addView(chip)
         }
     }
     private fun showEntities(entitiesList: List<String>) {
         entitiesGroup.removeAllViews()
-        entitiesList.forEachIndexed { index, entity ->
+        entitiesList.forEach { entity ->
             val chip = Chip(requireContext())
             chip.apply {
                 text = entity
                 isCheckable = false
                 isClickable = true
-                id = index
                 chipIcon = resources.getDrawable(R.drawable.ic_baseline_content_copy_24, requireActivity().theme)
                 setOnClickListener {view ->
                     val copyText = (view as Chip).text.toString()
-                    saveToClipboard("EntityExtractChip", copyText)
+                    EntityActions.openOrCopy(requireContext(), copyText)
                 }
             }
-            entitiesGroup.addView(chip as View)
+            entitiesGroup.addView(chip)
         }
     }
     private fun getCurrentDateTime(): String {
@@ -403,17 +359,12 @@ class ImageGroundFragment : Fragment() {
             result.isSuccessful -> {
                 Log.v("Bitmap", result.bitmap.toString())
                 Log.v("File Path", context?.let { result.getUriFilePath(it) }.toString())
-                findNavController().popBackStack(R.id.imageGroundFragment, false)
-
-                if (result.uriContent != null){
-                    //Toast.makeText(context, "Success here", Toast.LENGTH_SHORT).show()
-                    if (result.uriContent != null){
-                        loadImageThroughGlide(result.uriContent)
-                        clickTextView.visibility = View.GONE
-                    }
-                    convertUriToBitmap(result.uriContent!!)
-                    convertImageToText(result.uriContent)
-                    Log.v("Uri", result.uriContent.toString())
+                result.uriContent?.let { uri ->
+                    loadImageThroughGlide(uri)
+                    clickTextView.visibility = View.GONE
+                    imageFileName = "$designatedFileName.jpg"
+                    copyImageToInternalStorage(uri, imageFileName)
+                    convertImageToText(uri)
                 }
             }
             result is CropImage.CancelledResult -> {
@@ -426,59 +377,59 @@ class ImageGroundFragment : Fragment() {
     }
     private fun startCameraWithoutUri() {
         cropImageOther.launch(
-            options {
-                setImageSource(
-                    includeGallery = true,
-                    includeCamera = true,
-                )
-                // Normal Settings
-                setScaleType(CropImageView.ScaleType.FIT_CENTER)
-                setCropShape(CropImageView.CropShape.RECTANGLE)
-                setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                setAspectRatio(1, 1)
-                setMaxZoom(4)
-                setAutoZoomEnabled(true)
-                setMultiTouchEnabled(true)
-                setCenterMoveEnabled(true)
-                setShowCropOverlay(true)
-                setAllowFlipping(true)
-                setSnapRadius(3f)
-                setTouchRadius(48f)
-                setInitialCropWindowPaddingRatio(0.1f)
-                setBorderLineThickness(3f)
-                setBorderLineColor(Color.argb(170, 255, 255, 255))
-                setBorderCornerThickness(2f)
-                setBorderCornerOffset(5f)
-                setBorderCornerLength(14f)
-                setBorderCornerColor(WHITE)
-                setGuidelinesThickness(1f)
-                setGuidelinesColor(R.color.white)
-                setBackgroundColor(Color.argb(119, 0, 0, 0))
-                setMinCropWindowSize(24, 24)
-                setMinCropResultSize(20, 20)
-                setMaxCropResultSize(99999, 99999)
-                setActivityTitle("")
-                setActivityMenuIconColor(0)
-                setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
-                setOutputCompressQuality(90)
-                setRequestedSize(0, 0)
-                setRequestedSize(0, 0, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
-                setInitialCropWindowRectangle(null)
-                setInitialRotation(0)
-                setAllowCounterRotation(false)
-                setFlipHorizontally(false)
-                setFlipVertically(false)
-                setCropMenuCropButtonTitle(null)
-                setCropMenuCropButtonIcon(0)
-                setAllowRotation(true)
-                setNoOutputImage(false)
-                setFixAspectRatio(false)
-            }
+            CropImageContractOptions(
+                uri = null,
+                cropImageOptions = CropImageOptions(
+                    imageSourceIncludeGallery = true,
+                    imageSourceIncludeCamera = true,
+                    scaleType = CropImageView.ScaleType.FIT_CENTER,
+                    cropShape = CropImageView.CropShape.RECTANGLE,
+                    guidelines = CropImageView.Guidelines.ON_TOUCH,
+                    aspectRatioX = 1,
+                    aspectRatioY = 1,
+                    maxZoom = 4,
+                    autoZoomEnabled = true,
+                    multiTouchEnabled = true,
+                    centerMoveEnabled = true,
+                    showCropOverlay = true,
+                    allowFlipping = true,
+                    snapRadius = 3f,
+                    touchRadius = 48f,
+                    initialCropWindowPaddingRatio = 0.1f,
+                    borderLineThickness = 3f,
+                    borderLineColor = Color.argb(170, 255, 255, 255),
+                    borderCornerThickness = 2f,
+                    borderCornerOffset = 5f,
+                    borderCornerLength = 14f,
+                    borderCornerColor = WHITE,
+                    guidelinesThickness = 1f,
+                    guidelinesColor = ContextCompat.getColor(requireContext(), R.color.white),
+                    backgroundColor = Color.argb(119, 0, 0, 0),
+                    minCropWindowWidth = 24,
+                    minCropWindowHeight = 24,
+                    minCropResultWidth = 20,
+                    minCropResultHeight = 20,
+                    maxCropResultWidth = 99999,
+                    maxCropResultHeight = 99999,
+                    outputCompressFormat = Bitmap.CompressFormat.JPEG,
+                    outputCompressQuality = 90,
+                    outputRequestWidth = 0,
+                    outputRequestHeight = 0,
+                    outputRequestSizeOptions = CropImageView.RequestSizeOptions.RESIZE_INSIDE,
+                    initialRotation = 0,
+                    allowCounterRotation = false,
+                    flipHorizontally = false,
+                    flipVertically = false,
+                    allowRotation = true,
+                    noOutputImage = false,
+                    fixAspectRatio = false,
+                ),
+            )
         )
     }
     private fun showErrorMessage(message: String) {
         Log.e("Camera Error:", message)
-        Toast.makeText(activity, "Crop failed: $message", Toast.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, R.string.image_crop_failed, Snackbar.LENGTH_LONG).show()
     }
     private fun loadImageThroughGlide(imageUri: Uri?){
         try {
@@ -491,70 +442,57 @@ class ImageGroundFragment : Fragment() {
             e.printStackTrace()
         }
     }
-    private fun convertImageToText(imageUri: Uri?){
+    private fun convertImageToText(imageUri: Uri){
         try {
-            val inputImage = InputImage.fromFilePath(requireActivity().applicationContext, imageUri!!)
-            val result : Task<Text>  = textRecognizer.process(inputImage)
+            val inputImage = InputImage.fromFilePath(requireContext(), imageUri)
+            textRecognizer.process(inputImage)
                 .addOnSuccessListener {
-                    transcriptEditText.setText(it.text)
-                    //viewModel.createScanTest(it.text, "Translation of:${it.text}")
-                    //Toast.makeText(context, "Sxan created successfully", Toast.LENGTH_SHORT).show()
+                    _binding?.transcribedEdittext?.setText(it.text)
                 }.addOnFailureListener {
-                    transcriptEditText.setText("Error: ${it.message.toString()}")
+                    _binding?.root?.let { root ->
+                        Snackbar.make(
+                            root,
+                            R.string.image_text_recognition_failed,
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                 }
-            textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-        }catch (e: Exception){
-
+        } catch (_: IOException) {
+            Snackbar.make(binding.root, R.string.image_open_failed, Snackbar.LENGTH_LONG).show()
         }
     }
 
-    //Save method 1
-    private fun convertUriToBitmap(uri: Uri){
-        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, Uri.parse(uri.toString()))
-        saveImageToInternalStorage(bitmap)
-    }
-    private fun saveImageToInternalStorage(bmp: Bitmap): Boolean{
-        return try {
-            //
-            requireActivity().openFileOutput("$designatedFileName.jpg", MODE_PRIVATE).use {stream ->
-                if (!bmp.compress(Bitmap.CompressFormat.JPEG, 90, stream)){
-                    Toast.makeText(context,"Couldn't save bitmap.", Toast.LENGTH_SHORT).show()
-                    throw IOException("Couldn't save bitmap.")
+    private fun copyImageToInternalStorage(uri: Uri, filename: String) {
+        val resolver = requireContext().contentResolver
+        val destination = File(requireContext().filesDir, filename)
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            runCatching {
+                resolver.openInputStream(uri)?.use { input ->
+                    destination.outputStream().use(input::copyTo)
+                } ?: throw IOException("Unable to open selected image")
+            }.onFailure {
+                withContext(Dispatchers.Main) {
+                    if (imageFileName == filename) imageFileName = ""
+                    _binding?.root?.let { root ->
+                        Snackbar.make(root, R.string.image_save_failed, Snackbar.LENGTH_LONG).show()
+                    }
                 }
             }
-            true
-        }catch (e: IOException){
-            e.printStackTrace()
-            false
-        }
-    }
-    private suspend fun loadImageFromInternalStorage(filename: String): List<InternalStoragePhoto>{
-        return withContext(Dispatchers.IO){
-            val files = requireActivity().filesDir.listFiles()
-            files.filter { it.canRead() && it.isFile && it.name == filename }.map {
-                val bytes = it.readBytes()
-                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                InternalStoragePhoto(it.name, bmp)
-            } ?: listOf()
-        }
-    }
-    private fun deleteFromInternalStorage(filename: String): Boolean{
-        return try {
-            requireActivity().deleteFile(filename)
-        }catch (e: Exception){
-            e.printStackTrace()
-            false
         }
     }
 
-    private fun retrieveImageByID(imageID: String){
-        lifecycleScope.launch {
-            val imageList = loadImageFromInternalStorage(imageID)
-            if (imageList.isNotEmpty()){
-                val image = imageList[0]
-                showImageWithGlide(image.bmp)
-            }
+    private suspend fun loadImageFromInternalStorage(filename: String): Bitmap? =
+        withContext(Dispatchers.IO) {
+            filename.takeIf(String::isNotBlank)
+                ?.let { File(requireContext().filesDir, it) }
+                ?.takeIf { it.isFile && it.canRead() }
+                ?.let { BitmapFactory.decodeFile(it.absolutePath) }
         }
+
+    override fun onDestroyView() {
+        textRecognizer.close()
+        _binding = null
+        super.onDestroyView()
     }
 
 }

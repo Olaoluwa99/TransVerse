@@ -16,7 +16,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Theme"
+            android:text="@string/select_theme"
             android:textAllCaps="true"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,19 +36,19 @@
                 android:id="@+id/systemDefault"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="System default" />
+                android:text="@string/language_system_default" />
 
             <RadioButton
                 android:id="@+id/light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Light" />
+                android:text="@string/theme_light" />
 
             <RadioButton
                 android:id="@+id/dark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dark" />
+                android:text="@string/theme_dark" />
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

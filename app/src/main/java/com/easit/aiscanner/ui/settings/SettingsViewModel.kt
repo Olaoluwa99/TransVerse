@@ -1,30 +1,18 @@
 package com.easit.aiscanner.ui.settings
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easit.aiscanner.data.Preference
-import com.easit.aiscanner.database.ScanDatabase
 import com.easit.aiscanner.database.ScanRepository
-import com.easit.aiscanner.model.Scan
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    application: Application,
-    private val preference: Preference
-) : AndroidViewModel(application) {
-
-    private val repository : ScanRepository
-
-    init {
-        val dao = ScanDatabase.getDatabase(application).getScanDao()
-        repository = ScanRepository(dao)
-    }
+    private val preference: Preference,
+    private val repository: ScanRepository
+) : ViewModel() {
 
     var selectedTheme
         get() = preference.appTheme
@@ -36,12 +24,6 @@ class SettingsViewModel @Inject constructor(
         get() = preference.appFontSize
         set(value) {
             preference.appFontSize = value
-        }
-
-    var selectedLanguage
-        get() = preference.appLanguage
-        set(value) {
-            preference.appLanguage = value
         }
 
     var selectedBubbleSize

@@ -1,39 +1,67 @@
-#*.iml
-#.gradle
-#/local.properties
-#/.idea/caches
-#/.idea/libraries
-#/.idea/modules.xml
-#/.idea/workspace.xml
-#/.idea/navEditor.xml
-#/.idea/assetWizardSettings.xml
-#.DS_Store
-#/build
-#/captures
-#.externalNativeBuild
-#.cxx
-#local.properties
-
-# Gradle files
+# Gradle and Kotlin caches
 .gradle/
+.kotlin/
+kotlin-js-store/
 **/build/
 
-# Local configuration
+# Local Android SDK and machine-specific configuration
 local.properties
+keystore.properties
+secrets.properties
+.env
+.env.*
+!.env.example
 
-# IntelliJ / Android Studio
+# Android Studio and IntelliJ IDEA
 .idea/
 *.iml
+*.ipr
+*.iws
+out/
 
-# Log / captures
-*.log
+# VS Code
+.vscode/
+
+# Android build artifacts
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+output-metadata.json
 captures/
 
-# NDK / CMake
-.externalNativeBuild/
+# Signing credentials
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Native build output
 .cxx/
+.externalNativeBuild/
+.cmake/
+.ninja_deps
+.ninja_log
 
-# OS files
+# Test, coverage, and analysis output
+*.ec
+*.exec
+coverage/
+dependencyUpdates/
+.scannerwork/
+
+# Logs and JVM crash dumps
+*.log
+*.hprof
+hs_err_pid*
+replay_pid*
+
+# Operating-system metadata
 .DS_Store
+.AppleDouble
+.LSOverride
 Thumbs.db
+Desktop.ini
 
+# Keep Gradle wrapper files and Room schema history in version control.

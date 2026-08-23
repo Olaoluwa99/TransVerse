@@ -12,19 +12,9 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Preserve useful release crash traces while R8 still obfuscates implementation names.
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-# Please add these rules to your existing keep rules in order to suppress warnings.
-# This is generated automatically by the Android Gradle plugin.
--dontwarn com.easit.aiscanner.Hilt_BaseApp
--dontwarn com.easit.aiscanner.Hilt_MainActivity
--dontwarn com.easit.aiscanner.ui.audioGround.Hilt_AudioGroundFragment
--dontwarn com.easit.aiscanner.ui.imageGround.Hilt_ImageGroundFragment
--dontwarn com.easit.aiscanner.ui.settings.Hilt_SettingsFragment
--dontwarn com.easit.aiscanner.ui.text.Hilt_TextFragment

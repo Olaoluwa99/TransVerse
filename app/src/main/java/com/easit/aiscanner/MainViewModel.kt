@@ -10,15 +10,6 @@ class MainViewModel @Inject constructor(
     private val preference: Preference
 ) : ViewModel() {
 
-    var selectedTheme
+    val selectedTheme
         get() = preference.appTheme
-        set(value) {
-            preference.appTheme = value
-        }
-
-    var selectedFontSize
-        get() = preference.appFontSize
-        set(value) {
-            preference.appFontSize = value
-        }
 }

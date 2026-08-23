@@ -30,14 +30,15 @@
                     android:id="@+id/micState"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/action_start_speech"
                     android:src="@drawable/baseline_mic_24" />
 
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/clickTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="@string/click_to_start_recording"
@@ -49,7 +50,7 @@
                 android:id="@+id/transcriptTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Transcribed text"
+                android:text="@string/original_text_heading"
                 android:fontFamily="@font/poppins_bold"
                 android:textSize="24sp"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -92,6 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:contentDescription="@string/action_copy_original"
+                android:padding="12dp"
                 android:src="@drawable/ic_baseline_content_copy_24"
                 app:layout_constraintBottom_toBottomOf="@+id/transcriptScroll"
                 app:layout_constraintEnd_toEndOf="@id/transcriptScroll"/>
@@ -106,8 +109,8 @@
 
             <TextView
                 android:id="@+id/targetLangSelectorCover"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:visibility="invisible"
                 app:layout_constraintTop_toTopOf="@+id/targetLangSelector"
                 app:layout_constraintBottom_toBottomOf="@+id/targetLangSelector"
@@ -160,7 +163,7 @@
                 android:id="@+id/translationTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Translated text"
+                android:text="@string/translated_text_heading"
                 android:fontFamily="@font/poppins_bold"
                 android:textSize="24sp"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -195,6 +198,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:contentDescription="@string/action_copy_translation"
+                android:padding="12dp"
                 android:src="@drawable/ic_baseline_content_copy_24"
                 app:layout_constraintBottom_toBottomOf="@+id/translationScroll"
                 app:layout_constraintEnd_toEndOf="@id/translationScroll"/>
@@ -227,7 +232,7 @@
                 tools:text="10:02"/>
 
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/playAudioCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -238,18 +243,20 @@
 
                 <ImageView
                     android:id="@+id/playAudioImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/action_play_translation"
+                    android:padding="12dp"
                     android:src="@drawable/ic_baseline_play_arrow_24" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <Button
                 android:id="@+id/shareAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_margin"
-                android:text="Share audio"
+                android:text="@string/share_audio"
                 android:visibility="invisible"
                 android:enabled="false"
                 app:layout_constraintStart_toStartOf="parent"
@@ -259,7 +266,7 @@
                 android:id="@+id/downloadAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Download audio"
+                android:text="@string/download_audio"
                 app:layout_constraintBottom_toBottomOf="@+id/shareAudio"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/shareAudio" />
@@ -280,7 +287,7 @@
                 android:id="@+id/entitiesTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Extracted entities"
+                android:text="@string/entities_heading"
                 android:fontFamily="@font/poppins_bold"
                 android:textSize="24sp"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
@@ -313,7 +320,7 @@
                 android:id="@+id/smartReplyHeader"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Smart Reply"
+                android:text="@string/smart_reply_heading"
                 android:fontFamily="@font/poppins_bold"
                 android:textSize="24sp"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"

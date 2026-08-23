@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
-            android:text="DELETE HISTORY"
+            android:text="@string/delete_history_title"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dialog_margins"
-            android:text="Clicking on confirm would clear all history on device"
+            android:text="@string/delete_history_message"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deleteHistoryDialogHeader" />
@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            android:text="CONFIRM"
+            android:text="@string/action_confirm_delete"
             android:layout_marginTop="@dimen/dialog_margins"
             android:fontFamily="@font/poppins_bold"
             android:textColor="@color/red"

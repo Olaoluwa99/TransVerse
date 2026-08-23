@@ -260,7 +260,7 @@ class CameraSource(private val graphicOverlay: GraphicOverlay) {
         // should guarantee that there will be an array to work with.
         val byteArray = ByteArray(bufferSize)
         val byteBuffer = ByteBuffer.wrap(byteArray)
-        check(!(!byteBuffer.hasArray() || !byteBuffer.array()!!.contentEquals(byteArray))) {
+        check(byteBuffer.hasArray() && byteBuffer.array().contentEquals(byteArray)) {
             // This should never happen. If it does, then we wouldn't be passing the preview content to
             // the underlying detector later.
             "Failed to create valid buffer for camera source."
@@ -370,9 +370,15 @@ class CameraSource(private val graphicOverlay: GraphicOverlay) {
 
                 try {
                     synchronized(processorLock) {
-                        val frameMetadata = FrameMetadata(previewSize!!.width, previewSize!!.height, rotationDegrees)
-                        data?.let {
-                            frameProcessor?.process(it, frameMetadata, graphicOverlay)
+                        previewSize?.let { currentPreviewSize ->
+                            val frameMetadata = FrameMetadata(
+                                currentPreviewSize.width,
+                                currentPreviewSize.height,
+                                rotationDegrees
+                            )
+                            data?.let {
+                                frameProcessor?.process(it, frameMetadata, graphicOverlay)
+                            }
                         }
                     }
                 } catch (t: Exception) {

@@ -1,484 +1,330 @@
 package com.easit.aiscanner.floatingWindow
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
-import android.graphics.Point
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.ImageReader
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.os.*
-import android.util.Log
-import android.view.*
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.IBinder
+import android.os.Build
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.core.util.Pair
+import androidx.core.content.IntentCompat
 import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.R
-import java.io.FileOutputStream
 import java.io.IOException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-class ScreenCropping: Service() {
-    var windowManager: WindowManager? = null
+/** Captures one user-selected screen region, stores it privately, then opens analysis. */
+class ScreenCropping : Service() {
 
-    //Phase 2
-    private var mMediaProjection: MediaProjection? = null
-    private var mImageReader: ImageReader? = null
-    private var mHandler: Handler? = null
-    private var mDisplay: Display? = null
-    private var mVirtualDisplay: VirtualDisplay? = null
-    private var mDensity = 0
-    private var mRotation = 0
-    private var mOrientationChangeCallback: ScreenCropping.OrientationChangeCallback? = null
+    private lateinit var windowManager: WindowManager
+    private lateinit var captureThread: HandlerThread
+    private lateinit var captureHandler: Handler
+    private val mainHandler = Handler(android.os.Looper.getMainLooper())
 
-    //Phase 3
-    private lateinit var floatWindowLayoutParams: WindowManager.LayoutParams
-    private var layoutType: Int? = null
-    private var mContext: Context? = null
-    private var mScreenshotLayout: View? = null
-    private var movedFinger = false
-    private var partialScreenshotHelp: TextView? = null
-    private lateinit var myRect: Rect
+    private var selectorOverlay: View? = null
+    private var selection: Rect? = null
+    private var mediaProjection: MediaProjection? = null
+    private var imageReader: ImageReader? = null
+    private var virtualDisplay: VirtualDisplay? = null
+    @Volatile private var captureStarted = false
+    private var imageProcessed = false
 
-    var cropHeight = 0
-    var cropWidth = 0
-    var cropTop = 0
-    var cropLeft = 0
-
-    var mHeight = 0
-    var mWidth = 0
-
-    var latestScannedImagePath = ""
-    private var mgr: MediaProjectionManager? = null
-    private var wmgr: WindowManager? = null
-    private lateinit var data: Intent
-    var resultCode = 1001
-
-
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+    private val projectionCallback = object : MediaProjection.Callback() {
+        override fun onStop() {
+            releaseCaptureResources()
+            mainHandler.post {
+                if (captureStarted) finishWithError() else stopSelf()
+            }
+        }
     }
+
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
-        // start capture handling thread
-        /*
-        object : Thread() {
-            override fun run() {
-                Looper.prepare()
-                mHandler = Handler()
-                Looper.loop()
-            }
-        }.start()*/
-
-        setupScreenCropper()
+        windowManager = getSystemService(WindowManager::class.java)
+        captureThread = HandlerThread("TransVerseScreenCapture").apply { start() }
+        captureHandler = Handler(captureThread.looper)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupScreenCropper(){
-        //Mid Phase
-        val metrics = applicationContext.resources.displayMetrics
-        var width = metrics.widthPixels
-        var height = metrics.heightPixels
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = NotificationUtils.getNotification(this)
+        startForeground(notification.first, notification.second)
 
-
-        mContext = this
-        //mWindowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-        val layoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val c: Char = if (Utils.isAndroidO) {
-            '-';
-        } else {
-            '#';
-        }
-        val layoutParams = WindowManager.LayoutParams(
-            -1, -1,
-            c.toInt(), 16779016, -3
-        )
-        if (Utils.isAndroidP) layoutParams.layoutInDisplayCutoutMode =
-            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-        mScreenshotLayout = layoutInflater.inflate(R.layout.service_selector, null) as ViewGroup
-        partialScreenshotHelp =
-            mScreenshotLayout!!.findViewById<View>(R.id.help) as TextView
-
-        (mScreenshotLayout!!.findViewById<View>(R.id.global_screenshot_flash) as ImageView)
-        val mScreenshotSelectorView =
-            mScreenshotLayout!!.findViewById<View>(R.id.global_screenshot_selector) as ScreenshotSelectorView
-        mScreenshotLayout!!.isFocusable = true
-        mScreenshotSelectorView.isFocusable = true
-        mScreenshotSelectorView.isFocusableInTouchMode = true
-        mScreenshotLayout!!.setOnTouchListener(View.OnTouchListener { _, _ -> true })
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            layoutType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        }
-        //else LAYOUT_TYPE = WindowManager.LayoutParams.TYPE_TOAST
-        else layoutType = WindowManager.LayoutParams.TYPE_PHONE
-
-        floatWindowLayoutParams = WindowManager.LayoutParams(
-            (width * 1F).toInt(),
-            (height * 1F).toInt(),
-            layoutType!!,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSPARENT
-            /**To try as transparent later*/
-        )
-        floatWindowLayoutParams.gravity = Gravity.CENTER
-        floatWindowLayoutParams.x = 0
-        floatWindowLayoutParams.y = 0
-
-        //mWindowManager!!.addView(mScreenshotLayout, floatWindowLayoutParams)
-        windowManager!!.addView(mScreenshotLayout, floatWindowLayoutParams)
-
-        mgr = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        wmgr = getSystemService(WINDOW_SERVICE) as WindowManager
-
-        val display: Display = getWindowManager()!!.defaultDisplay
-        val size = Point()
-        display.getRealSize(size)
-        //For Normal Mobile .
-        //For Normal Mobile .
-        width = size.x
-        height = size.y
-
-        if (TransparentActivity().DeX) {
-            //For Dex Mode .
-            width = 1920
-            height = 1080
-        }
-
-        //part 2 mid
-        mScreenshotSelectorView.setOnTouchListener(View.OnTouchListener { param1View, param1MotionEvent ->
-            val screenshotSelectorView = param1View as ScreenshotSelectorView
-            val i = param1MotionEvent.action
-            if (i != 0) {
-                if (i != 1) {
-                    if (i != 2) return@OnTouchListener false
-                    partialScreenshotHelp!!.visibility = View.GONE
-                    screenshotSelectorView.updateSelection(
-                        param1MotionEvent.x.toInt(),
-                        param1MotionEvent.y.toInt()
-                    )
-                    movedFinger = true
-                    return@OnTouchListener true
-                }
-                if (!movedFinger) return@OnTouchListener false
-                screenshotSelectorView.visibility = View.GONE
-
-                //setupFloatingButtons()
-                startProjection(resultCode, data)
-
-                windowManager!!.removeView(mScreenshotLayout)
-                val selectionRect = screenshotSelectorView.selectionRect
-                myRect = screenshotSelectorView.selectionRect!!
-
-
-                if (selectionRect != null && selectionRect.width() != 0 && selectionRect.height() != 0){
-                    mScreenshotLayout!!.post(Runnable {
-                        cropWidth = myRect.width()
-                        cropHeight = myRect.height()
-                        cropTop = myRect.top
-                        cropLeft = myRect.left
-                        this@ScreenCropping.stopSelf()
-                    })
-                }
-                screenshotSelectorView.stopSelection()
-                return@OnTouchListener true
-            }
-
-            //TODO Test if this is the cause for double images
-            screenshotSelectorView.startSelection(
-                param1MotionEvent.x.toInt(),
-                param1MotionEvent.y.toInt()
-            )
-            true
-        })
-        mScreenshotLayout!!.post(Runnable {
-            mScreenshotSelectorView.visibility = View.VISIBLE
-            mScreenshotSelectorView.requestFocus()
-        })
-    }
-
-    @JvmName("getWindowManager1")
-    fun getWindowManager(): WindowManager? {
-        return wmgr
-    }
-
-    private fun stopService() {
-        try {
-            stopForeground(true)
+        if (intent?.action == ACTION_STOP) {
             stopSelf()
-            //windowManager!!.removeViewImmediate(viewRoot)
-        } catch (e: Exception) {
-            e.printStackTrace()
+            return START_NOT_STICKY
         }
-    }
 
-
-    //Phase 2
-    private inner class ImageAvailableListener : ImageReader.OnImageAvailableListener {
-        override fun onImageAvailable(reader: ImageReader) {
-            val fos: FileOutputStream? = null
-            var bitmap: Bitmap? = null
-            var croppedBitmap: Bitmap? = null
-
-            try {
-                mImageReader!!.acquireLatestImage().use { image ->
-                    if (image != null) {
-                        val planes = image.planes
-                        val buffer = planes[0].buffer
-                        val pixelStride = planes[0].pixelStride
-                        val rowStride = planes[0].rowStride
-                        val rowPadding = rowStride - pixelStride * mWidth
-
-
-                        // create bitmap
-                        bitmap = Bitmap.createBitmap(
-                            mWidth + rowPadding / pixelStride,
-                            mHeight,
-                            Bitmap.Config.ARGB_8888
-                        )
-                        bitmap!!.copyPixelsFromBuffer(buffer)
-
-                        val a = mWidth
-                        val b = mHeight
-                        val i = cropWidth
-                        val j = cropHeight
-                        val k = cropTop
-                        val l = cropLeft
-
-                        croppedBitmap = Bitmap.createBitmap(
-                            bitmap!!, cropLeft, cropTop,
-                            cropWidth, cropHeight)
-
-                        //
-                        Toast.makeText(this@ScreenCropping, "Stop projection about to be called", Toast.LENGTH_SHORT).show()
-
-                        //TODO Save to internal storage
-                        saveImageToInternalStorage(croppedBitmap!!)
-
-
-                        //TODO don't stop projection till user clicks close
-                        stopProjection()
-
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                if (fos != null) {
-                    try {
-                        fos!!.close()
-                    } catch (ioe: IOException) {
-                        ioe.printStackTrace()
-                    }
-                }
-                if (bitmap != null) {
-                    bitmap!!.recycle()
-                }
-            }
+        val resultCode = intent?.getIntExtra(RESULT_CODE, Activity.RESULT_CANCELED)
+            ?: Activity.RESULT_CANCELED
+        val projectionData = intent?.let {
+            IntentCompat.getParcelableExtra(it, DATA, Intent::class.java)
         }
-    }
 
-    private inner class OrientationChangeCallback internal constructor(context: Context?) :
-        OrientationEventListener(context) {
-        override fun onOrientationChanged(orientation: Int) {
-            val rotation = mDisplay!!.rotation
-            if (rotation != mRotation) {
-                mRotation = rotation
-                try {
-                    // clean up
-                    if (mVirtualDisplay != null) mVirtualDisplay!!.release()
-                    if (mImageReader != null) mImageReader!!.setOnImageAvailableListener(null, null)
-
-                    // re-create virtual display depending on device width / height
-                    //TODO Test if this is the reason for double images
-                    createVirtualDisplay()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-
-    private inner class MediaProjectionStopCallback : MediaProjection.Callback() {
-        override fun onStop() {
-            Log.e(TAG, "stopping projection.")
-            mHandler!!.post {
-                if (mVirtualDisplay != null) mVirtualDisplay!!.release()
-                if (mImageReader != null) mImageReader!!.setOnImageAvailableListener(null, null)
-                if (mOrientationChangeCallback != null) mOrientationChangeCallback!!.disable()
-                mMediaProjection!!.unregisterCallback(this@MediaProjectionStopCallback)
-            }
-        }
-    }
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (isStartCommand(intent)) {
-            // create notification
-            val notification: Pair<Int, Notification> = NotificationUtils.getNotification(this)
-            startForeground(notification.first, notification.second)
-            // start projection
-            Toast.makeText(this, "I am here 1", Toast.LENGTH_SHORT).show()
-
-            resultCode = intent.getIntExtra(RESULT_CODE, Activity.RESULT_CANCELED)
-            data = intent.getParcelableExtra<Intent>(DATA)!!
-            //TODO start projection here
-            //startProjection(resultCode, data)
-        } else if (isStopCommand(intent)) {
-            //stopProjection()
+        if (intent?.action != ACTION_START ||
+            resultCode != Activity.RESULT_OK ||
+            projectionData == null
+        ) {
             stopSelf()
-        } else {
-            stopSelf()
+            return START_NOT_STICKY
         }
+
+        showRegionSelector(resultCode, projectionData)
         return START_NOT_STICKY
     }
 
-    private fun startProjection(resultCode: Int, data: Intent?) {
-        val mpManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        if (mMediaProjection == null) {
-            mMediaProjection = mpManager.getMediaProjection(resultCode, data!!)
+    private fun showRegionSelector(resultCode: Int, projectionData: Intent) {
+        if (selectorOverlay != null) return
 
-            if (mMediaProjection != null) {
-                // display metrics
-                mDensity = Resources.getSystem().displayMetrics.densityDpi
-                val windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-                mDisplay = windowManager.defaultDisplay
+        val overlay = LayoutInflater.from(this).inflate(R.layout.service_selector, null)
+        val selector = overlay.findViewById<ScreenshotSelectorView>(R.id.global_screenshot_selector)
+        val help = overlay.findViewById<TextView>(R.id.help)
+        overlay.findViewById<View>(R.id.cancelCapture).setOnClickListener { stopSelf() }
+        val params = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            }
+        }
 
-                // create virtual display depending on device width / height
-                createVirtualDisplay()
-
-                // register orientation change callback
-                mOrientationChangeCallback =
-                    OrientationChangeCallback(
-                        this
-                    )
-                if (mOrientationChangeCallback!!.canDetectOrientation()) {
-                    mOrientationChangeCallback!!.enable()
+        selector.visibility = View.VISIBLE
+        selector.setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    help.visibility = View.GONE
+                    selector.startSelection(event.x.toInt(), event.y.toInt())
+                    true
                 }
 
-                // register media projection stop callback
-                mMediaProjection!!.registerCallback(
-                    MediaProjectionStopCallback(),
-                    mHandler
-                )
+                MotionEvent.ACTION_MOVE -> {
+                    selector.updateSelection(event.x.toInt(), event.y.toInt())
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    selector.performClick()
+                    selector.updateSelection(event.x.toInt(), event.y.toInt())
+                    val chosenRegion = selector.selectionRect?.let(::Rect)
+                    if (chosenRegion == null ||
+                        chosenRegion.width() < MIN_SELECTION_SIZE ||
+                        chosenRegion.height() < MIN_SELECTION_SIZE
+                    ) {
+                        selector.stopSelection()
+                        help.visibility = View.VISIBLE
+                        Toast.makeText(this, R.string.selection_too_small, Toast.LENGTH_SHORT).show()
+                    } else {
+                        selection = chosenRegion
+                        removeSelectorOverlay()
+                        mainHandler.postDelayed(
+                            { startCapture(resultCode, projectionData) },
+                            OVERLAY_SETTLE_DELAY_MS
+                        )
+                    }
+                    true
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    selector.stopSelection()
+                    help.visibility = View.VISIBLE
+                    true
+                }
+
+                else -> false
             }
+        }
+
+        selectorOverlay = overlay
+        try {
+            windowManager.addView(overlay, params)
+        } catch (_: RuntimeException) {
+            selectorOverlay = null
+            finishWithError()
         }
     }
 
-    private fun stopProjection() {
-        if (mHandler != null) {
-            mHandler!!.post {
-                if (mMediaProjection != null) {
-                    mMediaProjection!!.stop()
-                }
-            }
+    private fun startCapture(resultCode: Int, projectionData: Intent) {
+        if (captureStarted) return
+        captureStarted = true
+
+        val projectionManager = getSystemService(MediaProjectionManager::class.java)
+        val projection = projectionManager.getMediaProjection(resultCode, projectionData)
+        if (projection == null) {
+            finishWithError()
+            return
         }
-        Toast.makeText(this, "Projection has been stopped", Toast.LENGTH_SHORT).show()
-    }
+        mediaProjection = projection
+        projection.registerCallback(projectionCallback, captureHandler)
 
-    //TODO SELECT NUMBER OF IMAGES
-    @SuppressLint("WrongConstant")
-    private fun createVirtualDisplay() {
-        // get width and height
-        mWidth = Resources.getSystem().displayMetrics.widthPixels
-        mHeight = Resources.getSystem().displayMetrics.heightPixels
+        val metrics = resources.displayMetrics
+        val width = metrics.widthPixels
+        val height = metrics.heightPixels
+        val density = metrics.densityDpi
 
-        // start capture reader
-        mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 1)
+        val reader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
+        imageReader = reader
+        reader.setOnImageAvailableListener({ availableReader ->
+            captureImage(availableReader, width, height)
+        }, captureHandler)
 
-        mVirtualDisplay = mMediaProjection!!.createVirtualDisplay(
-            SCREENCAP_NAME, mWidth, mHeight,
-            mDensity, virtualDisplayFlags, mImageReader!!.surface, null, mHandler
+        virtualDisplay = projection.createVirtualDisplay(
+            DISPLAY_NAME,
+            width,
+            height,
+            density,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            reader.surface,
+            null,
+            captureHandler
         )
-        mImageReader!!.setOnImageAvailableListener(ImageAvailableListener(), mHandler)
+
+        captureHandler.postDelayed({
+            if (captureStarted) finishWithError()
+        }, CAPTURE_TIMEOUT_MS)
     }
 
-    private fun getCurrentDateTime(): String {
-        val currentTime = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
-        return currentTime.format(formatter)
-    }
-
-    private fun saveImageToInternalStorage(bmp: Bitmap): Boolean{
-        latestScannedImagePath = getCurrentDateTime()
-        return try {
-            //
-            openFileOutput("SCAN.$latestScannedImagePath.jpg", MODE_PRIVATE).use { stream ->
-                if (!bmp.compress(Bitmap.CompressFormat.JPEG, 90, stream)){
-                    Toast.makeText(this,"Couldn't save bitmap.", Toast.LENGTH_SHORT).show()
-                    throw IOException("Couldn't save bitmap.")
-                }else{
-                    launchAppAndPassData()
-                    stopService()
-
+    private fun captureImage(reader: ImageReader, width: Int, height: Int) {
+        val image = reader.acquireLatestImage() ?: return
+        if (imageProcessed) {
+            image.close()
+            return
+        }
+        imageProcessed = true
+        try {
+            val plane = image.planes.firstOrNull() ?: return
+            val pixelStride = plane.pixelStride
+            val rowStride = plane.rowStride
+            val paddedWidth = width + (rowStride - pixelStride * width) / pixelStride
+            val fullBitmap = Bitmap.createBitmap(paddedWidth, height, Bitmap.Config.ARGB_8888)
+            val imageId = System.currentTimeMillis().toString()
+            val saved = try {
+                fullBitmap.copyPixelsFromBuffer(plane.buffer)
+                val region = selection?.clampTo(width, height) ?: return
+                val croppedBitmap = Bitmap.createBitmap(
+                    fullBitmap,
+                    region.left,
+                    region.top,
+                    region.width(),
+                    region.height()
+                )
+                try {
+                    saveImage(imageId, croppedBitmap)
+                } finally {
+                    croppedBitmap.recycle()
                 }
+            } finally {
+                fullBitmap.recycle()
             }
-            true
-        }catch (e: IOException){
-            e.printStackTrace()
-            false
+
+            if (saved) {
+                captureStarted = false
+                startActivity(
+                    Intent(this, MainActivity::class.java)
+                        .putExtra(MainActivity.EXTRA_SCANNED_IMAGE, imageId)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                )
+                stopSelf()
+            } else {
+                finishWithError()
+            }
+        } catch (_: RuntimeException) {
+            finishWithError()
+        } finally {
+            image.close()
         }
     }
 
-    private fun launchAppAndPassData(){
-        //TODO
-        val mainIntent = Intent(this, MainActivity::class.java)
-        mainIntent.putExtra("ScannedImageURI", latestScannedImagePath)
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(mainIntent)
+    private fun Rect.clampTo(width: Int, height: Int): Rect {
+        val left = this.left.coerceIn(0, width - 1)
+        val top = this.top.coerceIn(0, height - 1)
+        val right = this.right.coerceIn(left + 1, width)
+        val bottom = this.bottom.coerceIn(top + 1, height)
+        return Rect(left, top, right, bottom)
+    }
+
+    private fun saveImage(imageId: String, bitmap: Bitmap): Boolean = try {
+        openFileOutput("SCAN.$imageId.jpg", MODE_PRIVATE).use { stream ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, stream)
+        }
+    } catch (_: IOException) {
+        false
+    }
+
+    private fun finishWithError() {
+        captureStarted = false
+        mainHandler.post {
+            Toast.makeText(this, R.string.screen_capture_failed, Toast.LENGTH_LONG).show()
+            stopSelf()
+        }
+    }
+
+    private fun removeSelectorOverlay() {
+        selectorOverlay?.let { overlay ->
+            runCatching { windowManager.removeViewImmediate(overlay) }
+        }
+        selectorOverlay = null
+    }
+
+    private fun releaseCaptureResources() {
+        imageReader?.setOnImageAvailableListener(null, null)
+        imageReader?.close()
+        imageReader = null
+        virtualDisplay?.release()
+        virtualDisplay = null
+    }
+
+    override fun onDestroy() {
+        removeSelectorOverlay()
+        releaseCaptureResources()
+        mediaProjection?.unregisterCallback(projectionCallback)
+        mediaProjection?.stop()
+        mediaProjection = null
+        mainHandler.removeCallbacksAndMessages(null)
+        captureHandler.removeCallbacksAndMessages(null)
+        captureThread.quitSafely()
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        super.onDestroy()
     }
 
     companion object {
-        private const val TAG = "ScreenCaptureService"
-        private const val RESULT_CODE = "RESULT_CODE"
-        private const val DATA = "DATA"
-        private const val ACTION = "ACTION"
-        private const val START = "START"
-        private const val STOP = "STOP"
-        private const val SCREENCAP_NAME = "screencap"
-        private var IMAGES_PRODUCED = 0
+        private const val ACTION_START = "com.easit.aiscanner.action.START_SCREEN_CAPTURE"
+        internal const val ACTION_STOP = "com.easit.aiscanner.action.STOP_SCREEN_CAPTURE"
+        private const val RESULT_CODE = "result_code"
+        private const val DATA = "projection_data"
+        private const val DISPLAY_NAME = "TransVerse partial screen capture"
+        private const val MIN_SELECTION_SIZE = 24
+        private const val JPEG_QUALITY = 92
+        private const val OVERLAY_SETTLE_DELAY_MS = 180L
+        private const val CAPTURE_TIMEOUT_MS = 10_000L
 
-        fun getStartIntent(context: Context?, resultCode: Int, data: Intent?): Intent {
-            val intent = Intent(context, ScreenCropping::class.java)
-            intent.putExtra(ACTION, START)
-            intent.putExtra(RESULT_CODE, resultCode)
-            intent.putExtra(DATA, data)
-            return intent
-        }
-
-        fun getStopIntent(context: Context?): Intent {
-            val intent = Intent(context, ScreenCropping::class.java)
-            intent.putExtra(ACTION, STOP)
-            return intent
-        }
-
-        private fun isStartCommand(intent: Intent): Boolean {
-            return (intent.hasExtra(RESULT_CODE) && intent.hasExtra(DATA)
-                    && intent.hasExtra(ACTION) && intent.getStringExtra(ACTION) == START)
-        }
-
-        private fun isStopCommand(intent: Intent): Boolean {
-            return intent.hasExtra(ACTION) && intent.getStringExtra(ACTION) == STOP
-        }
-
-        private val virtualDisplayFlags: Int
-            get() = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC
+        fun getStartIntent(context: Context, resultCode: Int, data: Intent): Intent =
+            Intent(context, ScreenCropping::class.java)
+                .setAction(ACTION_START)
+                .putExtra(RESULT_CODE, resultCode)
+                .putExtra(DATA, data)
     }
-
 }

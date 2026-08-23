@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Transcribed text"
+                android:text="@string/original_text_heading"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +54,12 @@
 
             <ImageView
                 android:id="@+id/copyTranscript"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:contentDescription="@string/action_copy_original"
+                android:padding="12dp"
                 android:src="@drawable/ic_baseline_content_copy_24"
                 app:layout_constraintBottom_toBottomOf="@+id/transcriptScroll"
                 app:layout_constraintEnd_toEndOf="@id/transcriptScroll"/>
@@ -72,8 +74,8 @@
 
             <TextView
                 android:id="@+id/targetLangSelectorCover"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/targetLangSelector"
                 app:layout_constraintStart_toStartOf="@+id/targetLangSelector"
@@ -137,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Translated text"
+                android:text="@string/translated_text_heading"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -170,6 +172,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:contentDescription="@string/action_copy_translation"
+                android:padding="12dp"
                 android:src="@drawable/ic_baseline_content_copy_24"
                 app:layout_constraintBottom_toBottomOf="@+id/translationScroll"
                 app:layout_constraintEnd_toEndOf="@id/translationScroll"/>
@@ -192,7 +196,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Extracted entities"
+                android:text="@string/entities_heading"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +231,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_entity_header_margin"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Smart Reply"
+                android:text="@string/smart_reply_heading"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -248,7 +252,5 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 

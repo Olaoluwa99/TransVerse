@@ -1,83 +1,67 @@
-# SmartText-Assistant
+# TransVerse
 
-![SmartText Assistant Logo](app/src/main/ic_launcher-playstore.png)
-## Overview
+TransVerse is a privacy-first Android assistant for capturing, translating and acting on text from anywhere. It accepts typed text, shared text, images, speech, barcodes and an optional floating screen-capture workflow.
 
-The SmartText Assistant is a versatile mobile application designed to enhance text communication and productivity. This app offers a wide range of features, including text input, image text extraction, voice-to-text transcription, language detection, smart replies, entity extraction, translation, a floating text box, and a history log.
+## Core workflow
 
-## Screenshots 
-![Zed-01](https://github.com/Olaoluwa99/SmartText-Assistant/assets/85140182/76c74558-9d6c-4efc-b816-e458e18b0bdd)
-![Zed-02](https://github.com/Olaoluwa99/SmartText-Assistant/assets/85140182/b8a572ff-78d3-4a35-beef-ea2f0cabf427)
-![Zed-03](https://github.com/Olaoluwa99/SmartText-Assistant/assets/85140182/d67d0648-c17f-4d7d-8ccd-7584e48f964f)
+1. Capture text from the Text, Image, Speech or Barcode entry point—or share selected text/an image into TransVerse.
+2. Review and correct the captured text.
+3. Detect its language and translate it with an on-device ML Kit model.
+4. Copy, speak or share the result, or act on extracted URLs, email addresses and phone numbers.
+5. Save the result locally, favourite it for quick access, or enable Incognito mode to avoid persistence.
 
+## Highlights
 
-## Key Features
+- On-device OCR, language identification, translation and entity extraction
+- English Smart Reply suggestions when supported by ML Kit
+- Searchable, favourite-first local history backed by Room
+- Share-sheet and Android Process Text integration
+- Optional user-controlled floating capture bubble
+- Light, dark and system themes
+- Adjustable font size, reading speed and speech pitch
+- No account and no application-owned cloud history
 
-- **Text Input:** Manually input text for various purposes, such as composing messages, notes, or emails.
+## Technology
 
-- **Image Text Extraction:** Extract text from images using Optical Character Recognition (OCR).
-
-- **Voice-to-Text:** Transcribe spoken words into text using your device's microphone.
-
-- **Language Detection:** Automatically detect the language of input text.
-
-- **Smart Replies:** AI-powered suggestions for contextually relevant and personalized responses.
-
-- **Entity Extraction:** Identify and extract entities within the text, such as names, dates, and locations.
-
-- **Floating Text Box:** Access a floating text box for quick text input and translations, ideal for multitasking.
-
-- **Translation:** Translate text to and from various languages.
-
-- **History Log:** Keep track of all text interactions for easy reference.
-
-## Getting Started
-
-### Installation
-
-1. Clone the repository.
-   ```shell
-   git clone https://github.com/Olaoluwa99/SmartText-Assistant.git
-   ```
-
-2. Install the app on your Android device.
-
-### Usage
-
-1. Launch the SmartText Assistant app on your device.
-
-2. Explore the various features and functionalities.
-
-3. Customize app settings to suit your preferences.
+- Kotlin and Android Views with an incremental feature-first architecture
+- ViewModel, LiveData/Flow and a single shared analysis state holder
+- Hilt dependency injection
+- Room database with explicit migrations
+- Google ML Kit and Play Services-delivered models
+- Material 3, Navigation, View Binding and Data Binding
 
 ## Development
 
-### Prerequisites
+Requirements:
 
-- Android Studio
-- Android SDK
-- Google play services
+- Android Studio with JDK 17
+- Android SDK 36
+- An Android 8.0+ device or emulator (`minSdk 26`)
 
-### Building and Running
+Common checks:
 
-1. Open the project in Android Studio.
+```shell
+./gradlew testDebugUnitTest
+./gradlew lintDebug
+./gradlew bundleRelease
+```
 
-2. Build and run the app on your emulator or physical device.
+CI runs all three checks for pushes and pull requests. Room exports versioned schemas to `app/schemas`; review and commit generated schema changes whenever the database version changes.
 
-## Contributing
+## Permissions
 
-Contributions are welcome! Please follow our [contribution guidelines](CONTRIBUTING.md) for more details.
+- Camera: image and barcode capture
+- Microphone: speech recognition
+- Notifications: foreground capture visibility
+- Display over other apps: optional Quick Capture bubble
+- Media projection: requested through Android’s system prompt for each screen-capture session
 
-## License
+TransVerse does not request broad external-storage access. Exports use Android MediaStore or the system share sheet.
 
-This project is licensed under the [MIT License](LICENSE).
+## Privacy
 
-## Acknowledgments
+Captured content and history remain on the device unless the user explicitly shares them. Some ML Kit models require an initial download through Google Play services. Incognito mode prevents new analysis results from being saved.
 
-- Mention any libraries, tools, or individuals you'd like to thank here.
+## Contributing and licence
 
-## Contact
-
-- Email: olaoluwadaniel99@gmail.com
-- Website: NIL
-- LinkedIn: [Olaoluwa Odewale](https://www.linkedin.com/in/Olaoluwa-Odewale/)
+See [CONTRIBUTING.md](CONTRIBUTING.md). TransVerse is available under the [MIT License](LICENSE).

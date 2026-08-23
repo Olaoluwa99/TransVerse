@@ -3,219 +3,191 @@ package com.easit.aiscanner.floatingWindow
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
+import android.app.Service
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.PixelFormat
-import android.media.projection.MediaProjectionManager
-import android.os.*
-import android.view.*
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.os.IBinder
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.WindowManager
 import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import com.easit.aiscanner.R
+import com.easit.aiscanner.data.Constants
+import com.easit.aiscanner.data.Preference
+import com.easit.aiscanner.databinding.ServiceFloatingButtonsBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import kotlin.math.abs
 
-class Floater: android.app.Service() {
-    var viewRoot: View? = null
-    var windowManager: WindowManager? = null
-    var rootParams: WindowManager.LayoutParams? = null
-    var imageView: ImageView? = null
-    var close: LinearLayout? = null
-    var textView: TextView? = null
-    var fab: LinearLayout? = null
-    var imageText: LinearLayout? = null
-    var audioText: LinearLayout? = null
-    //Phase 2
-    private var mHandler: Handler? = null
-    var fWidth = 0
+/** A user-controlled overlay that exposes image and speech capture shortcuts. */
+@AndroidEntryPoint
+class Floater : Service() {
 
+    @Inject lateinit var preference: Preference
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
+    private lateinit var binding: ServiceFloatingButtonsBinding
+    private lateinit var windowManager: WindowManager
+    private lateinit var layoutParams: WindowManager.LayoutParams
+    private var overlayAttached = false
+
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
-        // start capture handling thread
-        object : Thread() {
-            override fun run() {
-                Looper.prepare()
-                mHandler = Handler()
-                Looper.loop()
-            }
-        }.start()
-
-        setupFloatingButtons()
+        startForeground(NOTIFICATION_ID, createNotification())
+        showOverlay()
     }
 
-    private fun setupFloatingButtons(){
-        //Main Start
-        val metrics = resources.displayMetrics
-        fWidth = metrics.widthPixels
-        if (rootParams == null) {
-            val LAYOUT_FLAG: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            }
-            rootParams = WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                LAYOUT_FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT
-            )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel(
-                    "com.example.floatinglayout",
-                    "Floating Layout Service",
-                    NotificationManager.IMPORTANCE_LOW
-                )
-                channel.lightColor = Color.BLUE
-                channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-                val notificationManager =
-                    (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
-                notificationManager.createNotificationChannel(channel)
-                val builder = NotificationCompat.Builder(this, "com.example.floatinglayout")
-                val notification: Notification = builder.setOngoing(true)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Floating Layout Service is Running")
-                    .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .build()
-                startForeground(2, notification)
-            }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_NOT_STICKY
 
-            if (viewRoot == null) {
-                viewRoot = LayoutInflater.from(this).inflate(R.layout.service_floating_buttons, null)
-                rootParams!!.gravity = Gravity.CENTER_HORIZONTAL or Gravity.START
-                rootParams!!.x = 0
-                rootParams!!.y = 0
-                windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-                windowManager!!.addView(viewRoot, rootParams)
-                //textView = viewRoot!!.findViewById(R.id.textView)
-                //imageView = viewRoot!!.findViewById(R.id.imageView)
-                close = viewRoot!!.findViewById(R.id.close)
-                fab = viewRoot!!.findViewById(R.id.capture)
-                imageText = viewRoot!!.findViewById(R.id.imageText)
-                audioText = viewRoot!!.findViewById(R.id.audioText)
+    private fun showOverlay() {
+        binding = ServiceFloatingButtonsBinding.inflate(LayoutInflater.from(this))
+        val bubbleScale = when (preference.appBubbleSize) {
+            Constants.VERY_SMALL -> 0.7f
+            Constants.SMALL -> 0.85f
+            Constants.LARGE -> 1.15f
+            else -> 1f
+        }
+        binding.root.scaleX = bubbleScale
+        binding.root.scaleY = bubbleScale
+        binding.root.pivotX = 0f
+        binding.root.pivotY = 0f
+        windowManager = getSystemService(WindowManager::class.java)
+        layoutParams = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            x = 0
+            y = resources.displayMetrics.heightPixels / 3
+        }
 
-                viewRoot!!.findViewById<View>(R.id.root)
-                    .setOnTouchListener(object : View.OnTouchListener {
-                        private var initialX = 0
-                        private var initialY = 0
-                        private var initialTouchX = 0
-                        private var initialTouchY = 0
+        try {
+            windowManager.addView(binding.root, layoutParams)
+        } catch (_: RuntimeException) {
+            stopSelf()
+            return
+        }
+        overlayAttached = true
+        configureDragGesture()
 
-                        override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-                            when (motionEvent.action) {
-                                MotionEvent.ACTION_DOWN -> {
-                                    initialX = rootParams!!.x
-                                    initialY = rootParams!!.y
-                                    initialTouchX = motionEvent.rawX.toInt()
-                                    initialTouchY = motionEvent.rawY.toInt()
-                                    return true
-                                }
-                                MotionEvent.ACTION_UP -> {
-                                    if (motionEvent.rawX < fWidth / 2) {
-                                        rootParams!!.x = 0
-                                    } else {
-                                        rootParams!!.x = fWidth
-                                    }
-                                    rootParams!!.y =
-                                        initialY + (motionEvent.rawY - initialTouchY).toInt()
-                                    windowManager!!.updateViewLayout(viewRoot, rootParams)
-                                    val xDiff = (motionEvent.rawX - initialTouchX).toInt()
-                                    val yDiff = (motionEvent.rawY - initialTouchY).toInt()
-                                    if (xDiff < 20 && yDiff < 20) {
-                                        if (textView?.visibility == View.GONE) {
-                                            textView?.visibility = View.VISIBLE
-                                            //close!!.visibility = View.VISIBLE
-                                        } else {
-                                            textView?.visibility = View.GONE
-                                            //close!!.visibility = View.GONE
-                                        }
-                                    }
-                                    return true
-                                }
-                                MotionEvent.ACTION_MOVE -> {
-                                    rootParams!!.x =
-                                        initialX + (motionEvent.rawX - initialTouchX).toInt()
-                                    rootParams!!.y =
-                                        initialY + (motionEvent.rawY - initialTouchY).toInt()
-                                    windowManager!!.updateViewLayout(viewRoot, rootParams)
-                                    return true
-                                }
-                            }
-                            return false
+        binding.close.setOnClickListener { stopSelf() }
+        binding.capture.setOnClickListener {
+            val showActions = !binding.imageText.isVisible
+            binding.imageText.isVisible = showActions
+            binding.audioText.isVisible = showActions
+        }
+        binding.imageText.setOnClickListener {
+            launchCaptureActivity(ImageTransparentActivity::class.java)
+        }
+        binding.audioText.setOnClickListener {
+            launchCaptureActivity(AudioTransparentActivity::class.java)
+        }
+    }
+
+    private fun configureDragGesture() {
+        binding.root.setOnTouchListener(object : View.OnTouchListener {
+            private var initialX = 0
+            private var initialY = 0
+            private var touchX = 0f
+            private var touchY = 0f
+
+            override fun onTouch(view: View, event: MotionEvent): Boolean {
+                when (event.actionMasked) {
+                    MotionEvent.ACTION_DOWN -> {
+                        initialX = layoutParams.x
+                        initialY = layoutParams.y
+                        touchX = event.rawX
+                        touchY = event.rawY
+                        return true
+                    }
+
+                    MotionEvent.ACTION_MOVE -> {
+                        layoutParams.x = initialX + (event.rawX - touchX).toInt()
+                        layoutParams.y = clampedY(initialY + (event.rawY - touchY).toInt())
+                        updateOverlayPosition()
+                        return true
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        val screenWidth = resources.displayMetrics.widthPixels
+                        layoutParams.x = if (event.rawX < screenWidth / 2f) {
+                            0
+                        } else {
+                            (screenWidth - binding.root.width).coerceAtLeast(0)
                         }
-                    })
-                close!!.setOnClickListener { stopService() }
-                fab!!.setOnClickListener {
-                    if (!audioText!!.isVisible && !imageText!!.isVisible){
-                        audioText!!.visibility = View.VISIBLE
-                        imageText!!.visibility = View.VISIBLE
-                    }else{
-                        audioText!!.visibility = View.GONE
-                        imageText!!.visibility = View.GONE
+                        layoutParams.y = clampedY(
+                            initialY + (event.rawY - touchY).toInt()
+                        )
+                        updateOverlayPosition()
+
+                        if (abs(event.rawX - touchX) < CLICK_SLOP &&
+                            abs(event.rawY - touchY) < CLICK_SLOP
+                        ) {
+                            view.performClick()
+                        }
+                        return true
                     }
                 }
-                imageText!!.setOnClickListener {
-                    //To do
-                    viewRoot!!.visibility = View.GONE
-                    //setupScreenCropper()
-                    //TODO START TRANSPARENT ACTIVITY
-
-                    val intentMain = Intent(this, ImageTransparentActivity::class.java)
-                    intentMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intentMain)
-
-                    //ImageTransparentActivity().start
-                    //ImageTransparentActivity().startProjection()
-                    //(activity as ImageTransparentActivity).issues()
-                    //issues()
-                }
-                audioText!!.setOnClickListener {
-                    //To do
-                    viewRoot!!.visibility = View.GONE
-                    val intentMain = Intent(this, AudioTransparentActivity::class.java)
-                    intentMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intentMain)
-                }
+                return false
             }
+        })
+    }
+
+    private fun updateOverlayPosition() {
+        if (overlayAttached) {
+            windowManager.updateViewLayout(binding.root, layoutParams)
         }
     }
 
-    private fun stopService() {
-        try {
-            stopForeground(true)
-            stopSelf()
-            windowManager!!.removeViewImmediate(viewRoot)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    private fun clampedY(candidate: Int): Int {
+        val maximum = (resources.displayMetrics.heightPixels - binding.root.height).coerceAtLeast(0)
+        return candidate.coerceIn(0, maximum)
     }
 
-    fun issues(){
-        //Unknown action: To remove later
-        var DeX = false
-        val config = resources.configuration
-        try {
-            val configClass: Class<*> = config.javaClass
-            if (configClass.getField("SEM_DESKTOP_MODE_ENABLED").getInt(configClass) ==
-                configClass.getField("semDesktopModeEnabled").getInt(config)
-            ) {
-                DeX = true
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        val mProjectionManager =
-            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        //startActivityForResult(mProjectionManager.createScreenCaptureIntent(), REQUEST_CODE)
-        startActivity(mProjectionManager.createScreenCaptureIntent())
+    private fun launchCaptureActivity(activityClass: Class<*>) {
+        startActivity(Intent(this, activityClass).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        stopSelf()
     }
 
+    private fun createNotification(): Notification {
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.floating_service_running),
+                NotificationManager.IMPORTANCE_LOW
+            ).apply { lockscreenVisibility = Notification.VISIBILITY_PRIVATE }
+        )
+
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setOngoing(true)
+            .setSmallIcon(R.drawable.ic_baseline_camera_24)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.floating_service_running))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .build()
+    }
+
+    override fun onDestroy() {
+        if (overlayAttached) {
+            runCatching { windowManager.removeViewImmediate(binding.root) }
+            overlayAttached = false
+        }
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        super.onDestroy()
+    }
+
+    companion object {
+        private const val CHANNEL_ID = "transverse_quick_capture"
+        private const val NOTIFICATION_ID = 2002
+        private const val CLICK_SLOP = 20f
+    }
 }

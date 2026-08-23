@@ -3,34 +3,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <ImageView
-        android:id="@+id/global_screenshot_background"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:src="#99000000"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/global_screenshot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:background="@drawable/screenshot_panel"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/global_screenshot_flash"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:src="@android:color/white"
-        android:visibility="gone" />
-
     <com.easit.aiscanner.floatingWindow.ScreenshotSelectorView
         android:id="@+id/global_screenshot_selector"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="gone" />
+        android:contentDescription="@string/drag_to_scan" />
 
     <TextView
         android:id="@+id/help"
@@ -39,7 +16,19 @@
         android:layout_gravity="center"
         android:layout_margin="40.0dip"
         android:gravity="center"
-        android:text="Drag to scan"
+        android:text="@string/drag_to_scan"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@android:color/white" />
+
+    <ImageButton
+        android:id="@+id/cancelCapture"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_stop_capture"
+        android:padding="12dp"
+        android:src="@drawable/ic_baseline_close_24"
+        android:tint="@android:color/white" />
 </FrameLayout>

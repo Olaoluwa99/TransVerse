@@ -10,7 +10,9 @@ import com.easit.aiscanner.databinding.FragmentPrivacyPolicyBinding
 class PrivacyPolicyFragment : Fragment() {
 
     private var _binding: FragmentPrivacyPolicyBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding) {
+        "Binding accessed outside the view lifecycle"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -18,6 +20,11 @@ class PrivacyPolicyFragment : Fragment() {
     ): View? {
         _binding = FragmentPrivacyPolicyBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
 }

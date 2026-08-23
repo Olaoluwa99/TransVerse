@@ -14,77 +14,78 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.easit.aiscanner.R
+import com.easit.aiscanner.BuildConfig
+import com.easit.aiscanner.MainActivity
 import com.easit.aiscanner.data.Constants
 import com.easit.aiscanner.databinding.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
+import java.time.Year
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
-    private val shareURL = ""
     private val appURL = "https://play.google.com/store/apps/details?id="
 
     //GENERAL
-    private lateinit var generalText: TextView
-    private lateinit var launchModeText: TextView
-    private lateinit var launchModeLayout: LinearLayout
-    private lateinit var launchModeValueText: TextView
-    private lateinit var appThemeLayout: LinearLayout
-    private lateinit var appTheme: TextView
-    private lateinit var appThemeValueText: TextView
-    private lateinit var appLanguageLayout: LinearLayout
-    private lateinit var appLanguage: TextView
-    private lateinit var appLanguageValueText: TextView
-    private lateinit var fontSize: TextView
-    private lateinit var fontSizeSeekbar: SeekBar
-    private lateinit var fontSizeSeekbarValue: TextView
-    private lateinit var bubbleSizeLayout: LinearLayout
-    private lateinit var bubbleSize: TextView
-    private lateinit var bubbleSizeValueText: TextView
+    private val generalText get() = binding.generalText
+    private val launchModeText get() = binding.launchModeText
+    private val launchModeLayout get() = binding.launchModeLayout
+    private val launchModeValueText get() = binding.launchModeValueText
+    private val appThemeLayout get() = binding.appThemeLayout
+    private val appTheme get() = binding.appTheme
+    private val appThemeValueText get() = binding.appThemeValueText
+    private val fontSize get() = binding.fontSize
+    private val fontSizeSeekbar get() = binding.fontSizeSeekbar
+    private val fontSizeSeekbarValue get() = binding.fontSizeSeekbarValue
+    private val bubbleSizeLayout get() = binding.bubbleSizeLayout
+    private val bubbleSize get() = binding.bubbleSize
+    private val bubbleSizeValueText get() = binding.bubbleSizeValueText
 
     //AUDIO
-    private lateinit var audioHeader: TextView
-    private lateinit var readingSpeed: TextView
-    private lateinit var readingSpeedSeekbarValue: TextView
-    private lateinit var readingSpeedSeekbar: SeekBar
-    private lateinit var speechPitch: TextView
-    private lateinit var speechPitchSeekbarValue: TextView
-    private lateinit var speechPitchSeekbar: SeekBar
+    private val audioHeader get() = binding.audioHeader
+    private val readingSpeed get() = binding.readingSpeed
+    private val readingSpeedSeekbarValue get() = binding.readingSpeedSeekbarValue
+    private val readingSpeedSeekbar get() = binding.readingSpeedSeekbar
+    private val speechPitch get() = binding.speechPitch
+    private val speechPitchSeekbarValue get() = binding.speechPitchSeekbarValue
+    private val speechPitchSeekbar get() = binding.speechPitchSeekbar
 
     //STORAGE
-    private lateinit var goIncognitoCheckbox: CheckBox
-    private lateinit var deleteHistoryLayout: LinearLayout
-    private lateinit var storageHeader: TextView
-    private lateinit var incognitoText: TextView
-    private lateinit var incognitoDetailText: TextView
-    private lateinit var deleteHistory: TextView
-    private lateinit var deleteHistoryDetail: TextView
+    private val goIncognitoCheckbox get() = binding.goIncognitoCheckbox
+    private val deleteHistoryLayout get() = binding.deleteHistoryLayout
+    private val storageHeader get() = binding.storageHeader
+    private val incognitoText get() = binding.incognitoText
+    private val incognitoDetailText get() = binding.incognitoDetailText
+    private val deleteHistory get() = binding.deleteHistory
+    private val deleteHistoryDetail get() = binding.deleteHistoryDetail
 
     //OTHERS
-    private lateinit var othersHeader: TextView
-    private lateinit var helpSupportLayout: LinearLayout
-    private lateinit var privacyPermissionLayout: LinearLayout
-    private lateinit var thirdPartyNoticesLayout: LinearLayout
-    private lateinit var shareAppLayout: LinearLayout
-    private lateinit var rateUsLayout: LinearLayout
-    private lateinit var helpSupport: TextView
-    private lateinit var privacyPermission: TextView
-    private lateinit var thirdPartyNotices: TextView
-    private lateinit var shareApp: TextView
-    private lateinit var rateUs: TextView
+    private val othersHeader get() = binding.othersHeader
+    private val helpSupportLayout get() = binding.helpSupportLayout
+    private val privacyPermissionLayout get() = binding.privacyPermissionLayout
+    private val thirdPartyNoticesLayout get() = binding.thirdPartyNoticesLayout
+    private val shareAppLayout get() = binding.shareAppLayout
+    private val rateUsLayout get() = binding.rateUsLayout
+    private val helpSupport get() = binding.helpSupport
+    private val privacyPermission get() = binding.privacyPermission
+    private val thirdPartyNotices get() = binding.thirdPartyNotices
+    private val shareApp get() = binding.shareApp
+    private val rateUs get() = binding.rateUs
 
     //LAST
-    private lateinit var versionInfo: TextView
-    private lateinit var companyName: TextView
-    private lateinit var allRightsReserved: TextView
+    private val versionInfo get() = binding.versionInfo
+    private val companyName get() = binding.companyName
+    private val allRightsReserved get() = binding.allRightsReserved
 
 
     //MAIN
     private var _binding : FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding) {
+        "Binding accessed outside the view lifecycle"
+    }
     val viewModel by activityViewModels<SettingsViewModel>()
     var appFontSize = 0
     var progressReadingSpeed = 0
@@ -94,11 +95,9 @@ class SettingsFragment : Fragment() {
     //DIALOGS
     private var dialogThemeBinding: DialogThemeBinding? = null
     private var dialogBubbleSizeBinding: DialogBubbleSizeBinding? = null
-    private var dialogLanguageBinding: DialogLanguageBinding? = null
     private var dialogDeleteHistoryBinding: DialogDeleteHistoryBinding? = null
     private var themeAlertDialog: AlertDialog? = null
     private var bubbleSizeAlertDialog: AlertDialog? = null
-    private var languageAlertDialog: AlertDialog? = null
     private var deleteHistoryAlertDialog: AlertDialog? = null
 
     override fun onCreateView(
@@ -110,24 +109,24 @@ class SettingsFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        appFontSize = viewModel.selectedFontSize!!
-        progressSpeechPitch = viewModel.selectedSpeechPitch!!
-        progressReadingSpeed = viewModel.selectedReadingSpeed!!
+        appFontSize = viewModel.selectedFontSize
+        progressSpeechPitch = viewModel.selectedSpeechPitch
+        progressReadingSpeed = viewModel.selectedReadingSpeed
 
-        initializations()
         setFontSize()
         //Seekbar
         fontSizeSeekbar.progress = appFontSize
-        speechPitchSeekbar.progress = viewModel.selectedSpeechPitch!!
-        readingSpeedSeekbar.progress = viewModel.selectedReadingSpeed!!
+        speechPitchSeekbar.progress = viewModel.selectedSpeechPitch
+        readingSpeedSeekbar.progress = viewModel.selectedReadingSpeed
         //Text
         fontSizeSeekbarValue.text = "$appFontSize"
         bubbleSizeValueText.text = viewModel.selectedBubbleSize
-        appLanguageValueText.text = viewModel.selectedLanguage
-        goIncognitoCheckbox.isChecked = viewModel.selectedIncognitoMode!!
+        goIncognitoCheckbox.isChecked = viewModel.selectedIncognitoMode
         //Seekbar text
-        readingSpeedSeekbarValue.text = "${viewModel.selectedReadingSpeed!!}"
-        speechPitchSeekbarValue.text = "${viewModel.selectedSpeechPitch!!}"
+        readingSpeedSeekbarValue.text = viewModel.selectedReadingSpeed.toString()
+        speechPitchSeekbarValue.text = viewModel.selectedSpeechPitch.toString()
+        versionInfo.text = getString(R.string.version_format, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        companyName.text = getString(R.string.copyright_format, Year.now().value)
 
 
 
@@ -142,70 +141,12 @@ class SettingsFragment : Fragment() {
         storageListeners()
         othersListeners()
     }
-    private fun initializations(){
-        //GENERAL
-        generalText = binding.generalText
-        launchModeText = binding.launchModeText
-        launchModeLayout = binding.launchModeLayout
-        launchModeValueText = binding.launchModeValueText
-        appThemeLayout = binding.appThemeLayout
-        appTheme = binding.appTheme
-        appThemeValueText = binding.appThemeValueText
-        appLanguageLayout = binding.appLanguageLayout
-        appLanguage = binding.appLanguage
-        appLanguageValueText = binding.appLanguageValueText
-        fontSize = binding.fontSize
-        fontSizeSeekbar = binding.fontSizeSeekbar
-        fontSizeSeekbarValue = binding.fontSizeSeekbarValue
-        bubbleSizeLayout = binding.bubbleSizeLayout
-        bubbleSize = binding.bubbleSize
-        bubbleSizeValueText = binding.bubbleSizeValueText
-
-        //AUDIO
-        audioHeader = binding.audioHeader
-        readingSpeedSeekbar = binding.readingSpeedSeekbar
-        speechPitchSeekbar = binding.speechPitchSeekbar
-        readingSpeed = binding.readingSpeed
-        readingSpeedSeekbarValue = binding.readingSpeedSeekbarValue
-        speechPitch = binding.speechPitch
-        speechPitchSeekbarValue = binding.speechPitchSeekbarValue
-        storageHeader = binding.storageHeader
-        incognitoText = binding.incognitoText
-        incognitoDetailText = binding.incognitoDetailText
-        deleteHistory = binding.deleteHistory
-        deleteHistoryDetail = binding.deleteHistoryDetail
-
-        //STORAGE
-        goIncognitoCheckbox = binding.goIncognitoCheckbox
-        deleteHistoryLayout = binding.deleteHistoryLayout
-
-        //OTHERS
-        othersHeader = binding.othersHeader
-        helpSupport = binding.helpSupport
-        privacyPermission = binding.privacyPermission
-        thirdPartyNotices = binding.thirdPartyNotices
-        shareApp = binding.shareApp
-        rateUs = binding.rateUs
-        helpSupportLayout = binding.helpSupportLayout
-        privacyPermissionLayout = binding.privacyPermissionLayout
-        thirdPartyNoticesLayout = binding.thirdPartyNoticesLayout
-        shareAppLayout = binding.shareAppLayout
-        rateUsLayout = binding.rateUsLayout
-        //
-        versionInfo = binding.versionInfo
-        companyName = binding.companyName
-        allRightsReserved = binding.allRightsReserved
-
-    }
     private fun generalListeners(){
         launchModeLayout.setOnClickListener{
-
+            (activity as? MainActivity)?.launchFloater()
         }
         appThemeLayout.setOnClickListener{
             showThemeDialog()
-        }
-        appLanguageLayout.setOnClickListener {
-            showLanguageChooserDialog()
         }
         //var seekValue = viewModel.selectedFontSize
         fontSizeSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
@@ -271,37 +212,33 @@ class SettingsFragment : Fragment() {
     }
     private fun othersListeners(){
         helpSupportLayout.setOnClickListener {
-            //findNavController().navigate(R.id.action_settingsFragment_to_helpFragment)
-            Toast.makeText(requireContext(), "Coming soon...", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_settingsFragment_to_helpFragment)
         }
         privacyPermissionLayout.setOnClickListener {
-            val url = "https://olaoluwa99.github.io/privacy-policy-scanner/"
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_settingsFragment_to_privacyPolicyFragment)
         }
         thirdPartyNoticesLayout.setOnClickListener {
-            //findNavController().navigate(R.id.action_settingsFragment_to_thirdPartyNoticeFragment)
+            findNavController().navigate(R.id.action_settingsFragment_to_thirdPartyNoticeFragment)
         }
         shareAppLayout.setOnClickListener {
-            //Toast.makeText(requireContext(), "Share stuff", Toast.LENGTH_SHORT).show()
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Share App")
-            intent.putExtra(Intent.EXTRA_TEXT, "Lost in translation? Not anymore! Dive into global chats with TransVerse." +
-                    " Download now for text, speech, and even joke translations. Let the linguistic fun commence!" + shareURL + requireActivity().packageName)
-            startActivity(Intent.createChooser(intent, "Share App Via..."))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_app_subject))
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.share_app_message, appURL + requireActivity().packageName.removeSuffix(".debug"))
+            )
+            startActivity(Intent.createChooser(intent, getString(R.string.share_app_chooser)))
         }
         rateUsLayout.setOnClickListener {
-            //Toast.makeText(requireContext(), "Open play-store Intent", Toast.LENGTH_SHORT).show()
             try {
                 val rateIntent = Intent(Intent.ACTION_VIEW)
-                rateIntent.data = Uri.parse(appURL + requireActivity().packageName)
+                rateIntent.data = Uri.parse(appURL + requireActivity().packageName.removeSuffix(".debug"))
                 rateIntent.setPackage("com.android.vending")
                 startActivity(rateIntent)
             } catch (e: ActivityNotFoundException) {
                 val rateIntent = Intent(Intent.ACTION_VIEW)
-                rateIntent.data = Uri.parse(appURL + requireActivity().packageName)
+                rateIntent.data = Uri.parse(appURL + requireActivity().packageName.removeSuffix(".debug"))
                 startActivity(rateIntent)
             }
         }
@@ -314,8 +251,6 @@ class SettingsFragment : Fragment() {
         launchModeValueText.textSize = appFontSize.toFloat()
         appTheme.textSize = appFontSize.toFloat()
         appThemeValueText.textSize = appFontSize.toFloat()
-        appLanguage.textSize = appFontSize.toFloat()
-        appLanguageValueText.textSize = appFontSize.toFloat()
         fontSize.textSize = appFontSize.toFloat()
         fontSizeSeekbarValue.textSize = appFontSize.toFloat()
         bubbleSize.textSize = appFontSize.toFloat()
@@ -389,9 +324,9 @@ class SettingsFragment : Fragment() {
             setCancelable(true)
         }.create()
         when (viewModel.selectedBubbleSize){
-            Constants.VERY_SMALL -> dialogThemeBinding?.systemDefault?.isChecked = true
-            Constants.SMALL -> dialogThemeBinding?.light?.isChecked = true
-            Constants.MEDIUM -> dialogThemeBinding?.dark?.isChecked = true
+            Constants.VERY_SMALL -> dialogBubbleSizeBinding?.verySmall?.isChecked = true
+            Constants.SMALL -> dialogBubbleSizeBinding?.small?.isChecked = true
+            Constants.MEDIUM -> dialogBubbleSizeBinding?.medium?.isChecked = true
             Constants.LARGE -> dialogBubbleSizeBinding?.large?.isChecked = true
         }
         dialogBubbleSizeBinding?.verySmall?.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -424,58 +359,6 @@ class SettingsFragment : Fragment() {
         }
         bubbleSizeAlertDialog?.show()
     }
-    private fun showLanguageChooserDialog(){
-        dialogLanguageBinding = DialogLanguageBinding.inflate(layoutInflater)
-        languageAlertDialog = MaterialAlertDialogBuilder(requireContext()).apply {
-            dialogLanguageBinding?.root?.let { setView(it) }
-            setCancelable(true)
-        }.create()
-
-        when (viewModel.selectedLanguage){
-            Constants.SYSTEM_DEFAULT_LANGUAGE -> dialogLanguageBinding?.systemDefault?.isChecked = true
-            Constants.ENGLISH -> dialogLanguageBinding?.english?.isChecked = true
-            Constants.FRENCH -> dialogLanguageBinding?.french?.isChecked = true
-            Constants.DEUTSCH -> dialogLanguageBinding?.deutsch?.isChecked = true
-            Constants.JAPANESE -> dialogLanguageBinding?.japanese?.isChecked = true
-        }
-
-        dialogLanguageBinding?.systemDefault?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                viewModel.selectedLanguage = Constants.SYSTEM_DEFAULT
-                languageAlertDialog?.dismiss()
-                appLanguageValueText.text = Constants.SYSTEM_DEFAULT
-            }
-        }
-        dialogLanguageBinding?.english?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                viewModel.selectedLanguage = Constants.ENGLISH
-                languageAlertDialog?.dismiss()
-                appLanguageValueText.text = Constants.ENGLISH
-            }
-        }
-        dialogLanguageBinding?.french?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                viewModel.selectedLanguage = Constants.FRENCH
-                languageAlertDialog?.dismiss()
-                appLanguageValueText.text = Constants.FRENCH
-            }
-        }
-        dialogLanguageBinding?.deutsch?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                viewModel.selectedLanguage = Constants.DEUTSCH
-                languageAlertDialog?.dismiss()
-                appLanguageValueText.text = Constants.DEUTSCH
-            }
-        }
-        dialogLanguageBinding?.japanese?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked){
-                viewModel.selectedLanguage = Constants.JAPANESE
-                languageAlertDialog?.dismiss()
-                appLanguageValueText.text = Constants.JAPANESE
-            }
-        }
-        languageAlertDialog?.show()
-    }
     private fun showDeleteHistoryDialog(){
         dialogDeleteHistoryBinding = DialogDeleteHistoryBinding.inflate(layoutInflater)
         deleteHistoryAlertDialog = MaterialAlertDialogBuilder(requireContext()).apply {
@@ -486,12 +369,21 @@ class SettingsFragment : Fragment() {
         dialogDeleteHistoryBinding?.confirmButton?.setOnClickListener {
             viewModel.deleteAllHistory()
             deleteHistoryAlertDialog?.dismiss()
-            Toast.makeText(requireContext(), "All history deleted successfully", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, R.string.history_deleted, Snackbar.LENGTH_LONG).show()
         }
         deleteHistoryAlertDialog?.show()
     }
     override fun onDestroyView() {
-        super.onDestroyView()
+        themeAlertDialog?.dismiss()
+        bubbleSizeAlertDialog?.dismiss()
+        deleteHistoryAlertDialog?.dismiss()
+        themeAlertDialog = null
+        bubbleSizeAlertDialog = null
+        deleteHistoryAlertDialog = null
+        dialogThemeBinding = null
+        dialogBubbleSizeBinding = null
+        dialogDeleteHistoryBinding = null
         _binding = null
+        super.onDestroyView()
     }
 }

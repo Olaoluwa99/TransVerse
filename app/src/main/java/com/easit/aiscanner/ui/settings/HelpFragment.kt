@@ -10,7 +10,9 @@ import com.easit.aiscanner.databinding.FragmentHelpBinding
 class HelpFragment : Fragment() {
 
     private var _binding: FragmentHelpBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding) {
+        "Binding accessed outside the view lifecycle"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -18,5 +20,10 @@ class HelpFragment : Fragment() {
     ): View? {
         _binding = FragmentHelpBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 }

@@ -15,7 +15,7 @@
             android:id="@+id/selectBubbleSizeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select bubble size"
+            android:text="@string/select_bubble_size"
             android:textAllCaps="true"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,25 +35,25 @@
                 android:id="@+id/verySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Very small" />
+                android:text="@string/bubble_very_small" />
 
             <RadioButton
                 android:id="@+id/small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Small" />
+                android:text="@string/bubble_small" />
 
             <RadioButton
                 android:id="@+id/medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Medium" />
+                android:text="@string/bubble_medium" />
 
             <RadioButton
                 android:id="@+id/large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Large" />
+                android:text="@string/bubble_large" />
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
