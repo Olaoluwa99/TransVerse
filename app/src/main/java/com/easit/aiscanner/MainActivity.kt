@@ -3,38 +3,37 @@ package com.easit.aiscanner
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.View
 import android.widget.Toast
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import com.easit.aiscanner.data.Constants
-import com.easit.aiscanner.databinding.ActivityMainBinding
+import androidx.core.content.IntentCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.easit.aiscanner.floatingWindow.Floater
+import com.easit.aiscanner.ui.app.IncomingContent
+import com.easit.aiscanner.ui.app.TransVerseApp
+import com.easit.aiscanner.ui.theme.TransVerseTheme
+import com.easit.aiscanner.ui.theme.applyAsDefaultNightMode
+import com.easit.aiscanner.ui.theme.isDarkTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private val viewModel by viewModels<MainViewModel>()
     private var quickCaptureRequested = false
-
-    var scannedImageURI: String = ""
-    var floatingAudioTranscribedText: String = ""
-    var incomingText: String = ""
 
     private val overlayPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -56,19 +55,35 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Night mode is applied in BaseApp; ViewModels can't be created before super.onCreate.
         super.onCreate(savedInstanceState)
-        setupTheme()
+        enableEdgeToEdge()
+        if (savedInstanceState == null) handleIntent(intent)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContent {
+            val appearance by viewModel.appearance.collectAsStateWithLifecycle()
+            val incoming by viewModel.incoming.collectAsStateWithLifecycle()
+            val darkTheme = appearance.isDarkTheme()
 
-        val navHost = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        navController = navHost.navController
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+            // Keeps AppCompat screens in step when the theme is changed in Settings.
+            LaunchedEffect(appearance.themeMode) { appearance.themeMode.applyAsDefaultNightMode() }
+            DisposableEffect(darkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT) { darkTheme },
+                    navigationBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT) { darkTheme },
+                )
+                onDispose {}
+            }
 
-        configureToolbar()
-        handleIntent(intent)
+            TransVerseTheme(settings = appearance) {
+                TransVerseApp(
+                    incoming = incoming,
+                    onIncomingConsumed = viewModel::consumeIncoming,
+                    onOfferIncoming = viewModel::offerIncoming,
+                    onStartQuickCapture = ::requestQuickCapture,
+                )
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -77,98 +92,50 @@ class MainActivity : AppCompatActivity() {
         handleIntent(intent)
     }
 
-    private fun configureToolbar() {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.textView2.text = destination.label ?: getString(R.string.app_name)
-            val isHome = destination.id == R.id.typeChooserFragment
-            binding.backArrow.apply {
-                visibility = if (isHome) View.INVISIBLE else View.VISIBLE
-                setImageResource(R.drawable.ic_baseline_arrow_back_24)
-                setOnClickListener { navController.navigateUp() }
-            }
-            binding.imageView2.apply {
-                visibility = if (destination.id == R.id.settingsFragment) View.INVISIBLE else View.VISIBLE
-                setOnClickListener {
-                    if (navController.currentDestination?.id != R.id.settingsFragment) {
-                        navController.navigate(R.id.settingsFragment)
-                    }
-                }
-            }
-        }
-    }
-
+    /** Turns share-sheet, Process Text and overlay-capture intents into [IncomingContent]. */
     private fun handleIntent(source: Intent) {
-        scannedImageURI = source.getStringExtra(EXTRA_SCANNED_IMAGE).orEmpty()
-        floatingAudioTranscribedText = source.getStringExtra(EXTRA_TRANSCRIBED_TEXT).orEmpty()
+        val content: IncomingContent? = when {
+            source.hasExtra(EXTRA_SCANNED_IMAGE) ->
+                source.getStringExtra(EXTRA_SCANNED_IMAGE)
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { IncomingContent.ScreenCapture("SCAN.$it.jpg") }
+            source.hasExtra(EXTRA_TRANSCRIBED_TEXT) ->
+                source.getStringExtra(EXTRA_TRANSCRIBED_TEXT)
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let(IncomingContent::Speech)
+            source.action == Intent.ACTION_PROCESS_TEXT ->
+                source.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)
+                    ?.toString()?.takeIf { it.isNotBlank() }
+                    ?.let(IncomingContent::Text)
+            source.action == Intent.ACTION_SEND && source.type.orEmpty().startsWith("image/") ->
+                IntentCompat.getParcelableExtra(source, Intent.EXTRA_STREAM, Uri::class.java)
+                    ?.let(IncomingContent::SharedImage)
+            source.action == Intent.ACTION_SEND ->
+                source.getCharSequenceExtra(Intent.EXTRA_TEXT)
+                    ?.toString()?.takeIf { it.isNotBlank() }
+                    ?.let(IncomingContent::Text)
+            else -> null
+        }
+        content?.let(viewModel::offerIncoming)
+
+        // From the Quick Settings tile or launcher shortcut when a permission is still missing.
+        if (source.action == ACTION_START_FLOATING_CAPTURE) requestQuickCapture()
+
+        // Don't replay the same content when the activity is recreated.
         source.removeExtra(EXTRA_SCANNED_IMAGE)
         source.removeExtra(EXTRA_TRANSCRIBED_TEXT)
-
-        when (source.action) {
-            Intent.ACTION_PROCESS_TEXT -> {
-                incomingText = source.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)?.toString().orEmpty()
-                source.removeExtra(Intent.EXTRA_PROCESS_TEXT)
-            }
-            Intent.ACTION_SEND -> {
-                handleSharedContent(source)
-                source.removeExtra(Intent.EXTRA_TEXT)
-                source.removeExtra(Intent.EXTRA_STREAM)
-            }
-        }
+        source.removeExtra(Intent.EXTRA_PROCESS_TEXT)
+        source.removeExtra(Intent.EXTRA_TEXT)
+        source.removeExtra(Intent.EXTRA_STREAM)
         source.action = null
-
-        when {
-            scannedImageURI.isNotBlank() -> navigateFromHome(R.id.imageGroundFragment)
-            floatingAudioTranscribedText.isNotBlank() -> navigateFromHome(R.id.audioGroundFragment)
-            incomingText.isNotBlank() -> navigateFromHome(R.id.textGroundFragment)
-        }
-
-        if (source.getBooleanExtra(EXTRA_MINIMIZE_APP, false)) {
-            source.removeExtra(EXTRA_MINIMIZE_APP)
-            moveTaskToBack(true)
-        }
-    }
-
-    private fun handleSharedContent(source: Intent) {
-        val type = source.type.orEmpty()
-        if (type.startsWith("image/")) {
-            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                source.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                source.getParcelableExtra(Intent.EXTRA_STREAM)
-            }
-            scannedImageURI = uri?.toString().orEmpty()
-        } else {
-            incomingText = source.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString().orEmpty()
-        }
-    }
-
-    private fun navigateFromHome(destinationId: Int) {
-        if (!::navController.isInitialized) return
-        if (navController.currentDestination?.id != R.id.typeChooserFragment) {
-            navController.popBackStack(R.id.typeChooserFragment, false)
-        }
-        if (navController.currentDestination?.id == R.id.typeChooserFragment) {
-            navController.navigate(destinationId)
-        }
-    }
-
-    fun launchScanner() {
-        requestQuickCapture()
-    }
-
-    fun launchFloater() {
-        requestQuickCapture()
     }
 
     private fun requestQuickCapture() {
         quickCaptureRequested = true
         if (!Settings.canDrawOverlays(this)) {
-            val settingsIntent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
+            overlayPermissionLauncher.launch(
+                Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
             )
-            overlayPermissionLauncher.launch(settingsIntent)
             return
         }
         ensureNotificationPermission()
@@ -192,21 +159,12 @@ class MainActivity : AppCompatActivity() {
         quickCaptureRequested = false
     }
 
-    private fun setupTheme() {
-        val mode = when (viewModel.selectedTheme) {
-            Constants.LIGHT_THEME -> AppCompatDelegate.MODE_NIGHT_NO
-            Constants.DARK_THEME -> AppCompatDelegate.MODE_NIGHT_YES
-            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-        }
-        AppCompatDelegate.setDefaultNightMode(mode)
-    }
-
-    override fun onSupportNavigateUp(): Boolean =
-        navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-
     companion object {
+        /** Id of a screen capture saved as `SCAN.<id>.jpg` in `filesDir`. */
         const val EXTRA_SCANNED_IMAGE = "ScannedImageURI"
         const val EXTRA_TRANSCRIBED_TEXT = "transcribedText"
-        const val EXTRA_MINIMIZE_APP = "minimizeApp"
+
+        /** Asks for the floating-capture permissions if needed, then starts the bubble. */
+        const val ACTION_START_FLOATING_CAPTURE = "com.easit.aiscanner.action.START_FLOATING_CAPTURE"
     }
 }

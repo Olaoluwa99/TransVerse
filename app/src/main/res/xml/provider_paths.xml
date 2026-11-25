@@ -3,4 +3,8 @@
     <files-path
         name="shared_audio"
         path="." />
+    <!-- Camera photos for the in-app crop editor; deleted once cropped or cancelled. -->
+    <cache-path
+        name="captures"
+        path="captures/" />
 </paths>

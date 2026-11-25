@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Floating bubble -->
+    <string name="overlay_bubble_description">TransVerse quick capture</string>
+    <string name="overlay_bubble_open_menu">Open quick capture menu</string>
+    <string name="overlay_bubble_close_menu">Close quick capture menu</string>
+    <string name="overlay_menu_capture">Capture area</string>
+    <string name="overlay_menu_speak">Speak</string>
+    <string name="overlay_menu_close">Close</string>
+    <string name="overlay_close_target">Drop here to close quick capture</string>
+
+    <!-- Notifications -->
+    <string name="overlay_notification_bubble_channel">Quick capture bubble</string>
+    <string name="overlay_notification_bubble_title">Quick capture is on</string>
+    <string name="overlay_notification_bubble_text">Tap the bubble to translate anything on your screen</string>
+    <string name="overlay_notification_close">Close</string>
+    <string name="overlay_notification_capture_channel">Screen capture</string>
+    <string name="overlay_notification_capturing">Capturing your screen</string>
+    <string name="overlay_notification_editing">Select the text you want to translate</string>
+    <string name="overlay_notification_session_title">Capture session is on</string>
+    <string name="overlay_notification_session_text">Captures skip the permission prompt until you stop the session</string>
+    <string name="overlay_notification_stop_session">Stop session</string>
+
+    <!-- Capture editor -->
+    <string name="overlay_editor_close">Close capture</string>
+    <string name="overlay_editor_finding_text">Finding text…</string>
+    <string name="overlay_editor_preparing">Getting text recognition ready…</string>
+    <string name="overlay_editor_tap_text_hint">Tap text to select it</string>
+    <string name="overlay_editor_no_text_found">No text found. Frame the area you want</string>
+    <string name="overlay_editor_ocr_failed">Couldn\'t look for text. Frame the area you want</string>
+    <string name="overlay_editor_translate">Translate</string>
+    <string name="overlay_editor_copy_text">Copy text</string>
+    <string name="overlay_editor_open_app">Open in TransVerse</string>
+    <string name="overlay_editor_target_language">Translate to %1$s</string>
+
+    <!-- Language picker -->
+    <string name="overlay_language_title">Translate to</string>
+    <string name="overlay_language_close">Close language list</string>
+    <string name="overlay_language_search">Search languages</string>
+    <string name="overlay_language_clear_search">Clear search</string>
+    <string name="overlay_language_recent">Recent</string>
+    <string name="overlay_language_all">All languages</string>
+    <string name="overlay_language_no_match">No languages match</string>
+
+    <!-- Translation result -->
+    <string name="overlay_result_direction">%1$s → %2$s</string>
+    <string name="overlay_result_copy">Copy</string>
+    <string name="overlay_result_listen">Listen</string>
+    <string name="overlay_result_stop">Stop</string>
+    <string name="overlay_result_share">Share</string>
+    <string name="overlay_result_show_on_image">Show on image</string>
+    <string name="overlay_result_close">Close translation</string>
+    <string name="overlay_share_title">Share translation</string>
+    <string name="overlay_clip_label">TransVerse</string>
+
+    <!-- Progress -->
+    <string name="overlay_status_reading">Reading text…</string>
+    <string name="overlay_status_preparing">Getting language detection ready…</string>
+    <string name="overlay_status_identifying">Detecting language…</string>
+    <string name="overlay_status_downloading">Downloading language…</string>
+    <string name="overlay_status_translating">Translating…</string>
+    <string name="overlay_status_finishing">Finishing up…</string>
+    <string name="overlay_status_opening">Opening…</string>
+
+    <!-- Messages -->
+    <string name="overlay_message_copied">Copied</string>
+    <string name="overlay_message_no_text">There\'s no text in the selection</string>
+    <string name="overlay_message_nothing_on_image">Select some text to show its translation on the image</string>
+    <string name="overlay_message_translation_failed">Couldn\'t translate. Check your connection and try again</string>
+    <string name="overlay_message_language_undetermined">Couldn\'t tell which language this is</string>
+    <string name="overlay_message_detection_failed">Couldn\'t detect the language. Try again</string>
+    <string name="overlay_message_unsupported">This language can\'t be translated yet</string>
+    <string name="overlay_message_model_timeout">The language download is taking too long. Try again on a better connection</string>
+    <string name="overlay_message_setup_failed">Language detection couldn\'t be set up. Connect to the internet and try again</string>
+    <string name="overlay_message_save_failed">Couldn\'t save the capture</string>
+    <string name="overlay_message_open_failed">Couldn\'t open TransVerse</string>
+    <string name="overlay_message_speech_unavailable">Read-aloud isn\'t available for this language</string>
+    <string name="overlay_message_share_failed">No app can share this</string>
+
+    <!-- Errors shown as toasts -->
+    <string name="overlay_error_capture_failed">Couldn\'t capture the screen. Please try again.</string>
+    <string name="overlay_error_session_ended">The capture session has ended. Tap Capture area to start again.</string>
+    <string name="overlay_error_overlay_failed">TransVerse can\'t show over other apps. Check the permission in Settings.</string>
+    <string name="overlay_error_launch_failed">Couldn\'t start the capture. Please try again.</string>
+</resources>

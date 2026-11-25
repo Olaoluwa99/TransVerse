@@ -15,6 +15,16 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- Android 11+ package visibility: find the text-to-speech engine and speech recognizer. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".BaseApp"
         android:allowBackup="false"
@@ -25,6 +35,12 @@
         android:theme="@style/Theme.AIScanner"
         tools:targetApi="36">
 
+        <!-- Ask Play services to download these ML Kit modules at install time instead of on
+             first use (barcode scanning, text recognition, language identification). -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode,ocr,langid" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -34,14 +50,19 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <!-- Own task, so moveTaskToBack() after consent hides only this helper and the capture
+             shows the app the user was in, even when that is TransVerse itself. -->
         <activity
             android:name=".floatingWindow.ImageTransparentActivity"
             android:excludeFromRecents="true"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AIScanner.Translucent" />
         <activity
             android:name=".floatingWindow.AudioTransparentActivity"
             android:excludeFromRecents="true"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AIScanner.Translucent" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -67,13 +88,37 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.canhub.cropper.CropImageActivity"
-            android:exported="false"
-            android:theme="@style/Base.Theme.AppCompat"
-            tools:replace="android:exported" />
 
+            <!-- Launcher long-press shortcuts (floating capture). -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
+        <!-- Starts floating capture from the Quick Settings tile and the launcher shortcut, in its
+             own task so the user stays in the app they were using. Exported so the launcher can
+             open it from the shortcut; it only starts the user's own bubble. -->
+        <activity
+            android:name=".floatingWindow.QuickCaptureLauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AIScanner.Translucent" />
+
+        <service
+            android:name=".floatingWindow.FloatingCaptureTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_floating_capture"
+            android:label="@string/tile_floating_capture"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+        </service>
         <service
             android:name=".floatingWindow.Floater"
             android:exported="false"

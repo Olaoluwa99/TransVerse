@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translate workspace -->
+    <string name="translate_title">Translate</string>
+    <string name="translate_incognito_notice">Incognito: results won\'t be saved</string>
+    <string name="translate_action_scan_code">Scan a code</string>
+    <string name="translate_action_floating_capture">Start floating capture</string>
+    <string name="translate_action_stop_floating_capture">Turn off floating capture</string>
+
+    <!-- Floating capture card -->
+    <string name="translate_floating_title">Translate from any app</string>
+    <string name="translate_floating_body">Float a bubble over your other apps. Tap it, pick the text on screen, and see the translation right there.</string>
+    <string name="translate_floating_start">Start floating capture</string>
+    <string name="translate_floating_running_title">Floating capture is on</string>
+    <string name="translate_floating_running_body">Tap the bubble in any app to capture and translate. Drag it to the X to put it away.</string>
+    <string name="translate_floating_stop">Turn off</string>
+
+    <string name="translate_mode_text">Text</string>
+    <string name="translate_mode_image">Image</string>
+    <string name="translate_mode_voice">Voice</string>
+
+    <string name="translate_input_hint">Type or paste text to translate</string>
+    <string name="translate_action_paste">Paste</string>
+    <string name="translate_action_clear">Clear text</string>
+    <string name="translate_clipboard_empty">There\'s no text on the clipboard.</string>
+
+    <string name="translate_image_empty_title">Translate text in a photo</string>
+    <string name="translate_image_empty_body">Take a picture, pick one from your gallery or scan a document, then select the text.</string>
+    <string name="translate_action_camera">Camera</string>
+    <string name="translate_action_gallery">Gallery</string>
+    <string name="translate_action_scan_document">Scan document</string>
+    <string name="translate_camera_permission_denied">Allow camera access to take a photo.</string>
+    <string name="translate_camera_unavailable">No camera app is available.</string>
+    <string name="translate_scanner_unavailable">The document scanner isn\'t available on this device right now.</string>
+    <string name="translate_scan_failed">The document couldn\'t be scanned.</string>
+
+    <!-- Crop editor -->
+    <string name="translate_crop_title">Select text</string>
+    <string name="translate_crop_close">Close without cropping</string>
+    <string name="translate_crop_done">Done</string>
+    <string name="translate_crop_loading">Opening image…</string>
+    <string name="translate_crop_finding_text">Finding text…</string>
+    <string name="translate_crop_image_too_large">This image is too large to open.</string>
+    <string name="translate_image_preview_description">Selected image</string>
+    <string name="translate_image_transcript_label">Text found in the image</string>
+    <string name="translate_reading_image">Reading text…</string>
+    <string name="translate_no_text_in_image">No text was found in this image.</string>
+
+    <string name="translate_voice_prompt">Tap to speak</string>
+    <string name="translate_voice_again">Tap to speak again</string>
+    <string name="translate_action_speak">Start speaking</string>
+    <string name="translate_voice_transcript_label">What was said</string>
+    <string name="translate_record_permission_denied">Allow microphone access to translate speech.</string>
+
+    <string name="translate_source_label">From</string>
+    <string name="translate_target_label">To</string>
+    <string name="translate_detect_language">Detect language</string>
+    <string name="translate_detected">Detected</string>
+    <string name="translate_action_swap">Swap languages</string>
+    <string name="translate_action_choose_language">Choose the language to translate into, currently %1$s</string>
+
+    <string name="translate_action_translate">Translate</string>
+    <string name="translate_status_preparing">Setting up language detection… (first use only)</string>
+    <string name="translate_status_identifying">Detecting language…</string>
+    <string name="translate_status_downloading">Downloading language model…</string>
+    <string name="translate_status_downloading_named">Downloading %1$s for offline use… (one time only)</string>
+    <string name="translate_preparing_text_recognition">Setting up text recognition… (first use only)</string>
+    <string name="translate_status_translating">Translating…</string>
+    <string name="translate_status_analyzing">Finding replies and details…</string>
+
+    <string name="translate_error_empty">Enter or capture some text first.</string>
+    <string name="translate_error_setup_failed">Couldn\'t download language detection. Check your connection and try again.</string>
+    <string name="translate_error_undetermined">The source language could not be identified.</string>
+    <string name="translate_error_detection_failed">Language detection failed.</string>
+    <string name="translate_error_unsupported_pair">This language pair is not supported for offline translation.</string>
+    <string name="translate_error_download_timeout">The language model download timed out. Check your connection and try again.</string>
+    <string name="translate_error_translation_failed">Translation failed. Check your connection and language models.</string>
+    <string name="translate_error_save_failed">The translation could not be saved to history.</string>
+
+    <!-- Result -->
+    <string name="translate_action_copy">Copy translation</string>
+    <string name="translate_action_copy_original">Copy original text</string>
+    <string name="translate_action_listen">Listen</string>
+    <string name="translate_action_pause">Pause</string>
+    <string name="translate_preparing_audio">Preparing audio…</string>
+    <string name="translate_action_share">Share translation</string>
+    <string name="translate_action_share_audio">Share audio</string>
+    <string name="translate_action_save_audio">Save audio</string>
+    <string name="translate_share_chooser">Share translation with…</string>
+    <string name="translate_audio_position">Audio position</string>
+    <string name="translate_audio_time">%1$s / %2$s</string>
+    <string name="translate_entities_heading">Useful details</string>
+    <string name="translate_replies_heading">Suggested replies</string>
+
+    <!-- Language picker -->
+    <string name="translate_language_picker_title">Translate into</string>
+    <string name="translate_language_search">Search languages</string>
+    <string name="translate_language_clear_search">Clear search</string>
+    <string name="translate_language_recent">Recent</string>
+    <string name="translate_language_all">All languages</string>
+    <string name="translate_language_downloaded">Downloaded</string>
+    <string name="translate_language_selected">Selected</string>
+    <string name="translate_language_no_match">No languages match “%1$s”</string>
+
+    <!-- Saved scan -->
+    <string name="translate_saved_type_text">Text translation</string>
+    <string name="translate_saved_type_image">Image translation</string>
+    <string name="translate_saved_type_audio">Voice translation</string>
+    <string name="translate_saved_image_description">Captured image</string>
+    <string name="translate_saved_original">Original</string>
+    <string name="translate_saved_translation">Translation</string>
+    <string name="translate_saved_not_found_title">Not in your history</string>
+    <string name="translate_saved_not_found_body">This translation may have been deleted.</string>
+    <string name="translate_language_pair">%1$s to %2$s</string>
+    <string name="translate_action_play_audio">Play audio</string>
+    <string name="translate_action_pause_audio">Pause audio</string>
+</resources>

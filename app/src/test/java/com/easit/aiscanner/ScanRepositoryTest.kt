@@ -3,6 +3,7 @@ package com.easit.aiscanner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.easit.aiscanner.database.ScanDao
+import com.easit.aiscanner.database.ScanFileRef
 import com.easit.aiscanner.database.ScanRepository
 import com.easit.aiscanner.model.Scan
 import kotlinx.coroutines.flow.Flow
@@ -84,4 +85,7 @@ private class FakeScanDao : ScanDao {
     override suspend fun setFavorite(id: String, favorite: Boolean) {
         scans.value = scans.value.map { if (it.id == id) it.copy(isFavorite = favorite) else it }
     }
+
+    override suspend fun getFileReferences(): List<ScanFileRef> =
+        scans.value.map { ScanFileRef(it.id, it.imageUrl, it.audioUrl) }
 }

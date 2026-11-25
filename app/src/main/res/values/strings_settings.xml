@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings screen: sections -->
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_speech">Speech</string>
+    <string name="settings_section_about">About</string>
+
+    <!-- Appearance -->
+    <string name="settings_theme_label">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_dynamic_color">Use wallpaper colours</string>
+    <string name="settings_dynamic_color_summary">Match the app’s colours to your wallpaper</string>
+    <string name="settings_reading_text_size">Reading text size</string>
+    <string name="settings_reading_text_size_summary">Used for transcripts and translations</string>
+    <string name="settings_reading_text_sample">Translations and transcripts will look like this.</string>
+    <string name="settings_value_sp">%1$d sp</string>
+
+    <!-- Speech -->
+    <string name="settings_voice_pitch">Voice pitch</string>
+    <string name="settings_value_multiplier">%1$.1f×</string>
+    <string name="settings_test_voice">Test voice</string>
+    <string name="settings_stop_voice">Stop</string>
+    <string name="settings_voice_sample">This is how TransVerse will read your translations aloud.</string>
+    <string name="settings_voice_unavailable">Text-to-speech isn’t available on this device.</string>
+
+    <!-- Quick capture -->
+    <string name="settings_start_floating_capture">Start floating capture</string>
+    <string name="settings_bubble_size_summary">Size of the floating capture bubble</string>
+    <string name="settings_capture_session">Keep screen capture ready</string>
+    <string name="settings_capture_session_summary">Skip Android\'s permission prompt for each capture while the bubble is open. Android shows a screen-sharing indicator meanwhile and it uses a little more battery.</string>
+
+    <!-- Privacy -->
+    <string name="settings_incognito_supporting">New translations aren’t saved to history</string>
+    <string name="settings_delete_all_history">Delete all history</string>
+    <string name="settings_delete_dialog_text">This permanently removes all saved scans and captured images from this device. This can’t be undone.</string>
+    <string name="settings_action_delete">Delete</string>
+    <string name="settings_action_cancel">Cancel</string>
+    <string name="settings_history_delete_failed">History couldn’t be deleted. Please try again.</string>
+
+    <!-- About -->
+    <string name="settings_help_summary">Capturing, translating and quick capture</string>
+    <string name="settings_privacy_policy_summary">How your data stays on your device</string>
+    <string name="settings_licenses">Third-party licences</string>
+    <string name="settings_licenses_summary">Open-source software used by TransVerse</string>
+    <string name="settings_app_version">App version</string>
+    <string name="settings_link_unavailable">No app on this device can open this link.</string>
+    <string name="settings_open_website">Open website for %1$s</string>
+
+    <!-- Help & support page -->
+    <string name="settings_help_intro">Everything you need to capture text, translate it and act on it.</string>
+    <string name="settings_help_getting_started_title">Getting started</string>
+    <string name="settings_help_getting_started_body">Choose Text to paste or type, Image to extract printed text, Speech to dictate, or Barcode to scan a code. TransVerse detects the source language and translates to the language you select.</string>
+    <string name="settings_help_quick_capture_title">Quick capture</string>
+    <string name="settings_help_quick_capture_body">Quick capture adds a movable bubble over other apps. Android will ask for overlay, notification and screen-capture permission. Screen capture only begins after you approve Android’s system prompt, and you can stop it from the persistent notification.</string>
+    <string name="settings_help_results_title">Results</string>
+    <string name="settings_help_results_body">Tap links, email addresses and phone numbers in extracted entities to open the appropriate app. Other entities are copied. Use the copy buttons for original or translated text.</string>
+    <string name="settings_help_privacy_title">Privacy</string>
+    <string name="settings_help_privacy_body">Enable Incognito mode before analysing sensitive text. Incognito results are not added to history. Translation language models may need to download before first use.</string>
+
+    <!-- Privacy policy page -->
+    <string name="settings_privacy_intro">TransVerse is designed around on-device processing.</string>
+    <string name="settings_privacy_overview_title">Privacy overview</string>
+    <string name="settings_privacy_overview_body">Captured text, translations, entities and scan history are stored locally on your device. The app does not require an account and does not upload your scan history to an Easit Limited server.</string>
+    <string name="settings_privacy_models_title">Data and models</string>
+    <string name="settings_privacy_models_body">Google ML Kit performs OCR, language identification, translation, Smart Reply, barcode scanning and entity extraction. Some ML models are delivered or downloaded through Google Play services and therefore require an internet connection for their initial download. Translation then runs on-device.</string>
+    <string name="settings_privacy_permissions_title">Permissions</string>
+    <string name="settings_privacy_permissions_body">Camera is used only when you choose camera or barcode capture. Microphone is used only for speech capture. Display-over-other-apps, notifications and media projection are used only for the optional Quick Capture feature. Android displays a system confirmation before each media-projection session.</string>
+    <string name="settings_privacy_storage_title">Storage</string>
+    <string name="settings_privacy_storage_body">History and captured media remain in app-controlled storage unless you explicitly export or share them. Incognito mode prevents new analysis results from being saved. Deleting history removes saved records and captured images from this device.</string>
+    <string name="settings_privacy_sharing_title">Sharing</string>
+    <string name="settings_privacy_sharing_body">When you choose Share, open a link, dial a number or send an email, the selected content is handed to the external app you choose and becomes subject to that app’s privacy policy.</string>
+
+    <!-- Third-party licences page -->
+    <string name="settings_licenses_intro">TransVerse uses open-source Android libraries and Google ML Kit components.</string>
+    <string name="settings_licenses_terms_title">Licence terms</string>
+    <string name="settings_licenses_terms_body">Google ML Kit components are governed by Google’s API terms and attribution requirements. The other libraries are distributed under their respective open-source licences and retain their original copyright notices.</string>
+    <string name="settings_licenses_libraries_title">Libraries</string>
+    <string name="settings_licenses_texts_title">Licence texts</string>
+    <string name="settings_licenses_source_title">Source and licence texts</string>
+    <string name="settings_licenses_source_body">The authoritative dependency list and exact versions are maintained in the app module build file. Source distributions and full licence texts are available from each project’s official repository.</string>
+</resources>

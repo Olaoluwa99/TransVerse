@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108">
+  <!-- TransVerse icon, background + foreground flattened (Play Store artwork, previews). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="108" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A84A3"/>
+      <stop offset="1" stop-color="#004D62"/>
+    </linearGradient>
+  </defs>
+  <rect width="108" height="108" fill="url(#bg)"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M33 43 V37 A4 4 0 0 1 37 33 H43"/>
+    <path d="M65 33 H71 A4 4 0 0 1 75 37 V43"/>
+    <path d="M75 65 V71 A4 4 0 0 1 71 75 H65"/>
+    <path d="M43 75 H37 A4 4 0 0 1 33 71 V65"/>
+  </g>
+  <path fill="#FFB59E"
+        d="M45 41 H57 A6 6 0 0 1 63 47 V53 A6 6 0 0 1 57 59 H51 L42 65 L45 59 A6 6 0 0 1 39 53 V47 A6 6 0 0 1 45 41 Z"/>
+  <path fill="none" stroke="#723523" stroke-width="2.6" stroke-linecap="round" d="M44 46.2 H52"/>
+  <path fill="#003545" fill-opacity="0.35"
+        d="M52 49.5 H64 A6 6 0 0 1 70 55.5 V60.5 A6 6 0 0 1 64 66.5 L67 72 L58 66.5 H52 A6 6 0 0 1 46 60.5 V55.5 A6 6 0 0 1 52 49.5 Z"/>
+  <path fill="#FFFFFF"
+        d="M52 48 H64 A6 6 0 0 1 70 54 V59 A6 6 0 0 1 64 65 L67 70.5 L58 65 H52 A6 6 0 0 1 46 59 V54 A6 6 0 0 1 52 48 Z"/>
+  <g fill="none" stroke="#006782" stroke-width="2.6" stroke-linecap="round">
+    <path d="M51.5 53.8 H64.5"/>
+    <path d="M51.5 59 H59.5"/>
+  </g>
+</svg>

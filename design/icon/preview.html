@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>TransVerse icon preview</title>
+<style>
+  body { margin: 0; padding: 32px; font-family: system-ui, sans-serif; background: #ECEFF3; color: #171C1F; }
+  .row { display: flex; gap: 40px; align-items: flex-end; margin-bottom: 36px; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 13px; }
+  .dark { background: #12171A; color: #DFE3E7; padding: 24px; border-radius: 24px; }
+  /* The adaptive icon is 108dp; launchers show the central 72dp under a mask. */
+  .mask { overflow: hidden; position: relative; }
+  .mask img { position: absolute; width: 150%; height: 150%; left: -25%; top: -25%; }
+  .circle { border-radius: 50%; }
+  .squircle { border-radius: 30%; }
+  .rounded { border-radius: 18%; }
+  .teardrop { border-radius: 50% 50% 50% 12%; }
+  .mono { background: #DCE4E9; }
+  .mono img { filter: brightness(0) saturate(100%) invert(26%) sepia(52%) saturate(1200%) hue-rotate(160deg); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="mask circle" style="width:192px;height:192px"><img src="transverse_icon_full.svg"></div>Circle</div>
+    <div class="item"><div class="mask squircle" style="width:192px;height:192px"><img src="transverse_icon_full.svg"></div>Squircle</div>
+    <div class="item"><div class="mask rounded" style="width:192px;height:192px"><img src="transverse_icon_full.svg"></div>Rounded square</div>
+    <div class="item"><div class="mask teardrop" style="width:192px;height:192px"><img src="transverse_icon_full.svg"></div>Teardrop</div>
+  </div>
+  <div class="row dark">
+    <div class="item"><div class="mask circle" style="width:96px;height:96px"><img src="transverse_icon_full.svg"></div>96 px</div>
+    <div class="item"><div class="mask circle" style="width:64px;height:64px"><img src="transverse_icon_full.svg"></div>64 px</div>
+    <div class="item"><div class="mask circle" style="width:48px;height:48px"><img src="transverse_icon_full.svg"></div>48 px</div>
+    <div class="item"><div class="mask circle" style="width:32px;height:32px"><img src="transverse_icon_full.svg"></div>32 px</div>
+    <div class="item"><div class="mask circle mono" style="width:96px;height:96px"><img src="transverse_icon_monochrome.svg"></div>Themed (monochrome)</div>
+  </div>
+</body>
+</html>

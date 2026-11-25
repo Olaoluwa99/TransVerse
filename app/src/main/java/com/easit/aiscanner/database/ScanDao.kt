@@ -34,4 +34,7 @@ interface ScanDao {
     @Query("UPDATE scanTable SET is_favorite = :favorite WHERE id = :id")
     suspend fun setFavorite(id: String, favorite: Boolean)
 
+    @Query("SELECT id, image_url, audio_url FROM scanTable")
+    suspend fun getFileReferences(): List<ScanFileRef>
+
 }

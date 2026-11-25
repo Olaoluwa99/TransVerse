@@ -40,6 +40,31 @@ class Preference @Inject constructor(
         get() = preferences.getBoolean(KEY_INCOGNITO, false)
         set(value) = preferences.edit { putBoolean(KEY_INCOGNITO, value) }
 
+    /**
+     * Last position of the floating bubble in screen pixels (top-left of its window), or -1 when
+     * it has never been moved.
+     */
+    var bubbleX: Int
+        get() = preferences.getInt(KEY_BUBBLE_X, -1)
+        set(value) = preferences.edit { putInt(KEY_BUBBLE_X, value) }
+
+    var bubbleY: Int
+        get() = preferences.getInt(KEY_BUBBLE_Y, -1)
+        set(value) = preferences.edit { putInt(KEY_BUBBLE_Y, value) }
+
+    /**
+     * Keep the screen-capture session open while the floating bubble is showing, so repeat
+     * captures skip Android's consent prompt. Android shows a screen-sharing indicator meanwhile.
+     */
+    var captureSessionEnabled: Boolean
+        get() = preferences.getBoolean(KEY_CAPTURE_SESSION, false)
+        set(value) = preferences.edit { putBoolean(KEY_CAPTURE_SESSION, value) }
+
+    /** Use wallpaper-based colours on Android 12+ instead of the TransVerse palette. */
+    var appDynamicColor: Boolean
+        get() = preferences.getBoolean(KEY_DYNAMIC_COLOR, false)
+        set(value) = preferences.edit { putBoolean(KEY_DYNAMIC_COLOR, value) }
+
     companion object {
         const val FILE_NAME = "transverse_preferences"
         private const val KEY_THEME = "theme"
@@ -48,6 +73,10 @@ class Preference @Inject constructor(
         private const val KEY_READING_SPEED = "reading_speed"
         private const val KEY_SPEECH_PITCH = "speech_pitch"
         private const val KEY_INCOGNITO = "incognito"
+        private const val KEY_DYNAMIC_COLOR = "dynamic_color"
+        private const val KEY_BUBBLE_X = "bubble_x"
+        private const val KEY_BUBBLE_Y = "bubble_y"
+        private const val KEY_CAPTURE_SESSION = "capture_session"
         private const val DEFAULT_AUDIO_SETTING = 50
         private const val KEY_MIGRATED = "legacy_preferences_migrated"
     }

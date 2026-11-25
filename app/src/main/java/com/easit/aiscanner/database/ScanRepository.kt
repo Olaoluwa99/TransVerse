@@ -27,4 +27,6 @@ class ScanRepository @Inject constructor(private val scanDao: ScanDao) {
 
     suspend fun setFavorite(id: String, favorite: Boolean) = scanDao.setFavorite(id, favorite)
 
+    suspend fun getFileReferences(): List<ScanFileRef> = scanDao.getFileReferences()
+
 }

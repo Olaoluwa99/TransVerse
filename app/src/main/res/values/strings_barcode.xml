@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Barcode / QR scanner. -->
+    <string name="barcode_title">Scan a code</string>
+    <string name="barcode_hint">Point at a QR code or barcode</string>
+    <string name="barcode_flashlight">Flashlight</string>
+    <string name="barcode_switch_camera">Switch camera</string>
+
+    <!-- Camera permission and errors -->
+    <string name="barcode_permission_title">Allow camera access</string>
+    <string name="barcode_permission_body">TransVerse uses the camera only while the scanner is open, to read QR codes and barcodes. Nothing is recorded or saved.</string>
+    <string name="barcode_permission_denied_body">Camera access is turned off for TransVerse. Turn it on in the app\'s settings to scan codes.</string>
+    <string name="barcode_action_allow_camera">Allow camera</string>
+    <string name="barcode_action_open_settings">Open settings</string>
+    <string name="barcode_camera_error_title">Camera unavailable</string>
+    <string name="barcode_camera_error_body">The camera couldn\'t be started. Close other apps that may be using it, then try again.</string>
+
+    <!-- What kind of code was scanned -->
+    <string name="barcode_type_url">Link</string>
+    <string name="barcode_type_wifi">Wi-Fi network</string>
+    <string name="barcode_type_contact">Contact</string>
+    <string name="barcode_type_email">Email</string>
+    <string name="barcode_type_phone">Phone number</string>
+    <string name="barcode_type_sms">Text message</string>
+    <string name="barcode_type_geo">Location</string>
+    <string name="barcode_type_calendar">Calendar event</string>
+    <string name="barcode_type_product">Product</string>
+    <string name="barcode_type_isbn">Book (ISBN)</string>
+    <string name="barcode_type_driver_license">Driving licence</string>
+    <string name="barcode_type_text">Text</string>
+
+    <!-- Symbologies -->
+    <string name="barcode_format_qr">QR code</string>
+    <string name="barcode_format_unknown">Barcode</string>
+    <string name="barcode_format_aztec" translatable="false">Aztec</string>
+    <string name="barcode_format_data_matrix" translatable="false">Data Matrix</string>
+    <string name="barcode_format_pdf417" translatable="false">PDF417</string>
+    <string name="barcode_format_ean13" translatable="false">EAN-13</string>
+    <string name="barcode_format_ean8" translatable="false">EAN-8</string>
+    <string name="barcode_format_upca" translatable="false">UPC-A</string>
+    <string name="barcode_format_upce" translatable="false">UPC-E</string>
+    <string name="barcode_format_code128" translatable="false">Code 128</string>
+    <string name="barcode_format_code39" translatable="false">Code 39</string>
+    <string name="barcode_format_code93" translatable="false">Code 93</string>
+    <string name="barcode_format_codabar" translatable="false">Codabar</string>
+    <string name="barcode_format_itf" translatable="false">ITF</string>
+
+    <!-- Result actions -->
+    <string name="barcode_action_open_link">Open link</string>
+    <string name="barcode_action_send_email">Send email</string>
+    <string name="barcode_action_call">Call</string>
+    <string name="barcode_action_send_sms">Send message</string>
+    <string name="barcode_action_open_map">Open in Maps</string>
+    <string name="barcode_action_add_contact">Add contact</string>
+    <string name="barcode_action_add_event">Add to calendar</string>
+    <string name="barcode_action_join_wifi">Join network</string>
+    <string name="barcode_action_search_web">Search the web</string>
+    <string name="barcode_action_open">Open</string>
+    <string name="barcode_action_copy">Copy</string>
+    <string name="barcode_action_share">Share</string>
+    <string name="barcode_action_translate">Translate</string>
+    <string name="barcode_action_scan_again">Scan again</string>
+    <string name="barcode_share_chooser">Share code with…</string>
+    <string name="barcode_no_app">No app can open this, so it was copied instead.</string>
+
+    <!-- Wi-Fi details -->
+    <string name="barcode_wifi_network">Network</string>
+    <string name="barcode_wifi_password">Password</string>
+    <string name="barcode_wifi_security">Security</string>
+    <string name="barcode_wifi_security_open">Open (no password)</string>
+    <string name="barcode_wifi_security_wpa" translatable="false">WPA/WPA2</string>
+    <string name="barcode_wifi_security_wep" translatable="false">WEP</string>
+    <string name="barcode_wifi_show_password">Show password</string>
+    <string name="barcode_wifi_hide_password">Hide password</string>
+    <string name="barcode_wifi_copy_network">Copy network name</string>
+    <string name="barcode_wifi_copy_password">Copy password</string>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Crop editor toolbar -->
+    <string name="crop_mode_region">Select a region</string>
+    <string name="crop_mode_text">Select text blocks</string>
+    <string name="crop_rotate">Rotate clockwise</string>
+    <string name="crop_reset">Reset</string>
+    <string name="crop_select_all">Select all text</string>
+    <string name="crop_clear_selection">Clear selection</string>
+
+    <!-- Crop editor accessibility -->
+    <string name="crop_region">Selected region</string>
+    <string name="crop_region_state">%1$d%% wide, %2$d%% tall</string>
+    <string name="crop_handle_top_left">Top left corner handle</string>
+    <string name="crop_handle_top">Top edge handle</string>
+    <string name="crop_handle_top_right">Top right corner handle</string>
+    <string name="crop_handle_right">Right edge handle</string>
+    <string name="crop_handle_bottom_right">Bottom right corner handle</string>
+    <string name="crop_handle_bottom">Bottom edge handle</string>
+    <string name="crop_handle_bottom_left">Bottom left corner handle</string>
+    <string name="crop_handle_left">Left edge handle</string>
+    <string name="crop_action_outward">Move outward</string>
+    <string name="crop_action_inward">Move inward</string>
+    <string name="crop_action_expand">Expand region</string>
+    <string name="crop_action_shrink">Shrink region</string>
+    <string name="crop_action_move_left">Move region left</string>
+    <string name="crop_action_move_right">Move region right</string>
+    <string name="crop_action_move_up">Move region up</string>
+    <string name="crop_action_move_down">Move region down</string>
+    <string name="crop_block_toggle">Toggle selection</string>
+</resources>

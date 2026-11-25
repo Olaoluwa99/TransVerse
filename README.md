@@ -23,12 +23,12 @@ TransVerse is a privacy-first Android assistant for capturing, translating and a
 
 ## Technology
 
-- Kotlin and Android Views with an incremental feature-first architecture
-- ViewModel, LiveData/Flow and a single shared analysis state holder
+- Kotlin and Jetpack Compose with a feature-first architecture
+- ViewModels exposing StateFlow UI state, and a coroutine-based analysis pipeline
 - Hilt dependency injection
 - Room database with explicit migrations
 - Google ML Kit and Play Services-delivered models
-- Material 3, Navigation, View Binding and Data Binding
+- Material 3 Expressive, Navigation Compose, CameraX and Coil
 
 ## Development
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App shell. Each feature keeps its new strings in its own strings_<feature>.xml. -->
+    <string name="nav_translate">Translate</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
+</resources>
