@@ -32,7 +32,12 @@ class BaseApp : Application() {
         // Before any activity starts, so AppCompat screens open in the saved theme.
         appearanceStore.settings.value.themeMode.applyAsDefaultNightMode()
         // Covers installs where the install-time download didn't happen (e.g. sideloaded builds).
-        mlKitModules.prefetch()
+        // Best effort only: an ML Kit problem must never stop the app from launching.
+        try {
+            mlKitModules.prefetch()
+        } catch (e: RuntimeException) {
+            Log.w(TAG, "Could not prefetch ML Kit modules", e)
+        }
 
         // No capture screen is open yet, so any capture file not referenced by saved history
         // (incognito captures, unsaved captures, interrupted deletions) can be removed safely.
