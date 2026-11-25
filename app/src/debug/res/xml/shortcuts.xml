@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug copy of src/main/res/xml/shortcuts.xml: same shortcut, debug applicationId. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_floating_capture"
+        android:shortcutDisabledMessage="@string/shortcut_floating_capture_disabled"
+        android:shortcutId="floating_capture"
+        android:shortcutLongLabel="@string/shortcut_floating_capture_long"
+        android:shortcutShortLabel="@string/shortcut_floating_capture_short">
+        <intent
+            android:action="com.easit.aiscanner.action.START_FLOATING_CAPTURE"
+            android:targetClass="com.easit.aiscanner.floatingWindow.QuickCaptureLauncherActivity"
+            android:targetPackage="com.easit.aiscanner.debug" />
+    </shortcut>
+</shortcuts>

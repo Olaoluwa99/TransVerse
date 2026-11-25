@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Quick Settings tile -->
+    <string name="tile_floating_capture">Floating capture</string>
+    <string name="tile_state_on">On</string>
+    <string name="tile_state_off">Off</string>
+    <string name="tile_floating_capture_on_description">Floating capture is on. Tap to turn it off.</string>
+    <string name="tile_floating_capture_off_description">Floating capture is off. Tap to start translating from any app.</string>
+
+    <!-- Launcher long-press shortcut -->
+    <string name="shortcut_floating_capture_short">Floating capture</string>
+    <string name="shortcut_floating_capture_long">Start floating capture</string>
+    <string name="shortcut_floating_capture_disabled">Floating capture isn\'t available</string>
+
+    <color name="shortcut_icon_background">#FFBAEAFF</color>
+</resources>
