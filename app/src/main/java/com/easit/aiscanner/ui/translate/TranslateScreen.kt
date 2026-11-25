@@ -247,6 +247,7 @@ fun TranslateScreen(
                 }
                 TranslateAction.SwapLanguages -> viewModel.swapLanguages()
                 TranslateAction.Translate -> viewModel.translate()
+                TranslateAction.CancelTranslation -> viewModel.cancelTranslation()
                 TranslateAction.CopyTranslation -> state.result?.let {
                     TranslateIntents.copyToClipboard(context, "Translation", it.translatedText)
                     showMessage(R.string.copied_to_clipboard)
@@ -399,6 +400,8 @@ internal fun TranslateContent(
                 TranslateButton(
                     status = state.status,
                     setupProgress = state.setupProgress,
+                    modelDownload = state.modelDownload,
+                    onCancel = { onAction(TranslateAction.CancelTranslation) },
                     detectedLanguage = state.detectedLanguage,
                     running = state.isAnalyzing,
                     enabled = transcript.isNotBlank() && !state.readingImage,

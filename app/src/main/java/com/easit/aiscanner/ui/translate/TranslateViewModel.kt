@@ -636,6 +636,7 @@ class TranslateViewModel @Inject constructor(
                 detectedLanguage = null,
                 status = AnalysisStatus.IDENTIFYING,
                 setupProgress = null,
+                modelDownload = null,
             )
         }
         analysisJob = viewModelScope.launch {
@@ -646,6 +647,7 @@ class TranslateViewModel @Inject constructor(
                     onStatus = { status -> _state.update { it.copy(status = status) } },
                     onLanguageDetected = { _, name -> _state.update { it.copy(detectedLanguage = name) } },
                     onSetupProgress = { progress -> _state.update { it.copy(setupProgress = progress) } },
+                    onModelDownload = { progress -> _state.update { it.copy(modelDownload = progress) } },
                 )
             } catch (e: CancellationException) {
                 throw e
@@ -726,8 +728,20 @@ class TranslateViewModel @Inject constructor(
     }
 
     private fun fail(@StringRes message: Int) {
-        _state.update { it.copy(status = AnalysisStatus.ERROR) }
+        _state.update { it.copy(status = AnalysisStatus.ERROR, modelDownload = null) }
         send(message)
+    }
+
+    /**
+     * Stops waiting for a translation (e.g. a slow language download). ML Kit may still finish
+     * the download in the background, so the next attempt can be instant.
+     */
+    fun cancelTranslation() {
+        analysisJob?.cancel()
+        analysisJob = null
+        _state.update {
+            it.copy(status = AnalysisStatus.IDLE, setupProgress = null, modelDownload = null)
+        }
     }
 
     @StringRes

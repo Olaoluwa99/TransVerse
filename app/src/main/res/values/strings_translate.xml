@@ -73,7 +73,14 @@
     <string name="translate_error_undetermined">The source language could not be identified.</string>
     <string name="translate_error_detection_failed">Language detection failed.</string>
     <string name="translate_error_unsupported_pair">This language pair is not supported for offline translation.</string>
-    <string name="translate_error_download_timeout">The language model download timed out. Check your connection and try again.</string>
+    <string name="translate_error_download_timeout">The language download stopped making progress. Check your connection and try again. If it keeps happening, make sure the system Downloads app is enabled.</string>
+    <string name="translate_download_bytes">%1$s of %2$s</string>
+    <string name="translate_download_bytes_unknown_total">%1$s downloaded</string>
+    <string name="translate_download_waiting_network">Waiting for a connection…</string>
+    <string name="translate_download_waiting_wifi">Waiting for Wi-Fi…</string>
+    <string name="translate_download_retrying">Connection interrupted. Retrying…</string>
+    <string name="translate_download_paused">Download paused by Android…</string>
+    <string name="translate_action_cancel_download">Cancel</string>
     <string name="translate_error_translation_failed">Translation failed. Check your connection and language models.</string>
     <string name="translate_error_save_failed">The translation could not be saved to history.</string>
 

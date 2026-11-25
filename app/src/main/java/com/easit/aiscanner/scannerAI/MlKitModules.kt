@@ -1,6 +1,7 @@
 package com.easit.aiscanner.scannerAI
 
 import android.content.Context
+import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.OptionalModuleApi
@@ -16,12 +17,12 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.atomic.AtomicLong
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 /** A Play services module install that failed or was cancelled. */
 class ModuleInstallException(val errorCode: Int) :
@@ -39,6 +40,9 @@ class ModuleInstallException(val errorCode: Int) :
 class MlKitModules @Inject constructor(@ApplicationContext private val context: Context) {
 
     private val client = ModuleInstall.getClient(context)
+
+    /** Progress of translation-model downloads, which ML Kit runs through DownloadManager. */
+    val modelDownloads = ModelDownloadMonitor(context)
 
     /**
      * Starts downloading every module the app uses, so they are usually ready before the first
@@ -62,62 +66,70 @@ class MlKitModules @Inject constructor(@ApplicationContext private val context: 
      *
      * @param onDownloading called on the main thread while a download is needed, with progress
      *   from 0 to 1, or null while the size isn't known yet. Not called when already installed.
-     * @throws ModuleInstallException if Play services can't install the modules
+     * @throws ModuleInstallException if Play services can't install the modules, or the download
+     *   makes no progress for [STALL_TIMEOUT_MS]
      */
     suspend fun ensureInstalled(apis: List<OptionalModuleApi>, onDownloading: (Float?) -> Unit = {}) {
-        val alreadyAvailable = try {
-            client.areModulesAvailable(*apis.toTypedArray()).await().areModulesAvailable()
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Log.w(TAG, "Could not check ML Kit module availability", e)
-            false
-        }
-        if (alreadyAvailable) return
+        if (areAvailable(apis)) return
 
         onDownloading(null)
-        suspendCancellableCoroutine { continuation ->
-            lateinit var listener: InstallStatusListener
-            listener = InstallStatusListener { update ->
-                update.progressInfo?.let { progress ->
-                    val total = progress.totalBytesToDownload
-                    if (total > 0) onDownloading((progress.bytesDownloaded.toFloat() / total).coerceIn(0f, 1f))
-                }
-                when (update.installState) {
-                    InstallState.STATE_COMPLETED -> {
-                        client.unregisterListener(listener)
-                        if (continuation.isActive) continuation.resume(Unit)
-                    }
-                    InstallState.STATE_FAILED, InstallState.STATE_CANCELED -> {
-                        client.unregisterListener(listener)
-                        if (continuation.isActive) {
-                            continuation.resumeWithException(ModuleInstallException(update.errorCode))
-                        }
-                    }
-                }
+        val done = CompletableDeferred<Unit>()
+        val lastActivity = AtomicLong(SystemClock.elapsedRealtime())
+        val listener = InstallStatusListener { update ->
+            lastActivity.set(SystemClock.elapsedRealtime())
+            update.progressInfo?.let { progress ->
+                val total = progress.totalBytesToDownload
+                if (total > 0) onDownloading((progress.bytesDownloaded.toFloat() / total).coerceIn(0f, 1f))
             }
-            continuation.invokeOnCancellation { client.unregisterListener(listener) }
-
+            when (update.installState) {
+                InstallState.STATE_COMPLETED -> done.complete(Unit)
+                InstallState.STATE_FAILED, InstallState.STATE_CANCELED ->
+                    done.completeExceptionally(ModuleInstallException(update.errorCode))
+            }
+        }
+        try {
             val request = ModuleInstallRequest.newBuilder()
                 .apply { apis.forEach(::addApi) }
                 .setListener(listener, ContextCompat.getMainExecutor(context))
                 .build()
             client.installModules(request)
                 .addOnSuccessListener { response ->
-                    if (response.areModulesAlreadyInstalled()) {
-                        client.unregisterListener(listener)
-                        if (continuation.isActive) continuation.resume(Unit)
-                    }
+                    if (response.areModulesAlreadyInstalled()) done.complete(Unit)
                 }
-                .addOnFailureListener { error ->
-                    client.unregisterListener(listener)
-                    if (continuation.isActive) continuation.resumeWithException(error)
+                .addOnFailureListener { error -> done.completeExceptionally(error) }
+
+            // Status updates can be missed (e.g. another app finished the same install), so also
+            // poll availability, and give up if nothing moves rather than waiting forever.
+            while (!done.isCompleted) {
+                if (withTimeoutOrNull(POLL_INTERVAL_MS) { done.await() } != null) break
+                if (areAvailable(apis)) return
+                if (SystemClock.elapsedRealtime() - lastActivity.get() > STALL_TIMEOUT_MS) {
+                    Log.w(TAG, "ML Kit module install made no progress; giving up")
+                    throw ModuleInstallException(ERROR_STALLED)
                 }
+            }
+            done.await() // rethrows a failure reported by the listener
+        } finally {
+            client.unregisterListener(listener)
         }
+    }
+
+    private suspend fun areAvailable(apis: List<OptionalModuleApi>): Boolean = try {
+        client.areModulesAvailable(*apis.toTypedArray()).await().areModulesAvailable()
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.w(TAG, "Could not check ML Kit module availability", e)
+        false
     }
 
     companion object {
         private const val TAG = "MlKitModules"
+        private const val POLL_INTERVAL_MS = 2_000L
+        /** Give up on a module install with no status update for this long. */
+        private const val STALL_TIMEOUT_MS = 90_000L
+        /** [ModuleInstallException.errorCode] when an install stopped making progress. */
+        const val ERROR_STALLED = -1
         private const val RETRY_ATTEMPTS = 4
         private const val RETRY_DELAY_MS = 1_500L
 

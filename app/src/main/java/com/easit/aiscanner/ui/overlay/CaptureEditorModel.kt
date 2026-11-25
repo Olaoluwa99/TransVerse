@@ -27,6 +27,7 @@ import com.easit.aiscanner.scannerAI.AnalysisOutput
 import com.easit.aiscanner.scannerAI.AnalysisPipeline
 import com.easit.aiscanner.scannerAI.AnalysisStatus
 import com.easit.aiscanner.scannerAI.MlKitModules
+import com.easit.aiscanner.scannerAI.ModelDownloadProgress
 import com.easit.aiscanner.ui.crop.CropEditorState
 import com.easit.aiscanner.ui.crop.CropMode
 import com.easit.aiscanner.ui.crop.cropBitmap
@@ -87,6 +88,8 @@ data class CaptureEditorUiState(
     val preparingOcr: Boolean = false,
     /** Module download progress (OCR or language identification), or null if unknown. */
     val setupProgress: Float? = null,
+    /** While a language model downloads: its progress from DownloadManager. */
+    val modelDownload: ModelDownloadProgress? = null,
     val busy: EditorBusy? = null,
     val status: AnalysisStatus = AnalysisStatus.IDLE,
     val target: OverlayLanguage = OverlayLanguage("en", "English"),
@@ -216,6 +219,7 @@ class CaptureEditorModel(
                     onStatus = { status -> _state.update { it.copy(status = status) } },
                     onLanguageDetected = { _, _ -> },
                     onSetupProgress = { progress -> _state.update { it.copy(setupProgress = progress) } },
+                    onModelDownload = { progress -> _state.update { it.copy(modelDownload = progress) } },
                 )
                 _state.update {
                     it.copy(
@@ -237,7 +241,9 @@ class CaptureEditorModel(
                 Log.w(TAG, "Translation failed", e)
                 show(R.string.overlay_message_translation_failed)
             } finally {
-                _state.update { it.copy(busy = null, status = AnalysisStatus.IDLE, setupProgress = null) }
+                _state.update {
+                    it.copy(busy = null, status = AnalysisStatus.IDLE, setupProgress = null, modelDownload = null)
+                }
             }
         }
     }

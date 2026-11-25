@@ -70,7 +70,7 @@
     <string name="overlay_message_language_undetermined">Couldn\'t tell which language this is</string>
     <string name="overlay_message_detection_failed">Couldn\'t detect the language. Try again</string>
     <string name="overlay_message_unsupported">This language can\'t be translated yet</string>
-    <string name="overlay_message_model_timeout">The language download is taking too long. Try again on a better connection</string>
+    <string name="overlay_message_model_timeout">The language download stopped making progress. Check your connection and try again</string>
     <string name="overlay_message_setup_failed">Language detection couldn\'t be set up. Connect to the internet and try again</string>
     <string name="overlay_message_save_failed">Couldn\'t save the capture</string>
     <string name="overlay_message_open_failed">Couldn\'t open TransVerse</string>

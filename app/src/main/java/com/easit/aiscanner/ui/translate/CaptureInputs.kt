@@ -1,6 +1,7 @@
 package com.easit.aiscanner.ui.translate
 
 import android.net.Uri
+import android.text.format.Formatter
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
@@ -60,6 +61,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -70,6 +72,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.easit.aiscanner.R
 import com.easit.aiscanner.scannerAI.AnalysisStatus
+import com.easit.aiscanner.scannerAI.DownloadWaitReason
+import com.easit.aiscanner.scannerAI.ModelDownloadProgress
 import com.easit.aiscanner.ui.theme.readingTextStyle
 
 private val CaptureMode.label: Int
@@ -462,6 +466,8 @@ internal fun TranslateButton(
     modifier: Modifier = Modifier,
     setupProgress: Float? = null,
     detectedLanguage: String? = null,
+    modelDownload: ModelDownloadProgress? = null,
+    onCancel: (() -> Unit)? = null,
 ) {
     val size = ButtonDefaults.MediumContainerHeight
     Column(
@@ -499,6 +505,13 @@ internal fun TranslateButton(
                     progress = setupProgress,
                     modifier = Modifier.widthIn(max = 480.dp),
                 )
+            } else if (status == AnalysisStatus.DOWNLOADING_MODEL) {
+                ModelDownloadInfo(
+                    languageName = detectedLanguage,
+                    progress = modelDownload,
+                    onCancel = onCancel,
+                    modifier = Modifier.widthIn(max = 480.dp),
+                )
             } else {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -520,6 +533,76 @@ internal fun TranslateButton(
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ * A language model downloading for offline use: which language, real progress from Android's
+ * DownloadManager ("12 MB of 31 MB"), why it is waiting if Android has paused it, and Cancel.
+ * Shared with the floating-capture overlay.
+ */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+internal fun ModelDownloadInfo(
+    languageName: String?,
+    progress: ModelDownloadProgress?,
+    onCancel: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = if (languageName != null) {
+                stringResource(R.string.translate_status_downloading_named, languageName)
+            } else {
+                stringResource(R.string.translate_status_downloading)
+            },
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        val fraction = progress?.fraction
+        val waiting: DownloadWaitReason? = progress?.waitingFor
+        if (fraction != null && waiting == null) {
+            LinearWavyProgressIndicator(progress = { fraction }, modifier = Modifier.fillMaxWidth())
+        } else {
+            LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
+        val detail = when {
+            progress == null -> null
+            waiting != null -> stringResource(
+                when (waiting) {
+                    DownloadWaitReason.NETWORK -> R.string.translate_download_waiting_network
+                    DownloadWaitReason.WIFI -> R.string.translate_download_waiting_wifi
+                    DownloadWaitReason.RETRYING -> R.string.translate_download_retrying
+                    DownloadWaitReason.OTHER -> R.string.translate_download_paused
+                }
+            )
+            progress.totalBytes > 0 -> stringResource(
+                R.string.translate_download_bytes,
+                Formatter.formatShortFileSize(context, progress.bytesDownloaded),
+                Formatter.formatShortFileSize(context, progress.totalBytes),
+            )
+            progress.bytesDownloaded > 0 -> stringResource(
+                R.string.translate_download_bytes_unknown_total,
+                Formatter.formatShortFileSize(context, progress.bytesDownloaded),
+            )
+            else -> null
+        }
+        if (detail != null) {
+            Text(
+                text = detail,
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (waiting != null) MaterialTheme.colorScheme.tertiary
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        if (onCancel != null) {
+            TextButton(onClick = onCancel) { Text(stringResource(R.string.translate_action_cancel_download)) }
         }
     }
 }

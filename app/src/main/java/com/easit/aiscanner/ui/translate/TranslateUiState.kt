@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import com.easit.aiscanner.R
 import com.easit.aiscanner.scannerAI.AnalysisStatus
+import com.easit.aiscanner.scannerAI.ModelDownloadProgress
 import com.easit.aiscanner.ui.crop.TextBlock
 
 /** How the text to translate is captured. [scanType] is what history stores. */
@@ -61,6 +62,8 @@ data class TranslateUiState(
     val status: AnalysisStatus = AnalysisStatus.IDLE,
     /** While [AnalysisStatus.PREPARING]: module download progress (0–1), null if size unknown. */
     val setupProgress: Float? = null,
+    /** While [AnalysisStatus.DOWNLOADING_MODEL]: the language model download's progress. */
+    val modelDownload: ModelDownloadProgress? = null,
     val result: TranslationResult? = null,
     val playback: PlaybackState = PlaybackState(),
     /** The detected language can become the target (see [TranslateAction.SwapLanguages]). */
@@ -141,4 +144,5 @@ sealed interface TranslateAction {
     data object OpenBarcodeScanner : TranslateAction
     data object StartQuickCapture : TranslateAction
     data object StopQuickCapture : TranslateAction
+    data object CancelTranslation : TranslateAction
 }

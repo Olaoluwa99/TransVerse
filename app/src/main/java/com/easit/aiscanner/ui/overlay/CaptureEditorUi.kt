@@ -114,6 +114,7 @@ import com.easit.aiscanner.ui.crop.CropEditor
 import com.easit.aiscanner.ui.crop.CropEditorControls
 import com.easit.aiscanner.ui.theme.TransVerseTheme
 import com.easit.aiscanner.ui.theme.readingTextStyle
+import com.easit.aiscanner.ui.translate.ModelDownloadInfo
 
 /** Height reserved above the image for the top bar. */
 private val TopBarHeight = 64.dp
@@ -485,6 +486,15 @@ private fun EditorActionBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 8.dp, vertical = 8.dp),
+                )
+            }
+            if (state.busy == EditorBusy.TRANSLATING && state.status == AnalysisStatus.DOWNLOADING_MODEL) {
+                // Real progress (and why it's waiting) for the one-time language download.
+                ModelDownloadInfo(
+                    languageName = null,
+                    progress = state.modelDownload,
+                    onCancel = null,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.easit.aiscanner.scannerAI
 
+import android.os.SystemClock
 import android.util.Log
 import android.util.LruCache
 import com.google.android.gms.tasks.Task
@@ -14,11 +15,13 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withContext
 import java.io.Closeable
 import java.util.Locale
 import java.util.UUID
@@ -104,6 +107,8 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
      * @param onLanguageDetected the identified source language (code, display name)
      * @param onSetupProgress while [AnalysisStatus.PREPARING]: module download progress from 0 to
      *   1, or null while its size isn't known yet
+     * @param onModelDownload while [AnalysisStatus.DOWNLOADING_MODEL]: the language model
+     *   download's progress (null when nothing is being downloaded)
      * @throws AnalysisException when the analysis cannot complete
      */
     suspend fun analyze(
@@ -112,6 +117,7 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
         onStatus: (AnalysisStatus) -> Unit,
         onLanguageDetected: (code: String, name: String) -> Unit,
         onSetupProgress: (Float?) -> Unit = {},
+        onModelDownload: (ModelDownloadProgress?) -> Unit = {},
     ): AnalysisOutput {
         val normalizedText = AnalysisPolicy.normalizeInput(text)
         if (normalizedText.isEmpty()) throw AnalysisException(AnalysisFailure.EMPTY_INPUT)
@@ -123,7 +129,7 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
         val translatedText = if (sourceCode == targetLanguageCode) {
             normalizedText
         } else {
-            translate(normalizedText, sourceCode, targetLanguageCode, onStatus)
+            translate(normalizedText, sourceCode, targetLanguageCode, onStatus, onModelDownload)
         }
 
         onStatus(AnalysisStatus.ANALYZING)
@@ -156,6 +162,7 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
         targetLanguageCode: String,
         onStatus: (AnalysisStatus) -> Unit = {},
         onSetupProgress: (Float?) -> Unit = {},
+        onModelDownload: (ModelDownloadProgress?) -> Unit = {},
     ): BlockTranslation {
         val joined = AnalysisPolicy.normalizeInput(texts.joinToString("\n"))
         if (joined.isEmpty()) throw AnalysisException(AnalysisFailure.EMPTY_INPUT)
@@ -167,7 +174,7 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
             texts.map { block ->
                 val normalized = AnalysisPolicy.normalizeInput(block)
                 if (normalized.isEmpty()) block
-                else translate(normalized, sourceCode, targetLanguageCode, onStatus)
+                else translate(normalized, sourceCode, targetLanguageCode, onStatus, onModelDownload)
             }
         }
         onStatus(AnalysisStatus.COMPLETE)
@@ -214,11 +221,35 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
         return sourceCode
     }
 
+    /**
+     * Reports DownloadManager progress until cancelled. Throws MODEL_DOWNLOAD_TIMED_OUT when no
+     * bytes have arrived for [MODEL_DOWNLOAD_STALL_MS] (including a download that never starts,
+     * e.g. when the system Downloads service is disabled).
+     */
+    private suspend fun watchModelDownload(onModelDownload: (ModelDownloadProgress?) -> Unit) {
+        var lastBytes = -1L
+        var lastChange = SystemClock.elapsedRealtime()
+        while (true) {
+            val snapshot = withContext(Dispatchers.IO) { modules.modelDownloads.snapshot() }
+            onModelDownload(snapshot)
+            val bytes = snapshot?.bytesDownloaded ?: -1L
+            val now = SystemClock.elapsedRealtime()
+            if (bytes != lastBytes) {
+                lastBytes = bytes
+                lastChange = now
+            } else if (now - lastChange > MODEL_DOWNLOAD_STALL_MS) {
+                throw AnalysisException(AnalysisFailure.MODEL_DOWNLOAD_TIMED_OUT)
+            }
+            delay(MODEL_DOWNLOAD_POLL_MS)
+        }
+    }
+
     private suspend fun translate(
         text: String,
         sourceCode: String,
         targetCode: String,
         onStatus: (AnalysisStatus) -> Unit,
+        onModelDownload: (ModelDownloadProgress?) -> Unit = {},
     ): String {
         val supportedSource = TranslateLanguage.fromLanguageTag(sourceCode)
         val supportedTarget = TranslateLanguage.fromLanguageTag(targetCode)
@@ -233,11 +264,21 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
 
         onStatus(AnalysisStatus.DOWNLOADING_MODEL)
         try {
-            // Translation models are roughly 30 MB each; ML Kit reports no progress, so this only
-            // catches downloads that have genuinely stalled rather than ones on slow connections.
-            withTimeout(MODEL_DOWNLOAD_WATCHDOG_MS) { translator.downloadModelIfNeeded().await() }
-        } catch (e: TimeoutCancellationException) {
-            throw AnalysisException(AnalysisFailure.MODEL_DOWNLOAD_TIMED_OUT, e)
+            // Translation models are ~30 MB each. ML Kit itself reports no progress, but it
+            // downloads through DownloadManager, so watch that: show real progress, keep going
+            // while bytes arrive (even slowly), and stop only once the download has stalled.
+            coroutineScope {
+                val download = async { translator.downloadModelIfNeeded().await() }
+                val watcher = launch { watchModelDownload(onModelDownload) }
+                try {
+                    download.await()
+                } finally {
+                    watcher.cancel()
+                    onModelDownload(null)
+                }
+            }
+        } catch (e: AnalysisException) {
+            throw e
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
@@ -299,7 +340,9 @@ class AnalysisPipeline(private val modules: MlKitModules) : Closeable {
     companion object {
         private const val TAG = "AnalysisPipeline"
         private const val UNDETERMINED_LANGUAGE = "und"
-        private const val MODEL_DOWNLOAD_WATCHDOG_MS = 5 * 60_000L
+        /** Stop a language-model download when no bytes have arrived for this long. */
+        private const val MODEL_DOWNLOAD_STALL_MS = 90_000L
+        private const val MODEL_DOWNLOAD_POLL_MS = 500L
 
         /** The language's name in the user's locale, e.g. "French" for "fr". */
         fun displayNameOf(code: String): String =
